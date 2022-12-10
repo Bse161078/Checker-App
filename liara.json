@@ -1,0 +1,8 @@
+{
+    "disks": [
+        {
+            "name": "checker-disk",
+            "mountTo": "public/upload"
+        }
+    ]
+}

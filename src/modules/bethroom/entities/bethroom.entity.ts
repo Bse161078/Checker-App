@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 import { CommentsValueSchema, DamageReportSchema, TopQuestionSchema } from "src/modules/generals/schemas/index.schema";
-import { IComments, ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
+import { ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
 
 @Schema()
 class CommentsClass extends Document {
@@ -17,16 +17,22 @@ class CommentsClass extends Document {
     traysAreNotFilled: ICommentValue;
 
 }
-
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
-
-export class BathRoom {
+export interface IBethRoomComment {
+    tilesAreNotMopped: ICommentValue;
+    toiletIsNotWiped: ICommentValue;
+    thereIsDirtInTheShowe: ICommentValue;
+    shelvesAreNotWiped: ICommentValue;
+    traysAreNotFilled: ICommentValue;
+}
+@Schema()
+export class BethRoom {
     @Prop()
     title: string;
     @Prop({ type: TopQuestionSchema })
     topQuestion: ITopQuestion;
     @Prop({ type: CommentsSchema })
-    comments: IComments;
+    comments: IBethRoomComment;
     @Prop({ type: DamageReportSchema })
     damage: IDamageReport;
     @Prop({type: Types.ObjectId, ref: "User"})
@@ -35,6 +41,8 @@ export class BathRoom {
     room: Types.ObjectId;
     @Prop({type: Types.ObjectId, ref: "User"})
     hotel: Types.ObjectId;
+    @Prop({type: Types.ObjectId, ref: "User"})
+    checker: Types.ObjectId;
 }
-export type BathRoomDocument = BathRoom & Document;
-export const BathRoomSchema = SchemaFactory.createForClass(BathRoom)
+export type BethRoomDocument = BethRoom & Document;
+export const BethRoomSchema = SchemaFactory.createForClass(BethRoom)

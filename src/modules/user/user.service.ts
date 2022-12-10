@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, Types } from 'mongoose';
+import { NotFoundError } from 'rxjs';
+import { ADMIN_ROLES, ROLES } from 'src/common/enums/role.enum';
+import { removeEmptyFieldsObject } from 'src/common/utils/functions';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User, UserDocument } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectModel(User.name) private readonly userRepository: Model<UserDocument>
+  ) { }
+  async create(createUserDto: CreateUserDto) {
+    const newObjectDto: CreateUserDto = removeEmptyFieldsObject(createUserDto)
+    await this.checkExistUser(newObjectDto);
+    const user = await this.userRepository.create(createUserDto);
+    if (createUserDto.role == ADMIN_ROLES.HOTELADMIN) {
+      await this.update(user._id.toString(), { hotel: user._id })
+    }
+    return user
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return await this.userRepository.find({})
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.userRepository.findById(new Types.ObjectId(id));
+    if (!user) throw new NotFoundException("user not found ");
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    const updatedResult = await this.userRepository.updateOne({ _id: user._id }, {
+      $set: updateUserDto
+    })
+    if (!!updatedResult.modifiedCount) return true;
+    throw new BadRequestException("updated user failed")
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.findOne(id);
+    const deletedResult = await this.userRepository.deleteOne({ _id: user._id });
+    if (!!deletedResult.deletedCount) return true;
+    throw new BadRequestException("deleted user failed")
+  }
+  async checkExistUser(createUserDto: CreateUserDto) {
+    let checkUser = await this.userRepository.findOne({ username: createUserDto.username });
+    if (checkUser) throw new BadRequestException("username already exist")
+    if (createUserDto.mobile) checkUser = await this.userRepository.findOne({ mobile: createUserDto.mobile });
+    if (checkUser) throw new BadRequestException("mobile already exist")
+    if (createUserDto.email) checkUser = await this.userRepository.findOne({ email: createUserDto.email });
+    if (checkUser) throw new BadRequestException("email already exist")
   }
 }

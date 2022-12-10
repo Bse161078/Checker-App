@@ -1,26 +1,71 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
+import { InjectModel } from '@nestjs/mongoose';
+import { Request } from 'express';
+import { Model, Types } from 'mongoose';
+import { getObjectFiles, parseValue } from 'src/common/utils/functions';
 import { CreateFloorDto } from './dto/create-floor.dto';
-import { UpdateFloorDto } from './dto/update-floor.dto';
+import { FloorDto } from './dto/floor.dto';
+import { Floor, FloorDocument } from './entities/floor.entity';
+import { IFloorFilesUpload } from './interfaces/files.interface';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class FloorService {
-  create(createFloorDto: CreateFloorDto) {
-    return 'This action adds a new floor';
+  constructor(
+    @Inject(REQUEST) private request: Request,
+    @InjectModel(Floor.name) private floorRepository: Model<FloorDocument>
+  ) { }
+  async create(createFloorDto: CreateFloorDto & any, files: IFloorFilesUpload) {
+    const { hotel, _id: checker } = this.request.user;
+    const floor = await this.findOneByCheckerAndHotel();
+    createFloorDto = parseValue(createFloorDto)
+    const newFile: any = getObjectFiles(files);
+    const newDto: FloorDto = {
+      topQuestion: {
+        value: createFloorDto.topQuestionStatus,
+        samplePhoto: newFile.samplePhotoTopQuestion,
+      },
+      comments: {
+        roomIsNotVacuumed: {
+          status: createFloorDto.roomIsNotVacuumedStatus,
+          photos: newFile.roomIsNotVacuumedPhotos
+        },
+        roomHasStrongStainsThatCanNotBeCleanedByUs: {
+          status: createFloorDto.roomHasStrongStainsThatCanNotBeCleanedByUsStatus,
+          photos: newFile.roomHasStrongStainsThatCanNotBeCleanedByUsPhotos,
+        },
+        DamageCausedByGuests: {
+          status: createFloorDto.DamageCausedByGuestsStatus,
+          photos: newFile.DamageCausedByGuestsPhotos,
+        }
+      },
+      checker,
+      hotel: new Types.ObjectId(hotel),
+      damage: {
+        text: createFloorDto.DamageReportText,
+        photos: newFile.DamageReportPhotos
+      }
+    }
+    if (floor) {
+      const updatedResult = await this.floorRepository.updateOne({ _id: floor._id }, { $set: newDto })
+    } else {
+      const createdResult = await this.floorRepository.create(newDto)
+    }
+    return true
   }
 
-  findAll() {
-    return `This action returns all floor`;
+  async getFloorStatus() {
+    const floor = await this.findOneByCheckerAndHotel();
+    if (floor) return floor;
+    throw new NotFoundException("still not fill floor status")
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} floor`;
+  async findOneByCheckerAndHotel() {
+    const { hotel, _id: checker } = this.request.user;
+    const floor = await this.floorRepository.findOne({ hotel, checker });
+    console.log(floor);
+
+    return floor;
   }
 
-  update(id: number, updateFloorDto: UpdateFloorDto) {
-    return `This action updates a #${id} floor`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} floor`;
-  }
 }

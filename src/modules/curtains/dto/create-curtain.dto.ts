@@ -1,10 +1,10 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
 export class CreateCurtainDto {
-    @ApiPropertyOptional({default: false, type: "boolean", })
+    @ApiPropertyOptional({default: false, type: "bool", })
     topQuestionStatus: boolean
-    @ApiPropertyOptional({type: "string", format: "binary"})
-    samplePhotoTopQuestion: string
+    @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
+    samplePhotoTopQuestion: string[];
     @ApiPropertyOptional({type: "boolean"})
     curtainsNotCleanStatus: boolean
     @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})

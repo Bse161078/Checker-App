@@ -2,12 +2,20 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { AuthDecorator } from 'src/common/decorators/auth.decorator';
+import { ROLES } from 'src/common/enums/role.enum';
+import { SwaggerConsumes } from 'src/common/enums';
+import { GetUser } from 'src/common/decorators/user.decorator';
 
 @Controller('user')
+@ApiTags("User")
+@AuthDecorator(ROLES.SUPERADMIN)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -19,16 +27,19 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    this.userService.update(id, updateUserDto);
+    return {message: "updated user successfully"}
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    this.userService.remove(id);
+    return {message: "deleted user successfully"}
   }
 }

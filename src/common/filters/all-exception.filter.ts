@@ -29,7 +29,7 @@ export default class AllExceptionFilter implements ExceptionFilter {
         const errorResponse: ErrorResponse = {
             statusCode,
             errors: {
-                title: errorMessage,
+                message: errorMessage,
                 invalidParams,
             },
         };

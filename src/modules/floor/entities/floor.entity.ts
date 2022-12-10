@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { PartialType } from "@nestjs/swagger";
 import { Document, Types } from "mongoose";
 import { CommentsValueSchema, DamageReportSchema, TopQuestionSchema } from "src/modules/generals/schemas/index.schema";
-import { IComments, ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
+import { ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
 
 @Schema()
-class CommentsClass extends Document {
+class CommentsClass extends Document{
     @Prop({type: CommentsValueSchema })
     roomIsNotVacuumed: ICommentValue;
     @Prop({type: CommentsValueSchema })
@@ -13,16 +14,23 @@ class CommentsClass extends Document {
     DamageCausedByGuests: ICommentValue;
 }
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
-
+interface IFloorComments {
+    roomIsNotVacuumed: ICommentValue;
+    roomHasStrongStainsThatCanNotBeCleanedByUs: ICommentValue;
+    DamageCausedByGuests: ICommentValue;
+}
+@Schema({timestamps: true})
 export class Floor {
     @Prop({ type: TopQuestionSchema })
     topQuestion: ITopQuestion;
     @Prop({ type: CommentsSchema })
-    comments: IComments;
+    comments: IFloorComments;
     @Prop({ type: DamageReportSchema })
     damage: IDamageReport;
     @Prop({type: Types.ObjectId, ref: "User"})
     cleaner: Types.ObjectId;
+    @Prop({type: Types.ObjectId, ref: "User"})
+    checker: Types.ObjectId;
     @Prop({type: Types.ObjectId, ref: "Room"})
     room: Types.ObjectId;
     @Prop({type: Types.ObjectId, ref: "User"})

@@ -1,15 +1,16 @@
-import { applyDecorators, SetMetadata, UseGuards, UseInterceptors } from "@nestjs/common";
+import { applyDecorators, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth } from "@nestjs/swagger";
-// import { JwtGuard } from "src/modules/auth/strategies/jwt-auth.guard";
-// import { PermissionGuard } from "src/modules/auth/strategies/permission.guard";
-import { AuthSchemeName, MetaDataTitles } from "../enums";
-import CheckTokenInterceptor from "../interceptors/checkToken.interceptor";
+import { JwtGuard } from "src/modules/auth/guards/jwt.guard";
+import { RoleGuard } from "src/modules/auth/guards/role.guard";
+import { ROLES } from "../enums/role.enum";
+import { Roles } from "./role.decorator";
 
-export function AuthDecorator(permissions: string[] = []) {
+
+export function AuthDecorator(...permissions: ROLES[]) {
+    permissions = permissions ?? []
     return applyDecorators(
-        ApiBearerAuth(AuthSchemeName.Authorization),
-        UseInterceptors(CheckTokenInterceptor),
-        // UseGuards(JwtGuard, PermissionGuard),
-        SetMetadata(MetaDataTitles.PERMISSIONS, permissions)
+        ApiBearerAuth("bearer"),
+        Roles(...permissions),
+        UseGuards(JwtGuard, RoleGuard)
     )
 }

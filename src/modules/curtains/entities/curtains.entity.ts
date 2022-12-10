@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 import { CommentsValueSchema, DamageReportSchema, TopQuestionSchema } from "src/modules/generals/schemas/index.schema";
-import { IComments, ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
+import { ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
 
 @Schema()
 class CommentsClass extends Document {
@@ -11,14 +11,20 @@ class CommentsClass extends Document {
     curtainsHaveWrinkles: ICommentValue;
 
 }
+interface ICurtainComment {
+    curtainsNotClean: ICommentValue;
+    curtainsHaveWrinkles: ICommentValue;
+}
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
-export class Floor {
+
+@Schema()
+export class Curtain {
     @Prop()
     title: string;
     @Prop({ type: TopQuestionSchema })
     topQuestion: ITopQuestion;
     @Prop({ type: CommentsSchema })
-    comments: IComments;
+    comments: ICurtainComment;
     @Prop({ type: DamageReportSchema })
     damage: IDamageReport;
     @Prop({type: Types.ObjectId, ref: "User"})
@@ -27,6 +33,8 @@ export class Floor {
     room: Types.ObjectId;
     @Prop({type: Types.ObjectId, ref: "User"})
     hotel: Types.ObjectId;
+    @Prop({type: Types.ObjectId, ref: "User"})
+    checker: Types.ObjectId;
 }
-export type FloorDocument = Floor & Document;
-export const FloorSchema = SchemaFactory.createForClass(Floor)
+export type CurtainDocument = Curtain & Document;
+export const CurtainSchema = SchemaFactory.createForClass(Curtain)

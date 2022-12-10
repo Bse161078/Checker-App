@@ -8,7 +8,7 @@ export class Room {
     name: string;
     @Prop({enum: RoomType})
     type: RoomType
-    @Prop({ref: 'Room'})
+    @Prop({ref: 'Level'})
     level: Types.ObjectId
 }
 export type RoomDocument = Room & Document;

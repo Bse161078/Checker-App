@@ -3,9 +3,8 @@ import { ApiPropertyOptional } from "@nestjs/swagger"
 export class CreateBethroomDto {
     @ApiPropertyOptional({ default: false, type: "boolean", })
     topQuestionStatus: boolean
-    @ApiPropertyOptional({ type: "string", format: "binary" })
-    samplePhotoTopQuestion: string
-
+    @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
+    samplePhotoTopQuestion: string[]
     @ApiPropertyOptional({ type: "boolean" })
     tilesAreNotMoppedStatus: boolean
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
@@ -26,7 +25,6 @@ export class CreateBethroomDto {
     traysAreNotFilledStatus: boolean
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
     traysAreNotFilledPhotos: string[]
-
     @ApiPropertyOptional()
     DamageReportText: string
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })

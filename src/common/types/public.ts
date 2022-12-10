@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 
 export type MulterCallback<T> = (error: any, data?: T) => any;
-
+export type MulterFile = Express.Multer.File;
 export type RestFulResponse = {
   statusCode: HttpStatus;
   message?: string;
@@ -10,7 +10,8 @@ export type RestFulResponse = {
 export type FieldErrorMessage = { [key: string]: string };
 
 export type CustomValidationError = {
-  title: string;
+  title?: string;
+  message?: string;
   invalidParams: FieldErrorMessage;
 };
 

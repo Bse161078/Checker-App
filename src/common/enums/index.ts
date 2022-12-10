@@ -81,18 +81,10 @@ export enum SwaggerConfigData {
   TAG = 'Bullsfin',
 }
 
-export enum ROLES {
-  USER = 'USER',
-  ADMIN = 'ADMIN',
-}
 export enum MetaDataTitles {
   PERMISSIONS = 'permissions',
 }
 
-export const ROLE_PERMISSIONS = createEnumWithObject<RolePermissionsType>({
-  ADMIN: [ROLES.ADMIN, ROLES.USER],
-  USER: [ROLES.USER],
-});
 
 export enum LoggetTitles {
   SIMCARD_GATEWAY = "SimcardGateway",

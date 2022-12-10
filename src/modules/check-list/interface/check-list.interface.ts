@@ -1,7 +1,6 @@
 export interface ITopQuestion {
-    title: string;
     value: boolean;
-    samplePhoto: string;
+    samplePhoto: string[];
 }
 export interface IComments {
     title: string;
@@ -13,6 +12,6 @@ export interface IDamageReport {
     photos: string[];
 }
 export interface ICommentValue {
-    status: string;
+    status: boolean;
     photos: string[];
 }

@@ -8,8 +8,6 @@ export default function dbConfig(){
     NODE_ENV === NodeEnvironments.PRODUCTION ?
         `mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?${DB_OPTION}` :
         `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
-        console.log(connection);
-        
     return connection;
 
 }

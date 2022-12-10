@@ -35,7 +35,7 @@ import {
       const errorResponse: ErrorResponse = {
         statusCode,
         errors: {
-          title: errorMessage,
+          message: errorMessage,
           invalidParams,
         },
       };
