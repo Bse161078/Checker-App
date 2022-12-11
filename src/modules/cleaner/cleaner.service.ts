@@ -35,11 +35,16 @@ export class CleanerService {
     let filter: FilterQuery<UserDocument> = {};
     if (user.role == ROLES.COMPANYADMIN) {
       filter['company'] = user._id;
+    } else if (user.role == ROLES.HOTELADMIN) {
+      filter['hotel'] = user._id;
+    } else if (user.role == ROLES.SUPERADMIN) {
+      filter = {}
     } else {
       filter['hotel'] = user.hotel;
     }
+    if (user.role != ROLES.SUPERADMIN && Object.values(filter).length == 0) return []
     const cleaners = await this.userRepository.find(filter);
-    return { cleaners }
+    return cleaners
   }
 
   async findOne(id: string) {
@@ -56,14 +61,14 @@ export class CleanerService {
     const updatedResult = await this.userRepository.updateOne({ _id: cleaner._id }, {
       $set: newCleanerDto
     })
-    if(!!updatedResult.modifiedCount) return true;
+    if (!!updatedResult.modifiedCount) return true;
     throw new BadRequestException("updated cleaner failed")
   }
 
   async remove(id: string) {
     const cleaner = await this.findOne(id);
     const deletedResult = await this.userRepository.deleteOne({ _id: cleaner._id })
-    if(!!deletedResult.deletedCount) return true;
+    if (!!deletedResult.deletedCount) return true;
     throw new BadRequestException("deleted cleaner failed")
   }
 }

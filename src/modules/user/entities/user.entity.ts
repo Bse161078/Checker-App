@@ -8,13 +8,15 @@ export class User {
     _id: Types.ObjectId;
     @Prop()
     fullname: string
+    @Prop()
+    avatar: string;
     @Prop({unique: true, index: true, type: String})
     username: string
     @Prop()
     password: string
-    @Prop({index: true, type: String})
+    @Prop()
     email: string
-    @Prop({index: true, type: String})
+    @Prop()
     mobile: string;
     @Prop()
     address: string;

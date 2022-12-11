@@ -1,38 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
 import { ShelvesService } from './shelves.service';
-import { CreateShelfDto } from './dto/create-shelf.dto';
+import { CreateShelvesDto } from './dto/create-shelf.dto';
 import { UpdateShelfDto } from './dto/update-shelf.dto';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums';
+import { IShelvesFilesUpload } from './interfaces/files.interface';
+import { ShelvesFileUpload } from './interceptors/upload-file-shelves.interceptor';
+import { RoomIdDto } from '../room/dto/room.dto';
+import { Types } from 'mongoose';
 
 @Controller('shelves')
 @ApiTags("Shelves")
 export class ShelvesController {
-  constructor(private readonly shelvesService: ShelvesService) {}
+  constructor(private readonly shelvesService: ShelvesService) { }
 
-  @Post()
+  @Post("/:roomID")
+  @ApiParam({ name: "roomID", type: "string", required: true })
   @ApiConsumes(SwaggerConsumes.MULTIPART)
-  create(@Body() createShelfDto: CreateShelfDto) {
-    return this.shelvesService.create(createShelfDto);
+  @UseInterceptors(ShelvesFileUpload)
+  async create(
+    @UploadedFiles() files: IShelvesFilesUpload,
+    @Body() createShelvesDto: CreateShelvesDto,
+    @Param() param: RoomIdDto
+  ) {
+    createShelvesDto.room = new Types.ObjectId(param.roomID)
+    const result = await this.shelvesService.create(createShelvesDto, files);
+    return { message: "save shelves data successfully" }
   }
 
-  @Get()
-  findAll() {
-    return this.shelvesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.shelvesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShelfDto: UpdateShelfDto) {
-    return this.shelvesService.update(+id, updateShelfDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.shelvesService.remove(+id);
-  }
 }

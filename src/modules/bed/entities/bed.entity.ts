@@ -11,17 +11,24 @@ class CommentsClass extends Document {
     bedSheetInNotProperlyTightened: ICommentValue;
 }
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
+interface IBedComments {
+    bedDoesNotLookFresh: ICommentValue
+    bedSheetInNotProperlyTightened: ICommentValue
+}
+@Schema()
 export class Bed {
     @Prop()
     title: string;
     @Prop({ type: TopQuestionSchema })
     topQuestion: ITopQuestion;
     @Prop({ type: CommentsSchema })
-    comments: IComments;
+    comments: IBedComments;
     @Prop({ type: DamageReportSchema })
     damage: IDamageReport;
     @Prop({type: Types.ObjectId, ref: "User"})
     cleaner: Types.ObjectId;
+    @Prop({type: Types.ObjectId, ref: "User"})
+    checker: Types.ObjectId;
     @Prop({type: Types.ObjectId, ref: "Room"})
     room: Types.ObjectId;
     @Prop({type: Types.ObjectId, ref: "User"})

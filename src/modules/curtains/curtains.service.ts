@@ -38,6 +38,7 @@ export class CurtainsService {
         }
       },
       checker,
+      room: createCurtainDto.room,
       hotel: new Types.ObjectId(hotel),
       damage: {
         text: createCurtainDto.DamageReportText,

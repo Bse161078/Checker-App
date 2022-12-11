@@ -1,11 +1,11 @@
 import { ApiPropertyOptional } from "@nestjs/swagger"
+import { Types } from "mongoose"
 
 export class CreateBedDto {
     @ApiPropertyOptional({ default: false, type: "boolean", })
     topQuestionStatus: boolean
-    @ApiPropertyOptional({ type: "string", format: "binary" })
-    samplePhotoTopQuestion: string
-
+    @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
+    samplePhotoTopQuestion: string[]
     @ApiPropertyOptional({ type: "boolean" })
     bedDoesNotLookFreshStatus: boolean
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
@@ -19,5 +19,7 @@ export class CreateBedDto {
     DamageReportText: string
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
     DamageReportPhotos: string[]
+    room: Types.ObjectId
+
 }
 

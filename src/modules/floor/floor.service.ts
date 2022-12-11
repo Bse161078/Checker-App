@@ -41,6 +41,7 @@ export class FloorService {
       },
       checker,
       hotel: new Types.ObjectId(hotel),
+      room: createFloorDto.room,
       damage: {
         text: createFloorDto.DamageReportText,
         photos: newFile.DamageReportPhotos

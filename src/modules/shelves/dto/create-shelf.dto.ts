@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { Types } from "mongoose";
 
-export class CreateShelfDto {
+export class CreateShelvesDto {
     @ApiPropertyOptional({default: false, type: "boolean", })
     topQuestionStatus: boolean
     @ApiPropertyOptional({type: "string", format: "binary"})
@@ -33,4 +34,5 @@ export class CreateShelfDto {
     DamageReportText: string
     @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
     DamageReportPhotos: string[]
+    room: Types.ObjectId
 }

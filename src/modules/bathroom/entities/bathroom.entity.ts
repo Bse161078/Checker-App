@@ -18,7 +18,7 @@ class CommentsClass extends Document {
 
 }
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
-export interface IBethRoomComment {
+export interface IBathRoomComment {
     tilesAreNotMopped: ICommentValue;
     toiletIsNotWiped: ICommentValue;
     thereIsDirtInTheShowe: ICommentValue;
@@ -26,13 +26,13 @@ export interface IBethRoomComment {
     traysAreNotFilled: ICommentValue;
 }
 @Schema()
-export class BethRoom {
+export class BathRoom {
     @Prop()
     title: string;
     @Prop({ type: TopQuestionSchema })
     topQuestion: ITopQuestion;
     @Prop({ type: CommentsSchema })
-    comments: IBethRoomComment;
+    comments: IBathRoomComment;
     @Prop({ type: DamageReportSchema })
     damage: IDamageReport;
     @Prop({type: Types.ObjectId, ref: "User"})
@@ -44,5 +44,5 @@ export class BethRoom {
     @Prop({type: Types.ObjectId, ref: "User"})
     checker: Types.ObjectId;
 }
-export type BethRoomDocument = BethRoom & Document;
-export const BethRoomSchema = SchemaFactory.createForClass(BethRoom)
+export type BathRoomDocument = BathRoom & Document;
+export const BathRoomSchema = SchemaFactory.createForClass(BathRoom)

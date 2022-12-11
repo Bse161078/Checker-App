@@ -5,36 +5,46 @@ import { IComments, ICommentValue, IDamageReport, ITopQuestion } from "../../che
 
 @Schema()
 class CommentsClass extends Document {
-    @Prop({type: CommentsValueSchema })
+    @Prop({ type: CommentsValueSchema })
     tableNotClean: ICommentValue;
-    @Prop({type: CommentsValueSchema })
+    @Prop({ type: CommentsValueSchema })
     sideTableNotClean: ICommentValue;
-    @Prop({type: CommentsValueSchema })
+    @Prop({ type: CommentsValueSchema })
     tvStandNotClean: ICommentValue;
-    @Prop({type: CommentsValueSchema })
+    @Prop({ type: CommentsValueSchema })
     cabinetTopAndInsideSurfacesNotClean: ICommentValue;
-    @Prop({type: CommentsValueSchema })
+    @Prop({ type: CommentsValueSchema })
     windowSillNotClean: ICommentValue;
-    @Prop({type: CommentsValueSchema })
+    @Prop({ type: CommentsValueSchema })
     BrochuresNotNeatlyAndSortedInTheirPlace: ICommentValue;
 }
-
+export interface IShelvesComments {
+    tableNotClean: ICommentValue
+    sideTableNotClean: ICommentValue
+    tvStandNotClean: ICommentValue
+    cabinetTopAndInsideSurfacesNotClean: ICommentValue
+    windowSillNotClean: ICommentValue
+    BrochuresNotNeatlyAndSortedInTheirPlace: ICommentValue
+}
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
 
+@Schema()
 export class Shelves {
     @Prop()
     title: string;
     @Prop({ type: TopQuestionSchema })
     topQuestion: ITopQuestion;
     @Prop({ type: CommentsSchema })
-    comments: IComments;
+    comments: IShelvesComments;
     @Prop({ type: DamageReportSchema })
     damage: IDamageReport;
-    @Prop({type: Types.ObjectId, ref: "User"})
+    @Prop({ type: Types.ObjectId, ref: "User" })
     cleaner: Types.ObjectId;
-    @Prop({type: Types.ObjectId, ref: "Room"})
+    @Prop({ type: Types.ObjectId, ref: "User" })
+    checker: Types.ObjectId;
+    @Prop({ type: Types.ObjectId, ref: "Room" })
     room: Types.ObjectId;
-    @Prop({type: Types.ObjectId, ref: "User"})
+    @Prop({ type: Types.ObjectId, ref: "User" })
     hotel: Types.ObjectId;
 }
 export type ShelvesDocument = Shelves & Document;

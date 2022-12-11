@@ -9,6 +9,7 @@ import { AppModule } from './modules/app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors()
   app.useGlobalFilters(new AllExceptionFilter(), new MongoExceptionFilter(), new ValidationFilter())
   app.useGlobalInterceptors(new ResponseInterceptor())
   SwaggerInit(app)

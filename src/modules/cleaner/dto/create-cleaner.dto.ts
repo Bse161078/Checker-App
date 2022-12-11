@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Length } from "class-validator";
 import { Types } from "mongoose";
 
@@ -6,6 +6,8 @@ export class CreateCleanerDto {
     @ApiProperty({type: "string"})
     @Length(3)
     fullname: string;
+    @ApiPropertyOptional({type: "string", format: "binary", })
+    avatar: string;
     @ApiProperty({example: "09:00"})
     @Length(5,5)
     startAt: string;

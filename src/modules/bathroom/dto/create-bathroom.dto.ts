@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from "@nestjs/swagger"
+import { Types } from "mongoose"
 
-export class CreateBethroomDto {
+export class CreateBathroomDto {
     @ApiPropertyOptional({ default: false, type: "boolean", })
     topQuestionStatus: boolean
     @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
@@ -29,4 +30,5 @@ export class CreateBethroomDto {
     DamageReportText: string
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
     DamageReportPhotos: string[]
+    room: Types.ObjectId;
 }

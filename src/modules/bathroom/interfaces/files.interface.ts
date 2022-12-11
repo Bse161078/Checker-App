@@ -1,6 +1,6 @@
 import { MulterFile } from "src/common/types/public"
 
-export interface IBethRoomFilesUpload {
+export interface IBathRoomFilesUpload {
     samplePhotoTopQuestion: MulterFile[]
     tilesAreNotMoppedPhotos: MulterFile[]
     toiletIsNotWipedPhotos: MulterFile[]

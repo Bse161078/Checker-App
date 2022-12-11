@@ -1,4 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { Types } from "mongoose";
 
 export class CreateCurtainDto {
     @ApiPropertyOptional({default: false, type: "bool", })
@@ -17,4 +18,5 @@ export class CreateCurtainDto {
     DamageReportText: string
     @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
     DamageReportPhotos: string[]
+    room: Types.ObjectId
 }

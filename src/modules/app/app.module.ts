@@ -7,7 +7,7 @@ import { jwtConfig } from 'src/config/jwt.config';
 import dbConfig from 'src/config/mongoose.config';
 import { AuthModule } from '../auth/auth.module';
 import { BedModule } from '../bed/bed.module';
-import { BethroomModule } from '../bethroom/bethroom.module';
+import { BathroomModule } from '../bathroom/bathroom.module';
 import { AdminCheckListModule } from '../check-list/check-list.module';
 import { CleanerModule } from '../cleaner/cleaner.module';
 import { CurtainsModule } from '../curtains/curtains.module';
@@ -35,7 +35,7 @@ import { UserModule } from '../user/user.module';
     CurtainsModule,
     ShelvesModule,
     BedModule,
-    BethroomModule,
+    BathroomModule,
   ],
   controllers: [],
   providers: [],

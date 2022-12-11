@@ -8,7 +8,6 @@ export default function SwaggerInit(app: INestApplication) {
     .setVersion("v1")
     .addBearerAuth(SwaggerBearerConfig())
     .setDescription("api for admin and application of theChecker ")
-    .addServer("http://localhost:3000", "localhost server")
     .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup("/", app, document);

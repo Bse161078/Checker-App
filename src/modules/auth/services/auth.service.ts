@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { compareSync, genSaltSync, hashSync } from "bcrypt";
 import { Request } from "express";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { ROLES } from "src/common/enums/role.enum";
 import { User, UserDocument } from "../../user/entities/user.entity";
 import { LoginDto } from "../dto/login.dto";
@@ -32,11 +32,14 @@ export class AuthService {
             role: user.role
         }
     }
-    async register(registerDto: RegisterDto) {
+    async register(registerDto: RegisterDto | any) {
+        if (await this.userRepository.count() == 0) {
+            registerDto._id = new Types.ObjectId('6394666596c86815d3ccef30')
+        }
         const user = await this.userRepository.findOne({ username: registerDto.username });
         if (user) throw new UnauthorizedException("username already exist");
         registerDto.password = this.hashPassword(registerDto.password);
-        const userDto = Object.assign(registerDto, {role : ROLES.USER})
+        const userDto = Object.assign(registerDto, { role: ROLES.USER })
         return await this.userRepository.create(userDto)
     }
 
