@@ -30,4 +30,11 @@ export class CurtainsController {
     const result = await this.curtainsService.create(createCurtainDto, files);
   }
 
+  @Get("/:roomID")
+  @ApiParam({ name: "roomID", type: "string", required: true })
+  async getBathRoomDetail(@Param() param: RoomIdDto) {
+    const roomId = new Types.ObjectId(param.roomID)
+    const curtain = await this.curtainsService.getCurtainStatus(roomId)
+    return { curtain }
+  }
 }

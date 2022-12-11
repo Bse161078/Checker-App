@@ -30,4 +30,11 @@ export class BathroomController {
     const result = await this.bathroomService.create(createBathroomDto, files);
     return { message: "save bath-room data successfully" }
   }
+  @Get("/:roomID")
+  @ApiParam({ name: "roomID", type: "string", required: true })
+  async getBathRoomDetail(@Param() param: RoomIdDto) {
+    const roomId = new Types.ObjectId(param.roomID)
+    const bathroom = await this.bathroomService.getBathRoomStatus(roomId)
+    return { bathroom }
+  }
 }

@@ -17,7 +17,7 @@ export class FloorService {
   ) { }
   async create(createFloorDto: CreateFloorDto & any, files: IFloorFilesUpload) {
     const { hotel, _id: checker } = this.request.user;
-    const floor = await this.findOneByCheckerAndHotel();
+    const floor = await this.findOneFloor(createFloorDto.room);
     createFloorDto = parseValue(createFloorDto)
     const newFile: any = getObjectFiles(files);
     const newDto: FloorDto = {
@@ -55,17 +55,14 @@ export class FloorService {
     return true
   }
 
-  async getFloorStatus() {
-    const floor = await this.findOneByCheckerAndHotel();
+  async getFloorStatus(room: Types.ObjectId) {
+    const floor = await this.findOneFloor(room);
     if (floor) return floor;
     throw new NotFoundException("still not fill floor status")
   }
 
-  async findOneByCheckerAndHotel() {
-    const { hotel, _id: checker } = this.request.user;
-    const floor = await this.floorRepository.findOne({ hotel, checker });
-    console.log(floor);
-
+  async findOneFloor(room: Types.ObjectId) {
+    const floor = await this.floorRepository.findOne({ room });
     return floor;
   }
 

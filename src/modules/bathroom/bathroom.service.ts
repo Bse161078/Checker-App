@@ -18,7 +18,7 @@ export class BathroomService {
   async create(createBathroomDto: CreateBathroomDto | any, files: IBathRoomFilesUpload) {
     const { hotel, _id: checker } = this.request.user;
     const { room } = createBathroomDto;
-    const bathroom = await this.findOneByCheckerAndHotel(room);
+    const bathroom = await this.findOneBathRoom(room);
     createBathroomDto = parseValue(createBathroomDto)
     const newFile: any = getObjectFiles(files);
     const newDto: BathRoomDto = {
@@ -64,12 +64,12 @@ export class BathroomService {
     return true
   }
   async getBathRoomStatus(room: Types.ObjectId) {
-    const bathroom = await this.findOneByCheckerAndHotel(room);
+    const bathroom = await this.findOneBathRoom(room);
     if (bathroom) return bathroom;
     throw new NotFoundException("still not fill bathroom status")
   }
 
-  async findOneByCheckerAndHotel(room: Types.ObjectId) {
+  async findOneBathRoom(room: Types.ObjectId) {
     const bathroom = await this.bathroomRepository.findOne({ room });
     return bathroom;
   }

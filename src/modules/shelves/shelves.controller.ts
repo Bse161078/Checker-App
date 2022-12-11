@@ -8,9 +8,12 @@ import { IShelvesFilesUpload } from './interfaces/files.interface';
 import { ShelvesFileUpload } from './interceptors/upload-file-shelves.interceptor';
 import { RoomIdDto } from '../room/dto/room.dto';
 import { Types } from 'mongoose';
+import { AuthDecorator } from 'src/common/decorators/auth.decorator';
+import { ROLES } from 'src/common/enums/role.enum';
 
 @Controller('shelves')
 @ApiTags("Shelves")
+@AuthDecorator(ROLES.CHECKER)
 export class ShelvesController {
   constructor(private readonly shelvesService: ShelvesService) { }
 
@@ -28,4 +31,11 @@ export class ShelvesController {
     return { message: "save shelves data successfully" }
   }
 
+  @Get("/:roomID")
+  @ApiParam({ name: "roomID", type: "string", required: true })
+  async getBathRoomDetail(@Param() param: RoomIdDto) {
+    const roomId = new Types.ObjectId(param.roomID)
+    const shelves = await this.shelvesService.getShelvesStatus(roomId)
+    return { shelves }
+  }
 }

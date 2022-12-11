@@ -18,7 +18,7 @@ export class ShelvesService {
   ) { }
   async create(createShelvesDto: CreateShelvesDto | any, files: IShelvesFilesUpload) {
     const { hotel, _id: checker } = this.request.user;
-    const shelves = await this.findOneByCheckerAndHotel();
+    const shelves = await this.findOneShelves(createShelvesDto.room);
     createShelvesDto = parseValue(createShelvesDto)
     const newFile: any = getObjectFiles(files);
     const newDto: ShelvesDto = {
@@ -67,15 +67,14 @@ export class ShelvesService {
     }
     return true
   }
-  async getFloorStatus() {
-    const shelves = await this.findOneByCheckerAndHotel();
+  async getShelvesStatus(room: Types.ObjectId) {
+    const shelves = await this.findOneShelves(room);
     if (shelves) return shelves;
-    throw new NotFoundException("still not fill floor status")
+    throw new NotFoundException("still not fill shelves status")
   }
 
-  async findOneByCheckerAndHotel() {
-    const { hotel, _id: checker } = this.request.user;
-    const shelves = await this.shelvesRepository.findOne({ hotel, checker });
+  async findOneShelves(room: Types.ObjectId) {
+    const shelves = await this.shelvesRepository.findOne({ room });
     return shelves;
   }
 }

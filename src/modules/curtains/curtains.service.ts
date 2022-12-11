@@ -19,7 +19,7 @@ export class CurtainsService {
 
   async create(createCurtainDto: CreateCurtainDto & any, files: ICurtainFilesUpload) {
     const { hotel, _id: checker } = this.request.user;
-    const curtain = await this.findOneByCheckerAndHotel();
+    const curtain = await this.findOneCurtain(createCurtainDto.room);
     createCurtainDto = parseValue(createCurtainDto)
     const newFile: any = getObjectFiles(files);
     const newDto: CurtainDto = {
@@ -53,15 +53,14 @@ export class CurtainsService {
     return true
   }
 
-  async getFloorStatus() {
-    const curtain = await this.findOneByCheckerAndHotel();
+  async getCurtainStatus(room: Types.ObjectId) {
+    const curtain = await this.findOneCurtain(room);
     if (curtain) return curtain;
-    throw new NotFoundException("still not fill floor status")
+    throw new NotFoundException("still not fill curtain status")
   }
 
-  async findOneByCheckerAndHotel() {
-    const { hotel, _id: checker } = this.request.user;
-    const curtain = await this.curtainRepository.findOne({ hotel, checker });
+  async findOneCurtain(room: Types.ObjectId) {
+    const curtain = await this.curtainRepository.findOne({ room });
     return curtain;
   }
 }

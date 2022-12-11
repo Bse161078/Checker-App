@@ -31,9 +31,11 @@ export class FloorController {
     return { message: "save floor data successfully" }
   }
 
-  @Get()
-  getFloorStatus() {
-    const floor = this.floorService.getFloorStatus();
+  @Get("/:roomID")
+  @ApiParam({ name: "roomID", type: "string", required: true })
+  async getFloorDetail(@Param() param: RoomIdDto) {
+    const roomId = new Types.ObjectId(param.roomID)
+    const floor = await this.floorService.getFloorStatus(roomId)
     return { floor }
   }
 }

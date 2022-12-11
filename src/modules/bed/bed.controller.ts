@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Upl
 import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { Types } from 'mongoose';
+import { AuthDecorator } from 'src/common/decorators/auth.decorator';
 import { SwaggerConsumes } from 'src/common/enums';
+import { ROLES } from 'src/common/enums/role.enum';
 import { RoomIdDto } from '../room/dto/room.dto';
 import { BedService } from './bed.service';
 import { CreateBedDto } from './dto/create-bed.dto';
@@ -11,6 +13,7 @@ import { IBedFilesUpload } from './interfaces/files.interface';
 
 @Controller('bed')
 @ApiTags("Bed")
+@AuthDecorator(ROLES.CHECKER)
 export class BedController {
   constructor(private readonly bedService: BedService) { }
 
@@ -25,5 +28,12 @@ export class BedController {
   ) {
     createBedDto.room = new Types.ObjectId(param.roomID);
     return this.bedService.create(createBedDto, files);
+  }
+  @Get("/:roomID")
+  @ApiParam({ name: "roomID", type: "string", required: true })
+  async getBedDetail(@Param() param: RoomIdDto) {
+    const roomId = new Types.ObjectId(param.roomID)
+    const bed = await this.bedService.getBedStatus(roomId)
+    return { bed }
   }
 }

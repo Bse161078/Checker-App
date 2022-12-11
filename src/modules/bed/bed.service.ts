@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Request } from 'express';
@@ -10,7 +10,7 @@ import { UpdateBedDto } from './dto/update-bed.dto';
 import { Bed, BedDocument } from './entities/bed.entity';
 import { IBedFilesUpload } from './interfaces/files.interface';
 
-@Injectable()
+@Injectable({scope: Scope.REQUEST})
 export class BedService {
   constructor(
     @Inject(REQUEST) private request: Request,
@@ -19,7 +19,7 @@ export class BedService {
   async create(createBedDto: CreateBedDto | any, files: IBedFilesUpload) {
     const { hotel, _id: checker } = this.request.user;
     const { room } = createBedDto;
-    const bed = await this.findOneByCheckerAndHotel(room);
+    const bed = await this.findOneBed(room);
     createBedDto = parseValue(createBedDto)
     const newFile: any = getObjectFiles(files);
     const newDto: BedDto = {
@@ -52,13 +52,13 @@ export class BedService {
     }
     return true
   }
-  async getBathRoomStatus(room: Types.ObjectId) {
-    const bed = await this.findOneByCheckerAndHotel(room);
+  async getBedStatus(room: Types.ObjectId) {
+    const bed = await this.findOneBed(room);
     if (bed) return bed;
     throw new NotFoundException("still not fill bed status")
   }
 
-  async findOneByCheckerAndHotel(room: Types.ObjectId) {
+  async findOneBed(room: Types.ObjectId) {
     const bed = await this.bedRepository.findOne({ room });
     return bed;
   }
