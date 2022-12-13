@@ -1,0 +1,39 @@
+{
+    "version": 1,
+    "env": {
+        "NODE_ENV":"production",
+        "APPLICATION_PORT":"3000",
+        "BACKEND_URL":"",
+        "FRONTEND_URL":"",
+        "DB_USERNAME":"root",
+        "DB_PASSWORD":"3Hc6RQAICMvT8xD2YtAFqeZJ",
+        "DB_HOST":"may.iran.liara.ir",
+        "DB_PORT":"30707",
+        "DB_NAME":"my-app",
+        "DB_OPTION":"authSource=admin",
+        "DB_URI":"mongodb://root:3Hc6RQAICMvT8xD2YtAFqeZJ@checkerappdb:27017/my-app?authSource:admin",
+        "ACCESS_TOKEN_SECRET":"SDFVDSGREFYHRTE52RE52ERGER5GHER5FGE52RGER52AFGWE",
+        "REFRESH_TOKEN_SECRET":"DASF5SDF52WESDF58WEFQASWD6AQS52FDSD562VC56ADSWF562AQSC6ASC",
+        "ACCESS_TOKEN_EXPIRES_IN":"1d",
+        "REFRESH_TOKEN_EXPIRES_IN":"1y"
+    },
+    "builds": [
+        {
+            "src" : "src/main.ts",
+            "use" : "@vercel/node"
+        }
+    ],
+    "routes" : [
+        {
+            "src" : "/(.*)",
+            "dest" : "src/main.ts",
+            "mrthods": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT",
+                "PATCH"
+            ]
+        }
+    ]
+}
