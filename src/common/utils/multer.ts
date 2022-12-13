@@ -1,15 +1,15 @@
 import { BadRequestException } from "@nestjs/common";
 import { Request } from "express";
 import * as path from "path";
+import { MulterCallback, MulterFile } from "../types/public";
 
-export const destinationImageFile = (req: Request, file, callback) => {
-        return callback(null, path.join("public", "upload", "images"));
+export const destinationImageFile = (req: Request, file: MulterFile, callback: (error: Error | null, fileDestination: string | null) => void) => {
+    return callback(null, path.join("public", "upload", "images"));
 };
-export const imageFileFilter = (req: Request, file, callback) => {
+export const imageFileFilter = (req: Request, file: MulterFile, callback: (error: Error | null, acceptFile: boolean) => void) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
-        callback(new BadRequestException('Only image files are allowed!'), false)
-    }
-    callback(null, true);
+        callback(new Error('Only image files are allowed!'), false)
+    } else callback(null, true);
 };
 
 export const editFileName = (req: Request, file: Express.Multer.File, callback) => {

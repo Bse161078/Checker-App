@@ -8,6 +8,5 @@ export function UploadImageInterceptor(fieldName: string){
             destination: destinationImageFile,
             filename: editFileName,
         }),
-        fileFilter: imageFileFilter
     }){}
 }

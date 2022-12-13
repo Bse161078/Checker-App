@@ -16,6 +16,7 @@ import { LevelModule } from '../level/level.module';
 import { AdminRoomModule } from '../room/room.module';
 import { ShelvesModule } from '../shelves/shelves.module';
 import { UserModule } from '../user/user.module';
+import { CheckerModule } from '../checker/checker.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from '../user/user.module';
     AuthModule,
     UserModule,
     CleanerModule,
+    CheckerModule,
     LevelModule,
     AdminRoomModule,
     AdminCheckListModule,

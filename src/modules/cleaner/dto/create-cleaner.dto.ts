@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Length } from "class-validator";
 import { Types } from "mongoose";
+import { ROLES } from "src/common/enums/role.enum";
 
 export class CreateCleanerDto {
     @ApiProperty({type: "string"})
@@ -24,9 +25,9 @@ export class CreateCleanerDto {
     salaryPerRoom: number;
     @ApiProperty({type: "integer"})
     roomCountForCleanEachDay: number;
-    @ApiProperty({type: "string"})
+    @ApiPropertyOptional({type: "string"})
     hotelID: string;
-    
+    role: ROLES = ROLES.CLEANER;
     company?: Types.ObjectId;
     hotel?: Types.ObjectId;
 }
