@@ -35,3 +35,4 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 *.jpg\n*.jpeg\n*.png\n*.gif\n
+public/upload/images/*.*
