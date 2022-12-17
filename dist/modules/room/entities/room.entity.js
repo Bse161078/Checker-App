@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoomSchema = exports.Room = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
-const room_type_enum_1 = require("../enum/room-type.enum");
 let Room = class Room {
 };
 __decorate([
@@ -20,13 +19,17 @@ __decorate([
     __metadata("design:type", String)
 ], Room.prototype, "name", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ enum: room_type_enum_1.RoomType }),
-    __metadata("design:type", String)
-], Room.prototype, "type", void 0);
+    (0, mongoose_1.Prop)({ ref: 'RoomType' }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Room.prototype, "roomType", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ ref: 'Level' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], Room.prototype, "level", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ ref: 'User' }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Room.prototype, "hotel", void 0);
 Room = __decorate([
     (0, mongoose_1.Schema)()
 ], Room);

@@ -13,13 +13,12 @@ exports.CreateRoomDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const mongoose_1 = require("mongoose");
-const room_type_enum_1 = require("../enum/room-type.enum");
 class CreateRoomDto {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: "string", format: "enum", enum: room_type_enum_1.RoomType }),
-    __metadata("design:type", String)
-], CreateRoomDto.prototype, "type", void 0);
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", mongoose_1.Types.ObjectId)
+], CreateRoomDto.prototype, "roomType", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.Length)(3),

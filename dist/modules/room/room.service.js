@@ -17,19 +17,41 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const room_entity_1 = require("./entities/room.entity");
+const core_1 = require("@nestjs/core");
+const role_enum_1 = require("../../common/enums/role.enum");
 let AdminRoomService = class AdminRoomService {
-    constructor(adminRoomRepository) {
+    constructor(adminRoomRepository, request) {
         this.adminRoomRepository = adminRoomRepository;
+        this.request = request;
     }
     async create(createRoomDto) {
+        const user = this.request.user;
         createRoomDto.level = new mongoose_2.Types.ObjectId(createRoomDto.level);
+        if (user.hotel)
+            createRoomDto.hotel = user.hotel;
+        if (user.role == role_enum_1.ROLES.HOTELADMIN)
+            createRoomDto.hotel = user._id;
+        createRoomDto.roomType = new mongoose_2.Types.ObjectId(createRoomDto.roomType);
         const createdResult = await this.adminRoomRepository.create(createRoomDto);
         return createdResult;
     }
     async findAll(filter = {}) {
+        const user = this.request.user;
+        if (user.hotel)
+            filter['hotel'] = user.hotel;
+        if (user.role == role_enum_1.ROLES.HOTELADMIN)
+            filter['hotel'] = user._id;
         const rooms = await this.adminRoomRepository.aggregate([
             {
                 $match: filter
+            },
+            {
+                $lookup: {
+                    from: "roomtypes",
+                    foreignField: "_id",
+                    localField: "roomType",
+                    as: "roomType"
+                },
             },
             {
                 $lookup: {
@@ -84,6 +106,12 @@ let AdminRoomService = class AdminRoomService {
             },
             {
                 $unwind: {
+                    path: "$roomType",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
                     path: "$bathroom",
                     preserveNullAndEmptyArrays: true
                 }
@@ -116,6 +144,8 @@ let AdminRoomService = class AdminRoomService {
                 $project: {
                     "level.__v": 0,
                     "level.hotel": 0,
+                    "roomType.hotel": 0,
+                    "roomType.__v": 0,
                     __v: 0
                 }
             }
@@ -146,9 +176,10 @@ let AdminRoomService = class AdminRoomService {
     }
 };
 AdminRoomService = __decorate([
-    (0, common_1.Injectable)(),
+    (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),
     __param(0, (0, mongoose_1.InjectModel)(room_entity_1.Room.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __param(1, (0, common_1.Inject)(core_1.REQUEST)),
+    __metadata("design:paramtypes", [mongoose_2.Model, Object])
 ], AdminRoomService);
 exports.AdminRoomService = AdminRoomService;
 //# sourceMappingURL=room.service.js.map

@@ -26,6 +26,7 @@ const room_module_1 = require("../room/room.module");
 const shelves_module_1 = require("../shelves/shelves.module");
 const user_module_1 = require("../user/user.module");
 const checker_module_1 = require("../checker/checker.module");
+const room_type_module_1 = require("../room-type/room-type.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -39,6 +40,7 @@ AppModule = __decorate([
             jwt_1.JwtModule.register((0, jwt_config_1.jwtConfig)()),
             auth_module_1.AuthModule,
             user_module_1.UserModule,
+            room_type_module_1.RoomTypeModule,
             cleaner_module_1.CleanerModule,
             checker_module_1.CheckerModule,
             level_module_1.LevelModule,

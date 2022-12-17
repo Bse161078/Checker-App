@@ -8,6 +8,7 @@ import { User, UserDocument } from '../user/entities/user.entity';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { Level, LevelDocument } from './entities/level.entity';
+import { ROLES } from 'src/common/enums/role.enum';
 
 @Injectable({ scope: Scope.REQUEST })
 export class LevelService {
@@ -24,7 +25,9 @@ export class LevelService {
     return level;
   }
   async findAll(filter: FilterQuery<UserDocument> = {}) {
-    const user = this.request.user._id
+    const user = this.request.user;
+    if(user.hotel) filter['hotel'] = user._id;
+    if(user.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
     return await this.adminLevelRepository.aggregate([
       { $match: filter },
       {

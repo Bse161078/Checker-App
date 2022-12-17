@@ -23,11 +23,11 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Types } from "mongoose";
-import { RoomType } from "../enum/room-type.enum";
 export declare class Room {
     name: string;
-    type: RoomType;
+    roomType: Types.ObjectId;
     level: Types.ObjectId;
+    hotel: Types.ObjectId;
 }
 export type RoomDocument = Room & Document;
 export declare const RoomSchema: import("mongoose").Schema<Room, import("mongoose").Model<Room, any, any, any, any>, {}, {}, {}, {}, "type", Room>;

@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import { RoomType } from "../enum/room-type.enum";
 export declare class CreateRoomDto {
-    type: RoomType;
+    roomType: Types.ObjectId;
     name: string;
     level: Types.ObjectId;
+    hotel: Types.ObjectId;
 }

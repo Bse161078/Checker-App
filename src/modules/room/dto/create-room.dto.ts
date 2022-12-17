@@ -4,11 +4,12 @@ import { Types } from "mongoose";
 import { RoomType } from "../enum/room-type.enum";
 
 export class CreateRoomDto {
-    @ApiProperty({type: "string", format: "enum", enum: RoomType})
-    type: RoomType;
+    @ApiProperty()
+    roomType: Types.ObjectId;
     @ApiProperty()
     @Length(3)
     name: string;
     @ApiProperty({type: "string"})
     level: Types.ObjectId;
+    hotel: Types.ObjectId
 }

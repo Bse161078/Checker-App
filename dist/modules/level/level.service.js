@@ -20,6 +20,7 @@ const mongoose_2 = require("mongoose");
 const room_entity_1 = require("../room/entities/room.entity");
 const user_entity_1 = require("../user/entities/user.entity");
 const level_entity_1 = require("./entities/level.entity");
+const role_enum_1 = require("../../common/enums/role.enum");
 let LevelService = class LevelService {
     constructor(adminLevelRepository, adminRoomRepository, userRepository, request) {
         this.adminLevelRepository = adminLevelRepository;
@@ -33,7 +34,11 @@ let LevelService = class LevelService {
         return level;
     }
     async findAll(filter = {}) {
-        const user = this.request.user._id;
+        const user = this.request.user;
+        if (user.hotel)
+            filter['hotel'] = user._id;
+        if (user.role == role_enum_1.ROLES.HOTELADMIN)
+            filter['hotel'] = user._id;
         return await this.adminLevelRepository.aggregate([
             { $match: filter },
             {

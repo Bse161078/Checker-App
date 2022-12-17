@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { ROLES } from 'src/common/enums';
 
 declare global {
@@ -9,7 +9,7 @@ declare global {
       email?: string;
       role?: string;
       accessToken?: string;
-      hotel?: string;
+      hotel?: Types.ObjectId;
       whoMakeIt?: string;
     }
   }

@@ -26,9 +26,11 @@ import { FilterQuery, Model, Types } from 'mongoose';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { Room, RoomDocument } from './entities/room.entity';
+import { Request } from 'express';
 export declare class AdminRoomService {
     private readonly adminRoomRepository;
-    constructor(adminRoomRepository: Model<RoomDocument>);
+    private request;
+    constructor(adminRoomRepository: Model<RoomDocument>, request: Request);
     create(createRoomDto: CreateRoomDto): Promise<import("mongoose").Document<unknown, any, RoomDocument> & Room & Document & {
         _id: Types.ObjectId;
     }>;

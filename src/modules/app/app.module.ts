@@ -17,6 +17,7 @@ import { AdminRoomModule } from '../room/room.module';
 import { ShelvesModule } from '../shelves/shelves.module';
 import { UserModule } from '../user/user.module';
 import { CheckerModule } from '../checker/checker.module';
+import { RoomTypeModule } from '../room-type/room-type.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CheckerModule } from '../checker/checker.module';
     JwtModule.register(jwtConfig()),
     AuthModule,
     UserModule,
+    RoomTypeModule,
     CleanerModule,
     CheckerModule,
     LevelModule,
