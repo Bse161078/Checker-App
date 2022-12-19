@@ -31,10 +31,6 @@ export class User {
     @Prop()
     accessToken: string;
     @Prop()
-    startAt: string;
-    @Prop()
-    endAt: string;
-    @Prop()
     salaryPerRoom: string;
     @Prop()
     roomCountForCleanEachDay: string;

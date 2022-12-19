@@ -1,6 +1,8 @@
 {
     "dotenv.enableAutocloaking": false,
     "cSpell.words": [
-        "HOTELADMIN"
+        "COMPANYADMIN",
+        "HOTELADMIN",
+        "SUPERADMIN"
     ]
 }

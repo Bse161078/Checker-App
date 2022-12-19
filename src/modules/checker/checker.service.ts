@@ -71,4 +71,22 @@ export class CheckerService {
     if (!!deletedResult.deletedCount) return true;
     throw new BadRequestException("deleted checker failed")
   }
+  async getCompanyCheckers(companyID: string){
+    const checkers = await this.userRepository.find({company: companyID, role: ROLES.CHECKER});
+    return checkers
+  }
+  async getCompanyCheckerById(checkerId: string){
+    const checker = await this.userRepository.findOne({_id: checkerId, role: ROLES.CHECKER});
+    if(!checker) throw new NotFoundException("not found any checker");
+    return checker
+  }
+  async getHotelCheckers(hotelID: string){
+    const checkers = await this.userRepository.find({hotel: hotelID, role: ROLES.CHECKER});
+    return checkers
+  }
+  async getHotelCheckerById(checkerId: string){
+    const checker = await this.userRepository.findOne({_id: checkerId, role: ROLES.CHECKER});
+    if(!checker) throw new NotFoundException("not found any checker");
+    return checker
+  }
 }

@@ -31,6 +31,8 @@ export declare class CleaningHistory {
     room: Types.ObjectId;
     checker: Types.ObjectId;
     status: ROOM_STATUS;
+    checkerStatus: ROOM_STATUS;
+    checkoutStatus: boolean;
 }
 export type CleaningHistoryDocument = CleaningHistory & Document;
 export declare const CleaningHistorySchema: import("mongoose").Schema<CleaningHistory, import("mongoose").Model<CleaningHistory, any, any, any, any>, {}, {}, {}, {}, "type", CleaningHistory>;

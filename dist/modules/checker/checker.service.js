@@ -86,6 +86,26 @@ let CheckerService = class CheckerService {
             return true;
         throw new common_1.BadRequestException("deleted checker failed");
     }
+    async getCompanyCheckers(companyID) {
+        const checkers = await this.userRepository.find({ company: companyID, role: role_enum_1.ROLES.CHECKER });
+        return checkers;
+    }
+    async getCompanyCheckerById(checkerId) {
+        const checker = await this.userRepository.findOne({ _id: checkerId, role: role_enum_1.ROLES.CHECKER });
+        if (!checker)
+            throw new common_1.NotFoundException("not found any checker");
+        return checker;
+    }
+    async getHotelCheckers(hotelID) {
+        const checkers = await this.userRepository.find({ hotel: hotelID, role: role_enum_1.ROLES.CHECKER });
+        return checkers;
+    }
+    async getHotelCheckerById(checkerId) {
+        const checker = await this.userRepository.findOne({ _id: checkerId, role: role_enum_1.ROLES.CHECKER });
+        if (!checker)
+            throw new common_1.NotFoundException("not found any checker");
+        return checker;
+    }
 };
 CheckerService = __decorate([
     (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),

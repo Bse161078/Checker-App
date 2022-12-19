@@ -1,4 +1,8 @@
 export declare enum ROOM_STATUS {
-    PENDING = "PENDING",
-    FINISHED = "FINISHED"
+    START = "START",
+    FINISH = "FINISH",
+    CLEANED = "CLEANED",
+    NOT_CLEANED = "NOT_CLEANED",
+    IN_PROGRESS = "IN_PROGRESS",
+    DAMAGED = "DAMAGED"
 }

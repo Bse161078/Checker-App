@@ -26,6 +26,7 @@ const room_dto_1 = require("../room/dto/room.dto");
 const cleaner_service_1 = require("./cleaner.service");
 const create_cleaner_dto_1 = require("./dto/create-cleaner.dto");
 const update_cleaner_dto_1 = require("./dto/update-cleaner.dto");
+const cleaner_dto_1 = require("./dto/cleaner.dto");
 let CleanerController = class CleanerController {
     constructor(cleanerService) {
         this.cleanerService = cleanerService;
@@ -48,6 +49,34 @@ let CleanerController = class CleanerController {
         const { roomID } = param;
         const cleaningRoomStatus = await this.cleanerService.endCleaningRoom(roomID);
         return { message: `cleaner finished cleaning at ${cleaningRoomStatus.cleaningEndAt}` };
+    }
+    async getCleanerCompany(param, user) {
+        const { companyID } = param;
+        const cleaners = await this.cleanerService.getCompanyCleaners(companyID);
+        return {
+            cleaners
+        };
+    }
+    async getCleanerCompanyById(param, user) {
+        const { cleanerID } = param;
+        const cleaner = await this.cleanerService.getCompanyCleanerById(cleanerID);
+        return {
+            cleaner
+        };
+    }
+    async getCleanerHotel(param, user) {
+        const { hotelID } = param;
+        const cleaners = await this.cleanerService.getHotelCleaners(hotelID);
+        return {
+            cleaners
+        };
+    }
+    async getCleanerHotelById(param, user) {
+        const { cleanerID } = param;
+        const cleaner = await this.cleanerService.getHotelCleanerById(cleanerID);
+        return {
+            cleaner
+        };
     }
     findOne(id) {
         const cleaner = this.cleanerService.findOne(id);
@@ -99,6 +128,46 @@ __decorate([
     __metadata("design:paramtypes", [room_dto_1.RoomIdDto, Object]),
     __metadata("design:returntype", Promise)
 ], CleanerController.prototype, "finishCleaning", null);
+__decorate([
+    (0, common_1.Get)("/get-company-cleaners/:companyID"),
+    (0, swagger_1.ApiParam)({ name: "companyID", type: 'string' }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [cleaner_dto_1.CompanyIdDto, Object]),
+    __metadata("design:returntype", Promise)
+], CleanerController.prototype, "getCleanerCompany", null);
+__decorate([
+    (0, common_1.Get)("/get-company-cleaner-by-id/:cleanerID"),
+    (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [cleaner_dto_1.CleanerIdDto, Object]),
+    __metadata("design:returntype", Promise)
+], CleanerController.prototype, "getCleanerCompanyById", null);
+__decorate([
+    (0, common_1.Get)("/get-hotel-cleaners/:hotelID"),
+    (0, swagger_1.ApiParam)({ name: "hotelID", type: 'string' }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [cleaner_dto_1.HotelIdDto, Object]),
+    __metadata("design:returntype", Promise)
+], CleanerController.prototype, "getCleanerHotel", null);
+__decorate([
+    (0, common_1.Get)("/get-hotel-cleaner-by-id/:cleanerID"),
+    (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [cleaner_dto_1.CleanerIdDto, Object]),
+    __metadata("design:returntype", Promise)
+], CleanerController.prototype, "getCleanerHotelById", null);
 __decorate([
     (0, common_1.Get)(':id'),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.COMPANYADMIN, role_enum_1.ROLES.HOTELADMIN),

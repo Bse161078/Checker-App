@@ -56,6 +56,8 @@ let AdminRoomController = class AdminRoomController {
             message: "deleted room successfully"
         };
     }
+    async getCleanerBills() {
+    }
 };
 __decorate([
     (0, common_1.Post)(),
@@ -98,6 +100,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AdminRoomController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Get)('cleaner-bills'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminRoomController.prototype, "getCleanerBills", null);
 AdminRoomController = __decorate([
     (0, common_1.Controller)('room'),
     (0, swagger_1.ApiTags)("Admin-room"),

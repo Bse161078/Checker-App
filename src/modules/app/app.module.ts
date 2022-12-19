@@ -18,6 +18,9 @@ import { ShelvesModule } from '../shelves/shelves.module';
 import { UserModule } from '../user/user.module';
 import { CheckerModule } from '../checker/checker.module';
 import { RoomTypeModule } from '../room-type/room-type.module';
+import { BillsModule } from '../bills/bills.module';
+import { HotelModule } from '../hotel/hotel.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
   imports: [
@@ -29,8 +32,11 @@ import { RoomTypeModule } from '../room-type/room-type.module';
     JwtModule.register(jwtConfig()),
     AuthModule,
     UserModule,
+    HotelModule,
+    CompanyModule,
     RoomTypeModule,
     CleanerModule,
+    BillsModule,
     CheckerModule,
     LevelModule,
     AdminRoomModule,

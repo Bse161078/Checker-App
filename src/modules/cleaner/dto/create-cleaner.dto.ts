@@ -9,12 +9,6 @@ export class CreateCleanerDto {
     fullname: string;
     @ApiPropertyOptional({type: "string", format: "binary", })
     avatar: string;
-    @ApiProperty({example: "09:00"})
-    @Length(5,5)
-    startAt: string;
-    @ApiProperty({example: "18:20"})
-    @Length(5,5)
-    endAt: string;
     @ApiProperty()
     @Length(3)
     username: string;

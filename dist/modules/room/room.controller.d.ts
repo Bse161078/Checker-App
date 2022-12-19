@@ -19,4 +19,5 @@ export declare class AdminRoomController {
     remove(id: string): Promise<{
         message: string;
     }>;
+    getCleanerBills(): Promise<void>;
 }

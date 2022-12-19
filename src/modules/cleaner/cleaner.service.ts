@@ -79,13 +79,13 @@ export class CleanerService {
     const room = new Types.ObjectId(roomID);
     const cleaner = this.request.user._id;
     const cleaningStartAt: string = parseTime(date.getHours(), date.getMinutes());
-    const roomData = await this.cleaningHistoryRepository.findOne({room, status: ROOM_STATUS.PENDING});
+    const roomData = await this.cleaningHistoryRepository.findOne({room, status: ROOM_STATUS.START});
     if(roomData) throw new BadRequestException("Room cleaning not finished. Please finish cleaning first.")
     const createResult = await this.cleaningHistoryRepository.create({
       cleaner,
       cleaningStartAt,
       room,
-      status: ROOM_STATUS.PENDING
+      status: ROOM_STATUS.START
     });;
     return createResult;
   }
@@ -94,14 +94,32 @@ export class CleanerService {
     const room = new Types.ObjectId(roomID);
     const cleaner = this.request.user._id;
     const cleaningEndAt: string = parseTime(date.getHours(), date.getMinutes());
-    const roomData = await this.cleaningHistoryRepository.findOne({room, status: ROOM_STATUS.PENDING, cleaner});
+    const roomData = await this.cleaningHistoryRepository.findOne({room, status: ROOM_STATUS.START, cleaner});
     if(!roomData) throw new BadRequestException("not found any room being cleaned")
     const updatedResult = await this.cleaningHistoryRepository.updateOne({_id: roomData._id}, {
       $set: {
-        status: ROOM_STATUS.FINISHED,
+        status: ROOM_STATUS.FINISH,
         cleaningEndAt
       }
     });
     return {updatedResult, cleaningEndAt};
+  }
+  async getCompanyCleaners(companyID: string){
+    const cleaners = await this.userRepository.find({company: companyID, role: ROLES.CLEANER});
+    return cleaners
+  }
+  async getCompanyCleanerById(cleanerId: string){
+    const cleaner = await this.userRepository.findOne({_id: cleanerId, role: ROLES.CLEANER});
+    if(!cleaner) throw new NotFoundException("not found any cleaner");
+    return cleaner
+  }
+  async getHotelCleaners(hotelID: string){
+    const cleaners = await this.userRepository.find({hotel: hotelID, role: ROLES.CLEANER});
+    return cleaners
+  }
+  async getHotelCleanerById(cleanerId: string){
+    const cleaner = await this.userRepository.findOne({_id: cleanerId, role: ROLES.CLEANER});
+    if(!cleaner) throw new NotFoundException("not found any cleaner");
+    return cleaner
   }
 }

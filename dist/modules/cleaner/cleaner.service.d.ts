@@ -53,4 +53,16 @@ export declare class CleanerService {
         updatedResult: import("mongodb").UpdateResult;
         cleaningEndAt: string;
     }>;
+    getCompanyCleaners(companyID: string): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>)[]>;
+    getCompanyCleanerById(cleanerId: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
+    getHotelCleaners(hotelID: string): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>)[]>;
+    getHotelCleanerById(cleanerId: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
 }

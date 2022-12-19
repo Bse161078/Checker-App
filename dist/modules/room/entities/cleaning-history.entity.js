@@ -36,9 +36,17 @@ __decorate([
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], CleaningHistory.prototype, "checker", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: room_status_enum_1.ROOM_STATUS.PENDING }),
+    (0, mongoose_1.Prop)({ default: room_status_enum_1.ROOM_STATUS.START }),
     __metadata("design:type", String)
 ], CleaningHistory.prototype, "status", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], CleaningHistory.prototype, "checkerStatus", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], CleaningHistory.prototype, "checkoutStatus", void 0);
 CleaningHistory = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], CleaningHistory);

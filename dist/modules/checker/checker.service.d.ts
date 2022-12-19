@@ -44,4 +44,16 @@ export declare class CheckerService {
     }>>;
     update(id: string, updateCheckerDto: UpdateCheckerDto): Promise<boolean>;
     remove(id: string): Promise<boolean>;
+    getCompanyCheckers(companyID: string): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>)[]>;
+    getCompanyCheckerById(checkerId: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
+    getHotelCheckers(hotelID: string): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>)[]>;
+    getHotelCheckerById(checkerId: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
 }

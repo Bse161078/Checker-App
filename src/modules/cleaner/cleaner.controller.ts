@@ -12,6 +12,7 @@ import { RoomIdDto } from '../room/dto/room.dto';
 import { CleanerService } from './cleaner.service';
 import { CreateCleanerDto } from './dto/create-cleaner.dto';
 import { UpdateCleanerDto } from './dto/update-cleaner.dto';
+import { CleanerIdDto, CompanyIdDto, HotelIdDto } from './dto/cleaner.dto';
 
 @Controller('cleaner')
 @ApiTags("cleaner")
@@ -49,6 +50,49 @@ export class CleanerController {
     const cleaningRoomStatus = await this.cleanerService.endCleaningRoom(roomID);
     return {message: `cleaner finished cleaning at ${cleaningRoomStatus.cleaningEndAt}`}
   }
+  @Get("/get-company-cleaners/:companyID")
+  @ApiParam({name: "companyID", type: 'string'})
+  @Roles(ROLES.SUPERADMIN)
+  async getCleanerCompany(@Param() param: CompanyIdDto, @GetUser() user: Express.User){
+    const {companyID} = param;
+    const cleaners = await this.cleanerService.getCompanyCleaners(companyID);
+    return {
+      cleaners
+    }
+  }
+
+  @Get("/get-company-cleaner-by-id/:cleanerID")
+  @ApiParam({name: "cleanerID", type: 'string'})
+  @Roles(ROLES.SUPERADMIN)
+  async getCleanerCompanyById(@Param() param: CleanerIdDto, @GetUser() user: Express.User){
+    const {cleanerID} = param;
+    const cleaner = await this.cleanerService.getCompanyCleanerById(cleanerID);
+    return {
+      cleaner
+    }
+  }
+  @Get("/get-hotel-cleaners/:hotelID")
+  @ApiParam({name: "hotelID", type: 'string'})
+  @Roles(ROLES.SUPERADMIN)
+  async getCleanerHotel(@Param() param: HotelIdDto, @GetUser() user: Express.User){
+    const {hotelID} = param;
+    const cleaners = await this.cleanerService.getHotelCleaners(hotelID);
+    return {
+      cleaners
+    }
+  }
+
+  @Get("/get-hotel-cleaner-by-id/:cleanerID")
+  @ApiParam({name: "cleanerID", type: 'string'})
+  @Roles(ROLES.SUPERADMIN)
+  async getCleanerHotelById(@Param() param: CleanerIdDto, @GetUser() user: Express.User){
+    const {cleanerID} = param;
+    const cleaner = await this.cleanerService.getHotelCleanerById(cleanerID);
+    return {
+      cleaner
+    }
+  }
+
   @Get(':id')
   @Roles(ROLES.CHECKER, ROLES.COMPANYADMIN, ROLES.HOTELADMIN)
   findOne(@Param('id') id: string) {

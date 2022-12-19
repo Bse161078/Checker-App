@@ -23,6 +23,10 @@ const file_upload_interceptor_1 = require("../../common/interceptors/file-upload
 const checker_service_1 = require("./checker.service");
 const create_checker_dto_1 = require("./dto/create-checker.dto");
 const update_checker_dto_1 = require("./dto/update-checker.dto");
+const role_decorator_1 = require("../../common/decorators/role.decorator");
+const cleaner_dto_1 = require("../cleaner/dto/cleaner.dto");
+const checker_dto_1 = require("./dto/checker.dto");
+const user_decorator_1 = require("../../common/decorators/user.decorator");
 let CheckerController = class CheckerController {
     constructor(checkerService) {
         this.checkerService = checkerService;
@@ -35,6 +39,34 @@ let CheckerController = class CheckerController {
     async findAll() {
         const checkers = await this.checkerService.findAll();
         return { checkers };
+    }
+    async getCheckerCompany(param, user) {
+        const { companyID } = param;
+        const checkers = await this.checkerService.getCompanyCheckers(companyID);
+        return {
+            checkers
+        };
+    }
+    async getCheckerCompanyById(param, user) {
+        const { checkerID } = param;
+        const checker = await this.checkerService.getCompanyCheckerById(checkerID);
+        return {
+            checker
+        };
+    }
+    async getCleanerHotel(param, user) {
+        const { hotelID } = param;
+        const checkers = await this.checkerService.getHotelCheckers(hotelID);
+        return {
+            checkers
+        };
+    }
+    async getCleanerHotelById(param, user) {
+        const { checkerID } = param;
+        const checker = await this.checkerService.getHotelCheckerById(checkerID);
+        return {
+            checker
+        };
     }
     findOne(id) {
         const checker = this.checkerService.findOne(id);
@@ -65,6 +97,46 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], CheckerController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)("/get-company-checkers/:companyID"),
+    (0, swagger_1.ApiParam)({ name: "companyID", type: 'string' }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [cleaner_dto_1.CompanyIdDto, Object]),
+    __metadata("design:returntype", Promise)
+], CheckerController.prototype, "getCheckerCompany", null);
+__decorate([
+    (0, common_1.Get)("/get-company-checker-by-id/:checkerID"),
+    (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [checker_dto_1.CheckerIdDto, Object]),
+    __metadata("design:returntype", Promise)
+], CheckerController.prototype, "getCheckerCompanyById", null);
+__decorate([
+    (0, common_1.Get)("/get-hotel-checkers/:hotelID"),
+    (0, swagger_1.ApiParam)({ name: "hotelID", type: 'string' }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [cleaner_dto_1.HotelIdDto, Object]),
+    __metadata("design:returntype", Promise)
+], CheckerController.prototype, "getCleanerHotel", null);
+__decorate([
+    (0, common_1.Get)("/get-hotel-cleaner-by-id/:cleanerID"),
+    (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [checker_dto_1.CheckerIdDto, Object]),
+    __metadata("design:returntype", Promise)
+], CheckerController.prototype, "getCleanerHotelById", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

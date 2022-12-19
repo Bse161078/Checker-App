@@ -59,4 +59,9 @@ export class AdminRoomController {
       message: "deleted room successfully"
     }
   }
+
+  @Get('cleaner-bills')
+  async getCleanerBills(){
+    // const bill
+  }
 }

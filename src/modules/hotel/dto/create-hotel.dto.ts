@@ -1,0 +1,16 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { Types } from "mongoose";
+import { ROLES } from "src/common/enums/role.enum";
+
+export class CreateHotelDto {
+    @ApiProperty()
+    fullName: string;
+    @ApiProperty()
+    username: string;
+    @ApiProperty()
+    password: string;
+    @ApiProperty()
+    email: string;
+    role: ROLES
+}
+
