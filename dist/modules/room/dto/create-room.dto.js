@@ -10,13 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateRoomDto = void 0;
+const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const mongoose_1 = require("mongoose");
 class CreateRoomDto {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)(),
+    (0, swagger_1.ApiProperty)({ type: "string" }),
     __metadata("design:type", mongoose_1.Types.ObjectId)
 ], CreateRoomDto.prototype, "roomType", void 0);
 __decorate([
@@ -24,6 +25,11 @@ __decorate([
     (0, class_validator_1.Length)(3),
     __metadata("design:type", String)
 ], CreateRoomDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, common_1.Optional)(),
+    __metadata("design:type", String)
+], CreateRoomDto.prototype, "name_de", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: "string" }),
     __metadata("design:type", mongoose_1.Types.ObjectId)

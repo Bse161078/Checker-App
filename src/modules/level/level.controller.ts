@@ -2,12 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@
 import { LevelService } from './level.service';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
-import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums';
 import { ROLES } from 'src/common/enums/role.enum';
 import { Roles } from 'src/common/decorators/role.decorator';
 import { GetUser } from 'src/common/decorators/user.decorator';
 import { AuthDecorator } from 'src/common/decorators/auth.decorator';
+import { LevelIdDto } from './dto/level.dto';
 
 @Controller('level')
 @ApiTags("admin - Level")
@@ -17,38 +18,43 @@ export class LevelController {
 
   @Post()
   @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
+  @ApiOperation({summary: "hotel role access"})
   async create(@Body() createLevelDto: CreateLevelDto, @GetUser() user: Express.User) {
     const result = await this.levelService.create(createLevelDto, user._id);
     return result
   }
-
+  
   @Get()
   @Roles()
+  @ApiOperation({summary: "hotel role access"})
   async findAll() {
     const levels = await this.levelService.findAll();
     return { levels }
   }
-
-  @Get(':id')
+  
+  @Get(':levelID')
   @Roles()
-  @ApiParam({ name: "id", type: "string" })
-  async findOne(@Param('id') id: string) {
-    const level = await this.levelService.findOne(id);
+  @ApiParam({ name: "levelID", type: "string" })
+  @ApiOperation({summary: "hotel role access"})
+  async findOne(@Param() levelIdDto: LevelIdDto) {
+    const level = await this.levelService.findOne(levelIdDto.levelID);
     return { level }
   }
-
-  @Patch(':id')
+  
+  @Patch(':levelID')
   @ApiParam({ name: "id", type: "string" })
   @ApiConsumes("application/x-www-form-urlencoded", "application/json")
-  async update(@Param('id') id: string, @Body() updateLevelDto: UpdateLevelDto) {
-    const result = await this.levelService.update(id, updateLevelDto);
+  @ApiOperation({summary: "hotel role access"})
+  async update(@Param() levelIdDto: LevelIdDto, @Body() updateLevelDto: UpdateLevelDto) {
+    const result = await this.levelService.update(levelIdDto.levelID, updateLevelDto);
     return { message: "update level successfully" }
   }
-
-  @Delete(':id')
+  
+  @Delete(':levelID')
   @ApiParam({ name: "id", type: "string" })
-  async remove(@Param('id') id: string) {
-    const result = await this.levelService.remove(id);
+  @ApiOperation({summary: "hotel role access"})
+  async remove(@Param() levelIdDto: LevelIdDto) {
+    const result = await this.levelService.remove(levelIdDto.levelID);
     return {
       statusCode: HttpStatus.OK,
       data: {

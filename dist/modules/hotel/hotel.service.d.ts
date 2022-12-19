@@ -22,26 +22,33 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { CreateHotelDto } from './dto/create-hotel.dto';
+import { AddCompanyToHotel, CreateHotelDto } from './dto/create-hotel.dto';
 import { User, UserDocument } from '../user/entities/user.entity';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { AuthService } from '../auth/services/auth.service';
-import { CreateHotelCleanerDto } from './dto/hotel.dto';
+import { CreateHotelCheckerDto, CreateHotelCleanerDto, CreateHotelReceptionDto } from './dto/hotel.dto';
 export declare class HotelService {
     private userRepository;
     private authService;
     constructor(userRepository: Model<UserDocument>, authService: AuthService);
     create(createHotelDto: CreateHotelDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>>;
     createCleaner(createCleanerDto: CreateHotelCleanerDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
+    }>>;
+    addCompanyToHotel(hotelID: string, addCompanyDto: AddCompanyToHotel): Promise<boolean>;
+    createChecker(createCheckerDto: CreateHotelCheckerDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
+    createReception(createReceptionDto: CreateHotelReceptionDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
     }>>;
     findAll(): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>)[]>;
     findOne(id: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>>;
     remove(id: string): Promise<boolean>;
 }

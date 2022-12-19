@@ -42,6 +42,7 @@ __decorate([
     (0, common_1.Post)("/:roomID"),
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
     (0, common_1.UseInterceptors)(upload_file_shelves_interceptor_1.ShelvesFileUpload),
     __param(0, (0, common_1.UploadedFiles)()),
     __param(1, (0, common_1.Body)()),
@@ -53,6 +54,7 @@ __decorate([
 ], ShelvesController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)("/:roomID"),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),

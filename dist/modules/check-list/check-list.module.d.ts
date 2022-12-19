@@ -1,2 +1,2 @@
-export declare class AdminCheckListModule {
+export declare class CheckListModule {
 }

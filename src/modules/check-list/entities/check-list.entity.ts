@@ -1,51 +1,32 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 import { IComments, IDamageReport, ITopQuestion } from "../interface/check-list.interface";
-
+import { ApiProperty } from "@nestjs/swagger";
+import { CheckListSupplier } from "../enum/check-list-supplier.enum";
 @Schema()
-class TopQuestionClass extends Document {
+export class MaterialList extends Document {
     @Prop()
-    title: string;
-    @Prop({ type: Boolean })
-    value: boolean;
+    material: Types.ObjectId;
     @Prop()
-    samplePhoto: string;
+    quantity: number;
 }
-@Schema()
-class CommentsClass extends Document {
-    @Prop()
-    title: string;
-    @Prop({ type: Boolean })
-    value: boolean;
-    @Prop({default: []})
-    photos: string[];
+export interface IMaterialList {
+    material: Types.ObjectId;
+    quantity: number;
 }
-@Schema()
-class DamageReportClass extends Document {
-    @Prop()
-    text: string;
-    @Prop({default: []})
-    photos: string[];
-}
-const TopQuestionSchema = SchemaFactory.createForClass(TopQuestionClass);
-const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
-const DamageReportSchema = SchemaFactory.createForClass(DamageReportClass);
-
 export class CheckList {
+    @Prop({type: [MaterialList]})
+    @ApiProperty()
+    materials: IMaterialList[];
     @Prop()
-    title: string;
-    @Prop({ type: TopQuestionSchema })
-    topQuestion: ITopQuestion;
-    @Prop({ type: [CommentsSchema] })
-    comments: IComments[];
-    @Prop({ type: [DamageReportSchema] })
-    damage: IDamageReport[];
+    @ApiProperty({type: "string", enum: CheckListSupplier})
+    supplierIsCompany: CheckListSupplier
     @Prop({type: Types.ObjectId, ref: "User"})
-    cleaner: Types.ObjectId;
-    @Prop({type: Types.ObjectId, ref: "Room"})
-    room: Types.ObjectId;
+    company: Types.ObjectId;
     @Prop({type: Types.ObjectId, ref: "User"})
     hotel: Types.ObjectId;
+    @Prop({type: Types.ObjectId, ref: "User"})
+    checker: Types.ObjectId;
 }
 export type CheckListDocument = Document & CheckList;
 export const CheckListSchema = SchemaFactory.createForClass(CheckList)

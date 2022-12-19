@@ -23,15 +23,21 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Document, Types } from "mongoose";
-import { IComments, IDamageReport, ITopQuestion } from "../interface/check-list.interface";
+import { CheckListSupplier } from "../enum/check-list-supplier.enum";
+export declare class MaterialList extends Document {
+    material: Types.ObjectId;
+    quantity: number;
+}
+export interface IMaterialList {
+    material: Types.ObjectId;
+    quantity: number;
+}
 export declare class CheckList {
-    title: string;
-    topQuestion: ITopQuestion;
-    comments: IComments[];
-    damage: IDamageReport[];
-    cleaner: Types.ObjectId;
-    room: Types.ObjectId;
+    materials: IMaterialList[];
+    supplierIsCompany: CheckListSupplier;
+    company: Types.ObjectId;
     hotel: Types.ObjectId;
+    checker: Types.ObjectId;
 }
 export type CheckListDocument = Document & CheckList;
 export declare const CheckListSchema: import("mongoose").Schema<CheckList, import("mongoose").Model<CheckList, any, any, any, any>, {}, {}, {}, {}, "type", CheckList>;

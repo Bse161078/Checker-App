@@ -49,6 +49,7 @@ let BillsController = class BillsController {
 __decorate([
     (0, common_1.Post)(":cleanerID"),
     (0, swagger_1.ApiParam)({ name: "cleanerID", type: "string" }),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company role access" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_bill_dto_1.CreateBillDto]),
@@ -56,12 +57,14 @@ __decorate([
 ], BillsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company role access" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BillsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('/by-cleaner/:cleanerID'),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company role access" }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -70,6 +73,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company role access" }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

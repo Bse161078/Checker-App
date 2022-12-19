@@ -12,73 +12,84 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdminCheckListController = void 0;
+exports.CheckListController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const check_list_service_1 = require("./check-list.service");
 const create_check_list_dto_1 = require("./dto/create-check-list.dto");
-const update_check_list_dto_1 = require("./dto/update-check-list.dto");
-let AdminCheckListController = class AdminCheckListController {
+const auth_decorator_1 = require("../../common/decorators/auth.decorator");
+const role_enum_1 = require("../../common/enums/role.enum");
+const role_decorator_1 = require("../../common/decorators/role.decorator");
+let CheckListController = class CheckListController {
     constructor(checkListService) {
         this.checkListService = checkListService;
     }
-    create(createCheckListDto) {
-        return createCheckListDto;
-        return this.checkListService.create(createCheckListDto);
+    async create(createCheckListDto) {
+        const createdResult = await this.checkListService.create(createCheckListDto);
+        return {
+            message: "created/updated order list successfully"
+        };
     }
-    findAll() {
-        return this.checkListService.findAll();
+    async findAll() {
+        const checkList = await this.checkListService.findAll();
+        return {
+            checkList
+        };
     }
-    findOne(id) {
-        return this.checkListService.findOne(+id);
+    async findOne(id) {
+        const checkList = await this.checkListService.findOne(id);
+        return { checkList };
     }
-    update(id, updateCheckListDto) {
-        return this.checkListService.update(+id, updateCheckListDto);
-    }
-    remove(id) {
-        return this.checkListService.remove(+id);
+    async remove(id) {
+        const deletedResult = await this.checkListService.remove(id);
+        return {
+            message: "deleted order list successfully"
+        };
     }
 };
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiConsumes)("application/x-www-form-urlencoded", "application/json"),
+    (0, swagger_1.ApiConsumes)("application/json"),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_check_list_dto_1.CreateCheckListDto]),
-    __metadata("design:returntype", void 0)
-], AdminCheckListController.prototype, "create", null);
+    __metadata("design:returntype", Promise)
+], CheckListController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.COMPANYADMIN),
+    (0, swagger_1.ApiOperation)({ summary: "checker and hotel and company role access" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AdminCheckListController.prototype, "findAll", null);
+    __metadata("design:returntype", Promise)
+], CheckListController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.COMPANYADMIN),
+    (0, swagger_1.ApiOperation)({ summary: "checker and hotel and company role access" }),
+    (0, swagger_1.ApiParam)({ name: "id" }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], AdminCheckListController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_check_list_dto_1.UpdateCheckListDto]),
-    __metadata("design:returntype", void 0)
-], AdminCheckListController.prototype, "update", null);
+    __metadata("design:returntype", Promise)
+], CheckListController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.HOTELADMIN),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
+    (0, swagger_1.ApiParam)({ name: "id" }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], AdminCheckListController.prototype, "remove", null);
-AdminCheckListController = __decorate([
+    __metadata("design:returntype", Promise)
+], CheckListController.prototype, "remove", null);
+CheckListController = __decorate([
     (0, common_1.Controller)('check-list'),
-    (0, swagger_1.ApiTags)("Admin-chackList"),
-    __metadata("design:paramtypes", [check_list_service_1.AdminCheckListService])
-], AdminCheckListController);
-exports.AdminCheckListController = AdminCheckListController;
+    (0, swagger_1.ApiTags)("checkList"),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.COMPANYADMIN, role_enum_1.ROLES.HOTELADMIN),
+    __metadata("design:paramtypes", [check_list_service_1.CheckListService])
+], CheckListController);
+exports.CheckListController = CheckListController;
 //# sourceMappingURL=check-list.controller.js.map

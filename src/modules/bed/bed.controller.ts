@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
-import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { Types } from 'mongoose';
 import { AuthDecorator } from 'src/common/decorators/auth.decorator';
@@ -21,16 +21,21 @@ export class BedController {
   @ApiConsumes(SwaggerConsumes.MULTIPART)
   @ApiParam({ name: "roomID", type: "string", required: true })
   @UseInterceptors(BedFileUpload)
-  create(
+  @ApiOperation({summary: "checker role access"})
+  async create(
     @Body() createBedDto: CreateBedDto,
     @Param() param: RoomIdDto,
     @UploadedFiles() files: IBedFilesUpload
   ) {
     createBedDto.room = new Types.ObjectId(param.roomID);
-    return this.bedService.create(createBedDto, files);
+    const bed = await this.bedService.create(createBedDto, files);
+    return {
+      message: "created bed report successfully"
+    }
   }
   @Get("/:roomID")
   @ApiParam({ name: "roomID", type: "string", required: true })
+  @ApiOperation({summary: "checker role access"})
   async getBedDetail(@Param() param: RoomIdDto) {
     const roomId = new Types.ObjectId(param.roomID)
     const bed = await this.bedService.getBedStatus(roomId)

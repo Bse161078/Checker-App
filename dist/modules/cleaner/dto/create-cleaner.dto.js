@@ -24,19 +24,9 @@ __decorate([
     __metadata("design:type", String)
 ], CreateCleanerDto.prototype, "fullname", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: "string", format: "binary", }),
+    (0, swagger_1.ApiProperty)({ type: "string", format: "binary", required: false }),
     __metadata("design:type", String)
 ], CreateCleanerDto.prototype, "avatar", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: "09:00" }),
-    (0, class_validator_1.Length)(5, 5),
-    __metadata("design:type", String)
-], CreateCleanerDto.prototype, "startAt", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: "18:20" }),
-    (0, class_validator_1.Length)(5, 5),
-    __metadata("design:type", String)
-], CreateCleanerDto.prototype, "endAt", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.Length)(3),

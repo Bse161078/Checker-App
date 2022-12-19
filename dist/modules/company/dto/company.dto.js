@@ -9,8 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CompanyDto = void 0;
+exports.CreateCompanyCheckerDto = exports.CreateCompanyCleanerDto = exports.CompanyDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const mongoose_1 = require("mongoose");
+const role_enum_1 = require("../../../common/enums/role.enum");
+const hotel_dto_1 = require("../../hotel/dto/hotel.dto");
 class CompanyDto {
 }
 __decorate([
@@ -18,4 +21,22 @@ __decorate([
     __metadata("design:type", String)
 ], CompanyDto.prototype, "companyID", void 0);
 exports.CompanyDto = CompanyDto;
+class CreateCompanyCleanerDto extends hotel_dto_1.CreateHotelCleanerDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string" }),
+    __metadata("design:type", mongoose_1.Types.ObjectId)
+], CreateCompanyCleanerDto.prototype, "company", void 0);
+exports.CreateCompanyCleanerDto = CreateCompanyCleanerDto;
+class CreateCompanyCheckerDto extends hotel_dto_1.CreateHotelCheckerDto {
+    constructor() {
+        super(...arguments);
+        this.role = role_enum_1.ROLES.CHECKER;
+    }
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string" }),
+    __metadata("design:type", mongoose_1.Types.ObjectId)
+], CreateCompanyCheckerDto.prototype, "company", void 0);
+exports.CreateCompanyCheckerDto = CreateCompanyCheckerDto;
 //# sourceMappingURL=company.dto.js.map

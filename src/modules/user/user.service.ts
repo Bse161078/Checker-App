@@ -7,15 +7,18 @@ import { removeEmptyFieldsObject } from 'src/common/utils/functions';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
+import { AuthService } from '../auth/services/auth.service';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User.name) private readonly userRepository: Model<UserDocument>
+    @InjectModel(User.name) private readonly userRepository: Model<UserDocument>,
+    private authService: AuthService
   ) { }
   async create(createUserDto: CreateUserDto) {
     const newObjectDto: CreateUserDto = removeEmptyFieldsObject(createUserDto)
     await this.checkExistUser(newObjectDto);
+    createUserDto.password = this.authService.hashPassword(createUserDto.password)
     const user = await this.userRepository.create(createUserDto);
     if (createUserDto.role == ADMIN_ROLES.HOTELADMIN) {
       await this.update(user._id.toString(), { hotel: user._id })

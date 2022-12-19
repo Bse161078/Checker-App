@@ -28,7 +28,9 @@ export class RoomTypeService {
   }
 
   async findAll() {
-    const roomTypes = await this.roomtypeRepository.find({});
+    const roomTypes = await this.roomtypeRepository.find({}).populate(
+      {path: "hotel", select: {username: 1} }
+    );
     return roomTypes;
   }
 

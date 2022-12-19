@@ -9,13 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CompanyDto = void 0;
+exports.LevelIdDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
-class CompanyDto {
+class LevelIdDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
-], CompanyDto.prototype, "companyID", void 0);
-exports.CompanyDto = CompanyDto;
-//# sourceMappingURL=company.dto.js.map
+], LevelIdDto.prototype, "levelID", void 0);
+exports.LevelIdDto = LevelIdDto;
+//# sourceMappingURL=level.dto.js.map

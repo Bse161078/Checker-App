@@ -26,7 +26,7 @@ let HotelService = class HotelService {
     }
     async create(createHotelDto) {
         createHotelDto.password = this.authService.hashPassword(createHotelDto.password);
-        createHotelDto.role = role_enum_1.ROLES.COMPANYADMIN;
+        createHotelDto.role = role_enum_1.ROLES.HOTELADMIN;
         let hotel = null;
         if (createHotelDto.username)
             hotel = await this.userRepository.findOne({ username: createHotelDto.username });
@@ -40,10 +40,31 @@ let HotelService = class HotelService {
         return createdResult;
     }
     async createCleaner(createCleanerDto) {
+        createCleanerDto.hotel = new mongoose_2.Types.ObjectId(createCleanerDto.hotel);
         createCleanerDto.password = this.authService.hashPassword(createCleanerDto.password);
         createCleanerDto.role = role_enum_1.ROLES.CLEANER;
         const cleaner = await this.userRepository.create(createCleanerDto);
         return cleaner;
+    }
+    async addCompanyToHotel(hotelID, addCompanyDto) {
+        await this.userRepository.updateOne({ _id: hotelID }, {
+            $set: { company: new mongoose_2.Types.ObjectId(addCompanyDto.company) }
+        });
+        return true;
+    }
+    async createChecker(createCheckerDto) {
+        createCheckerDto.hotel = new mongoose_2.Types.ObjectId(createCheckerDto.hotel);
+        createCheckerDto.password = this.authService.hashPassword(createCheckerDto.password);
+        createCheckerDto.role = role_enum_1.ROLES.CHECKER;
+        const checker = await this.userRepository.create(createCheckerDto);
+        return checker;
+    }
+    async createReception(createReceptionDto) {
+        createReceptionDto.hotel = new mongoose_2.Types.ObjectId(createReceptionDto.hotel);
+        createReceptionDto.password = this.authService.hashPassword(createReceptionDto.password);
+        createReceptionDto.role = role_enum_1.ROLES.HOTELRECEPTION;
+        const reception = await this.userRepository.create(createReceptionDto);
+        return reception;
     }
     async findAll() {
         const hotels = await this.userRepository.find({ role: role_enum_1.ROLES.HOTELADMIN });

@@ -23,6 +23,7 @@ const role_enum_1 = require("../../common/enums/role.enum");
 const role_decorator_1 = require("../../common/decorators/role.decorator");
 const user_decorator_1 = require("../../common/decorators/user.decorator");
 const auth_decorator_1 = require("../../common/decorators/auth.decorator");
+const level_dto_1 = require("./dto/level.dto");
 let LevelController = class LevelController {
     constructor(levelService) {
         this.levelService = levelService;
@@ -35,16 +36,16 @@ let LevelController = class LevelController {
         const levels = await this.levelService.findAll();
         return { levels };
     }
-    async findOne(id) {
-        const level = await this.levelService.findOne(id);
+    async findOne(levelIdDto) {
+        const level = await this.levelService.findOne(levelIdDto.levelID);
         return { level };
     }
-    async update(id, updateLevelDto) {
-        const result = await this.levelService.update(id, updateLevelDto);
+    async update(levelIdDto, updateLevelDto) {
+        const result = await this.levelService.update(levelIdDto.levelID, updateLevelDto);
         return { message: "update level successfully" };
     }
-    async remove(id) {
-        const result = await this.levelService.remove(id);
+    async remove(levelIdDto) {
+        const result = await this.levelService.remove(levelIdDto.levelID);
         return {
             statusCode: common_1.HttpStatus.OK,
             data: {
@@ -56,6 +57,7 @@ let LevelController = class LevelController {
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
@@ -65,35 +67,39 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, role_decorator_1.Roles)(),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], LevelController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Get)(':levelID'),
     (0, role_decorator_1.Roles)(),
-    (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
-    __param(0, (0, common_1.Param)('id')),
+    (0, swagger_1.ApiParam)({ name: "levelID", type: "string" }),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [level_dto_1.LevelIdDto]),
     __metadata("design:returntype", Promise)
 ], LevelController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Patch)(':levelID'),
     (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
     (0, swagger_1.ApiConsumes)("application/x-www-form-urlencoded", "application/json"),
-    __param(0, (0, common_1.Param)('id')),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
+    __param(0, (0, common_1.Param)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_level_dto_1.UpdateLevelDto]),
+    __metadata("design:paramtypes", [level_dto_1.LevelIdDto, update_level_dto_1.UpdateLevelDto]),
     __metadata("design:returntype", Promise)
 ], LevelController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
+    (0, common_1.Delete)(':levelID'),
     (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
-    __param(0, (0, common_1.Param)('id')),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [level_dto_1.LevelIdDto]),
     __metadata("design:returntype", Promise)
 ], LevelController.prototype, "remove", null);
 LevelController = __decorate([

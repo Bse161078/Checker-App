@@ -26,9 +26,11 @@ import { Model, Types } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
+import { AuthService } from '../auth/services/auth.service';
 export declare class UserService {
     private readonly userRepository;
-    constructor(userRepository: Model<UserDocument>);
+    private authService;
+    constructor(userRepository: Model<UserDocument>, authService: AuthService);
     create(createUserDto: CreateUserDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
     }>>;

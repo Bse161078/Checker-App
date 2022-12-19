@@ -5,6 +5,8 @@ import { Types } from "mongoose";
 export class Room {
     @Prop()
     name: string;
+    @Prop()
+    name_de: string;
     @Prop({ref: 'RoomType'})
     roomType: Types.ObjectId
     @Prop({ref: 'Level'})

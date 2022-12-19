@@ -6,12 +6,25 @@ export declare class HotelDto {
 export declare class CreateHotelCleanerDto {
     fullname: string;
     avatar: string;
-    startAt: string;
-    endAt: string;
     username: string;
     password: string;
     salaryPerRoom: number;
     roomCountForCleanEachDay: number;
-    hotel?: Types.ObjectId;
+    hotel: Types.ObjectId;
+    role: ROLES;
+}
+export declare class CreateHotelCheckerDto {
+    fullname: string;
+    avatar: string;
+    username: string;
+    password: string;
+    hotel: Types.ObjectId;
+    role: ROLES;
+}
+export declare class CreateHotelReceptionDto {
+    fullname: string;
+    username: string;
+    password: string;
+    hotel: Types.ObjectId;
     role: ROLES;
 }

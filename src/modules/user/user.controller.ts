@@ -16,8 +16,9 @@ export class UserController {
 
   @Post()
   @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.create(createUserDto);
+    return {user}
   }
 
   @Get()

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateHotelCleanerDto = exports.HotelDto = void 0;
+exports.CreateHotelReceptionDto = exports.CreateHotelCheckerDto = exports.CreateHotelCleanerDto = exports.HotelDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const mongoose_1 = require("mongoose");
@@ -36,16 +36,6 @@ __decorate([
     __metadata("design:type", String)
 ], CreateHotelCleanerDto.prototype, "avatar", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "09:00" }),
-    (0, class_validator_1.Length)(5, 5),
-    __metadata("design:type", String)
-], CreateHotelCleanerDto.prototype, "startAt", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: "18:20" }),
-    (0, class_validator_1.Length)(5, 5),
-    __metadata("design:type", String)
-], CreateHotelCleanerDto.prototype, "endAt", void 0);
-__decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.Length)(3),
     __metadata("design:type", String)
@@ -64,8 +54,62 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateHotelCleanerDto.prototype, "roomCountForCleanEachDay", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: "string" }),
+    (0, swagger_1.ApiProperty)({ type: "string" }),
     __metadata("design:type", mongoose_1.Types.ObjectId)
 ], CreateHotelCleanerDto.prototype, "hotel", void 0);
 exports.CreateHotelCleanerDto = CreateHotelCleanerDto;
+class CreateHotelCheckerDto {
+    constructor() {
+        this.role = role_enum_1.ROLES.CHECKER;
+    }
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string" }),
+    (0, class_validator_1.Length)(3),
+    __metadata("design:type", String)
+], CreateHotelCheckerDto.prototype, "fullname", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "string", format: "binary", }),
+    __metadata("design:type", String)
+], CreateHotelCheckerDto.prototype, "avatar", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.Length)(3),
+    __metadata("design:type", String)
+], CreateHotelCheckerDto.prototype, "username", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.Length)(6, 16),
+    __metadata("design:type", String)
+], CreateHotelCheckerDto.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string" }),
+    __metadata("design:type", mongoose_1.Types.ObjectId)
+], CreateHotelCheckerDto.prototype, "hotel", void 0);
+exports.CreateHotelCheckerDto = CreateHotelCheckerDto;
+class CreateHotelReceptionDto {
+    constructor() {
+        this.role = role_enum_1.ROLES.HOTELRECEPTION;
+    }
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string" }),
+    (0, class_validator_1.Length)(3),
+    __metadata("design:type", String)
+], CreateHotelReceptionDto.prototype, "fullname", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.Length)(3),
+    __metadata("design:type", String)
+], CreateHotelReceptionDto.prototype, "username", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.Length)(6, 16),
+    __metadata("design:type", String)
+], CreateHotelReceptionDto.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string" }),
+    __metadata("design:type", mongoose_1.Types.ObjectId)
+], CreateHotelReceptionDto.prototype, "hotel", void 0);
+exports.CreateHotelReceptionDto = CreateHotelReceptionDto;
 //# sourceMappingURL=hotel.dto.js.map

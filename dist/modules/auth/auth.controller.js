@@ -19,17 +19,22 @@ const swagger_enum_1 = require("../../common/enums/swagger.enum");
 const auth_service_1 = require("./services/auth.service");
 const login_dto_1 = require("./dto/login.dto");
 const register_dto_ts_1 = require("./dto/register.dto.ts");
+const auth_decorator_1 = require("../../common/decorators/auth.decorator");
+const user_decorator_1 = require("../../common/decorators/user.decorator");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
     async login(body) {
         const loginResult = await this.authService.login(body);
-        return loginResult;
+        return { loginResult };
     }
     async register(body) {
-        const loginResult = await this.authService.register(body);
-        return loginResult;
+        const registerResult = await this.authService.register(body);
+        return { registerResult };
+    }
+    async checkLogin(user) {
+        return { user };
     }
 };
 __decorate([
@@ -49,6 +54,15 @@ __decorate([
     __metadata("design:paramtypes", [register_dto_ts_1.RegisterDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.Get)("/check-login"),
+    (0, swagger_1.ApiConsumes)(swagger_enum_1.ContentType.URL_ENCODED, swagger_enum_1.ContentType.JSON),
+    (0, auth_decorator_1.AuthDecorator)(),
+    __param(0, (0, user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "checkLogin", null);
 AuthController = __decorate([
     (0, common_1.Controller)("auth"),
     (0, swagger_1.ApiTags)("Authentication"),

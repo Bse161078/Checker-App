@@ -7,8 +7,8 @@ export class CreateCleanerDto {
     @ApiProperty({type: "string"})
     @Length(3)
     fullname: string;
-    @ApiPropertyOptional({type: "string", format: "binary", })
-    avatar: string;
+    @ApiProperty({type: "string", format: "binary", required: false})
+    avatar?: string;
     @ApiProperty()
     @Length(3)
     username: string;

@@ -58,6 +58,7 @@ let RoomTypeController = class RoomTypeController {
 };
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -66,12 +67,14 @@ __decorate([
 ], RoomTypeController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], RoomTypeController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
     (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -82,6 +85,7 @@ __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -91,6 +95,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
+    (0, swagger_1.ApiOperation)({ summary: "hotel role access" }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

@@ -11,22 +11,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateCheckListDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
-const class_validator_1 = require("class-validator");
+const check_list_supplier_enum_1 = require("../enum/check-list-supplier.enum");
 class CreateCheckListDto {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({ default: "check-list item" }),
-    (0, class_validator_1.Length)(3),
-    __metadata("design:type", String)
-], CreateCheckListDto.prototype, "title", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ default: "item question" }),
-    (0, class_validator_1.Length)(10, 200),
-    __metadata("design:type", String)
-], CreateCheckListDto.prototype, "topQuestion", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: "array", format: "string", isArray: true }),
+    (0, swagger_1.ApiProperty)({ default: [
+            {
+                material: "materialObjectID",
+                quantity: 0
+            },
+            {
+                material: "materialObjectID",
+                quantity: 2
+            },
+        ] }),
     __metadata("design:type", Array)
-], CreateCheckListDto.prototype, "comments", void 0);
+], CreateCheckListDto.prototype, "materials", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: "string", enum: check_list_supplier_enum_1.CheckListSupplier }),
+    __metadata("design:type", String)
+], CreateCheckListDto.prototype, "supplier", void 0);
 exports.CreateCheckListDto = CreateCheckListDto;
 //# sourceMappingURL=create-check-list.dto.js.map

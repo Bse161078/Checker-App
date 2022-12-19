@@ -8,7 +8,7 @@ import dbConfig from 'src/config/mongoose.config';
 import { AuthModule } from '../auth/auth.module';
 import { BedModule } from '../bed/bed.module';
 import { BathroomModule } from '../bathroom/bathroom.module';
-import { AdminCheckListModule } from '../check-list/check-list.module';
+import { CheckListModule } from '../check-list/check-list.module';
 import { CleanerModule } from '../cleaner/cleaner.module';
 import { CurtainsModule } from '../curtains/curtains.module';
 import { FloorModule } from '../floor/floor.module';
@@ -21,6 +21,7 @@ import { RoomTypeModule } from '../room-type/room-type.module';
 import { BillsModule } from '../bills/bills.module';
 import { HotelModule } from '../hotel/hotel.module';
 import { CompanyModule } from '../company/company.module';
+import { MaterialListModule } from '../material-list/material-list.module';
 
 @Module({
   imports: [
@@ -40,12 +41,13 @@ import { CompanyModule } from '../company/company.module';
     CheckerModule,
     LevelModule,
     AdminRoomModule,
-    AdminCheckListModule,
+    CheckListModule,
     FloorModule,
     CurtainsModule,
     ShelvesModule,
     BedModule,
     BathroomModule,
+    MaterialListModule,
   ],
   controllers: [],
   providers: [],

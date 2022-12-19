@@ -17,12 +17,11 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const auth_decorator_1 = require("../../common/decorators/auth.decorator");
 const role_decorator_1 = require("../../common/decorators/role.decorator");
-const upload_decorators_1 = require("../../common/decorators/upload.decorators");
 const user_decorator_1 = require("../../common/decorators/user.decorator");
 const enums_1 = require("../../common/enums");
 const role_enum_1 = require("../../common/enums/role.enum");
 const file_upload_interceptor_1 = require("../../common/interceptors/file-upload.interceptor");
-const room_dto_1 = require("../room/dto/room.dto");
+const room_dto_1 = require("../company/room/dto/room.dto");
 const cleaner_service_1 = require("./cleaner.service");
 const create_cleaner_dto_1 = require("./dto/create-cleaner.dto");
 const update_cleaner_dto_1 = require("./dto/update-cleaner.dto");
@@ -32,7 +31,8 @@ let CleanerController = class CleanerController {
         this.cleanerService = cleanerService;
     }
     async create(avatar, createCleanerDto) {
-        createCleanerDto.avatar = avatar.path.slice(7);
+        if (avatar)
+            createCleanerDto.avatar = avatar.path.slice(7);
         const cleaner = await this.cleanerService.create(createCleanerDto);
         return { cleaner };
     }
@@ -78,24 +78,25 @@ let CleanerController = class CleanerController {
             cleaner
         };
     }
-    findOne(id) {
-        const cleaner = this.cleanerService.findOne(id);
+    findOne(cleanerIdDto) {
+        const cleaner = this.cleanerService.findOne(cleanerIdDto.cleanerID);
         return { cleaner };
     }
-    async update(id, updateCleanerDto) {
-        await this.cleanerService.update(id, updateCleanerDto);
+    async update(cleanerIdDto, updateCleanerDto) {
+        await this.cleanerService.update(cleanerIdDto.cleanerID, updateCleanerDto);
         return { message: "updated cleaner successfully" };
     }
-    async remove(id) {
-        await this.cleanerService.remove(id);
+    async remove(cleanerIdDto) {
+        await this.cleanerService.remove(cleanerIdDto.cleanerID);
         return { message: "deleted cleaner successfully" };
     }
 };
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company role access" }),
     (0, common_1.UseInterceptors)((0, file_upload_interceptor_1.UploadImageInterceptor)('avatar')),
-    __param(0, (0, upload_decorators_1.UploadedFileDecorator)('image/*')),
+    __param(0, (0, common_1.UploadedFile)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, create_cleaner_dto_1.CreateCleanerDto]),
@@ -104,12 +105,14 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.COMPANYADMIN, role_enum_1.ROLES.HOTELADMIN),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company and checker role access" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], CleanerController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)("/start-cleaning/:roomID"),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin access" }),
     (0, swagger_1.ApiParam)({ name: "roomID", type: 'string' }),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.CLEANER),
     __param(0, (0, common_1.Param)()),
@@ -120,6 +123,7 @@ __decorate([
 ], CleanerController.prototype, "startCleaning", null);
 __decorate([
     (0, common_1.Get)("/finish-cleaning/:roomID"),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin access" }),
     (0, swagger_1.ApiParam)({ name: "roomID", type: 'string' }),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.CLEANER),
     __param(0, (0, common_1.Param)()),
@@ -130,6 +134,7 @@ __decorate([
 ], CleanerController.prototype, "finishCleaning", null);
 __decorate([
     (0, common_1.Get)("/get-company-cleaners/:companyID"),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin access" }),
     (0, swagger_1.ApiParam)({ name: "companyID", type: 'string' }),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
     __param(0, (0, common_1.Param)()),
@@ -140,6 +145,7 @@ __decorate([
 ], CleanerController.prototype, "getCleanerCompany", null);
 __decorate([
     (0, common_1.Get)("/get-company-cleaner-by-id/:cleanerID"),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin access" }),
     (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
     __param(0, (0, common_1.Param)()),
@@ -152,6 +158,7 @@ __decorate([
     (0, common_1.Get)("/get-hotel-cleaners/:hotelID"),
     (0, swagger_1.ApiParam)({ name: "hotelID", type: 'string' }),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.Param)()),
     __param(1, (0, user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
@@ -162,6 +169,7 @@ __decorate([
     (0, common_1.Get)("/get-hotel-cleaner-by-id/:cleanerID"),
     (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.Param)()),
     __param(1, (0, user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
@@ -169,26 +177,32 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CleanerController.prototype, "getCleanerHotelById", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Get)(':cleanerID'),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.COMPANYADMIN, role_enum_1.ROLES.HOTELADMIN),
-    __param(0, (0, common_1.Param)('id')),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company and checker role access" }),
+    (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [cleaner_dto_1.CleanerIdDto]),
     __metadata("design:returntype", void 0)
 ], CleanerController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Patch)(':cleanerID'),
+    (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company role access" }),
+    __param(0, (0, common_1.Param)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_cleaner_dto_1.UpdateCleanerDto]),
+    __metadata("design:paramtypes", [cleaner_dto_1.CleanerIdDto, update_cleaner_dto_1.UpdateCleanerDto]),
     __metadata("design:returntype", Promise)
 ], CleanerController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Delete)(':cleanerID'),
+    (0, swagger_1.ApiParam)({ name: "cleanerID", type: 'string' }),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and company role access" }),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [cleaner_dto_1.CleanerIdDto]),
     __metadata("design:returntype", Promise)
 ], CleanerController.prototype, "remove", null);
 CleanerController = __decorate([

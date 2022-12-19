@@ -27,6 +27,8 @@ import { ROLES } from "src/common/enums/role.enum";
 export declare class User {
     _id: Types.ObjectId;
     fullname: string;
+    hotel_name: string;
+    company_name: string;
     avatar: string;
     username: string;
     password: string;
@@ -38,8 +40,6 @@ export declare class User {
     hotel: Types.ObjectId;
     company: Types.ObjectId;
     accessToken: string;
-    startAt: string;
-    endAt: string;
     salaryPerRoom: string;
     roomCountForCleanEachDay: string;
 }

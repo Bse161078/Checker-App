@@ -30,10 +30,17 @@ export declare class AuthController {
     private authService;
     constructor(authService: AuthService);
     login(body: LoginDto): Promise<{
-        accessToken: string;
-        role: import("../../common/enums/role.enum").ROLES;
+        loginResult: {
+            accessToken: string;
+            role: import("../../common/enums/role.enum").ROLES;
+        };
     }>;
-    register(body: RegisterDto): Promise<import("mongoose").Document<unknown, any, import("../user/entities/user.entity").UserDocument> & import("../user/entities/user.entity").User & Document & Required<{
-        _id: import("mongoose").Types.ObjectId;
-    }>>;
+    register(body: RegisterDto): Promise<{
+        registerResult: import("mongoose").Document<unknown, any, import("../user/entities/user.entity").UserDocument> & import("../user/entities/user.entity").User & Document & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }>;
+    }>;
+    checkLogin(user: Express.User): Promise<{
+        user: Express.User;
+    }>;
 }

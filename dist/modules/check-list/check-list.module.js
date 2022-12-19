@@ -6,24 +6,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdminCheckListModule = void 0;
+exports.CheckListModule = void 0;
 const common_1 = require("@nestjs/common");
 const check_list_service_1 = require("./check-list.service");
 const check_list_controller_1 = require("./check-list.controller");
 const mongoose_1 = require("@nestjs/mongoose");
 const check_list_entity_1 = require("./entities/check-list.entity");
-let AdminCheckListModule = class AdminCheckListModule {
+const user_entity_1 = require("../user/entities/user.entity");
+let CheckListModule = class CheckListModule {
 };
-AdminCheckListModule = __decorate([
+CheckListModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([
-                { name: check_list_entity_1.CheckList.name, schema: check_list_entity_1.CheckListSchema }
+                { name: check_list_entity_1.CheckList.name, schema: check_list_entity_1.CheckListSchema },
+                { name: user_entity_1.User.name, schema: user_entity_1.UserSchema }
             ])
         ],
-        controllers: [check_list_controller_1.AdminCheckListController],
-        providers: [check_list_service_1.AdminCheckListService]
+        controllers: [check_list_controller_1.CheckListController],
+        providers: [check_list_service_1.CheckListService]
     })
-], AdminCheckListModule);
-exports.AdminCheckListModule = AdminCheckListModule;
+], CheckListModule);
+exports.CheckListModule = CheckListModule;
 //# sourceMappingURL=check-list.module.js.map

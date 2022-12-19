@@ -24,20 +24,27 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { User, UserDocument } from '../user/entities/user.entity';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { AuthService } from '../auth/services/auth.service';
+import { CreateCompanyCheckerDto, CreateCompanyCleanerDto } from './dto/company.dto';
 export declare class CompanyService {
     private userRepository;
     private authService;
     constructor(userRepository: Model<UserDocument>, authService: AuthService);
     create(createCompanyDto: CreateCompanyDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
+    }>>;
+    createCleaner(createCleanerDto: CreateCompanyCleanerDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
+    createChecker(createCheckerDto: CreateCompanyCheckerDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
     }>>;
     findAll(): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>)[]>;
     findOne(id: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>>;
     remove(id: string): Promise<boolean>;
 }

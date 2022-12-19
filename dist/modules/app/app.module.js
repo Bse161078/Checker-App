@@ -30,6 +30,7 @@ const room_type_module_1 = require("../room-type/room-type.module");
 const bills_module_1 = require("../bills/bills.module");
 const hotel_module_1 = require("../hotel/hotel.module");
 const company_module_1 = require("../company/company.module");
+const material_list_module_1 = require("../material-list/material-list.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -51,12 +52,13 @@ AppModule = __decorate([
             checker_module_1.CheckerModule,
             level_module_1.LevelModule,
             room_module_1.AdminRoomModule,
-            check_list_module_1.AdminCheckListModule,
+            check_list_module_1.CheckListModule,
             floor_module_1.FloorModule,
             curtains_module_1.CurtainsModule,
             shelves_module_1.ShelvesModule,
             bed_module_1.BedModule,
             bathroom_module_1.BathroomModule,
+            material_list_module_1.MaterialListModule,
         ],
         controllers: [],
         providers: [],

@@ -31,6 +31,22 @@ let CompanyController = class CompanyController {
             message: "created company account successfully"
         };
     }
+    async createHotelCleaner(avatar, createCleanerDto) {
+        if (avatar)
+            createCleanerDto.avatar = avatar.path.slice(7);
+        const cleaner = await this.companyService.createCleaner(createCleanerDto);
+        return {
+            message: "created company cleaner account successfully"
+        };
+    }
+    async createHotelChecker(avatar, createCheckerDto) {
+        if (avatar)
+            createCheckerDto.avatar = avatar.path.slice(7);
+        const cleaner = await this.companyService.createChecker(createCheckerDto);
+        return {
+            message: "created company checker account successfully"
+        };
+    }
     async findAll() {
         const companies = await this.companyService.findAll();
         return {
@@ -53,12 +69,34 @@ let CompanyController = class CompanyController {
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_company_dto_1.CreateCompanyDto]),
     __metadata("design:returntype", Promise)
 ], CompanyController.prototype, "create", null);
 __decorate([
+    (0, common_1.Post)("/create-company-cleaner"),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, company_dto_1.CreateCompanyCleanerDto]),
+    __metadata("design:returntype", Promise)
+], CompanyController.prototype, "createHotelCleaner", null);
+__decorate([
+    (0, common_1.Post)("/create-company-checker"),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, company_dto_1.CreateCompanyCheckerDto]),
+    __metadata("design:returntype", Promise)
+], CompanyController.prototype, "createHotelChecker", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -67,6 +105,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':companyID'),
     (0, swagger_1.ApiParam)({ name: "companyID", type: "string" }),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [company_dto_1.CompanyDto]),
@@ -75,6 +114,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':companyID'),
     (0, swagger_1.ApiParam)({ name: "companyID", type: "string" }),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [company_dto_1.CompanyDto]),
@@ -82,7 +122,7 @@ __decorate([
 ], CompanyController.prototype, "remove", null);
 CompanyController = __decorate([
     (0, common_1.Controller)('company'),
-    (0, swagger_1.ApiTags)('company-admin'),
+    (0, swagger_1.ApiTags)('company-supperAdmin'),
     (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.SUPERADMIN),
     __metadata("design:paramtypes", [company_service_1.CompanyService])
 ], CompanyController);

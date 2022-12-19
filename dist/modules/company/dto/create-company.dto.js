@@ -20,6 +20,10 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
+], CreateCompanyDto.prototype, "company_name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
 ], CreateCompanyDto.prototype, "username", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),

@@ -21,6 +21,7 @@ const enums_1 = require("../../common/enums");
 const auth_decorator_1 = require("../../common/decorators/auth.decorator");
 const role_enum_1 = require("../../common/enums/role.enum");
 const hotel_dto_1 = require("./dto/hotel.dto");
+const role_decorator_1 = require("../../common/decorators/role.decorator");
 let HotelController = class HotelController {
     constructor(hotelService) {
         this.hotelService = hotelService;
@@ -31,12 +32,32 @@ let HotelController = class HotelController {
             message: "created hotel account successfully"
         };
     }
+    async addCompanyToHotel(hotelID, addCompanyDto) {
+        await this.hotelService.addCompanyToHotel(hotelID, addCompanyDto);
+        return {
+            message: "added company account to hotel successfully"
+        };
+    }
     async createHotelCleaner(avatar, createCleanerDto) {
         if (avatar)
             createCleanerDto.avatar = avatar.path.slice(7);
         const cleaner = await this.hotelService.createCleaner(createCleanerDto);
         return {
-            message: "created hotel account successfully"
+            message: "created hotel cleaner account successfully"
+        };
+    }
+    async createHotelReception(createReceptionDto) {
+        const reception = await this.hotelService.createReception(createReceptionDto);
+        return {
+            message: "created hotel reception account successfully"
+        };
+    }
+    async createHotelChecker(avatar, createCheckerDto) {
+        if (avatar)
+            createCheckerDto.avatar = avatar.path.slice(7);
+        const cleaner = await this.hotelService.createChecker(createCheckerDto);
+        return {
+            message: "created hotel checker account successfully"
         };
     }
     async findAll() {
@@ -61,15 +82,28 @@ let HotelController = class HotelController {
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_hotel_dto_1.CreateHotelDto]),
     __metadata("design:returntype", Promise)
 ], HotelController.prototype, "create", null);
 __decorate([
-    (0, common_1.Post)("/create-hotel-cleaner/:hotelID"),
+    (0, common_1.Post)("/add-company-to-hotel/:hotelID"),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin and hotel-admin role access" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN),
     (0, swagger_1.ApiParam)({ name: "hotelID" }),
+    __param(0, (0, common_1.Param)('hotelID')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, create_hotel_dto_1.AddCompanyToHotel]),
+    __metadata("design:returntype", Promise)
+], HotelController.prototype, "addCompanyToHotel", null);
+__decorate([
+    (0, common_1.Post)("/create-hotel-cleaner"),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.UploadedFile)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -77,13 +111,34 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], HotelController.prototype, "createHotelCleaner", null);
 __decorate([
+    (0, common_1.Post)("/create-hotel-reception"),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [hotel_dto_1.CreateHotelReceptionDto]),
+    __metadata("design:returntype", Promise)
+], HotelController.prototype, "createHotelReception", null);
+__decorate([
+    (0, common_1.Post)("/create-hotel-checker"),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, hotel_dto_1.CreateHotelCheckerDto]),
+    __metadata("design:returntype", Promise)
+], HotelController.prototype, "createHotelChecker", null);
+__decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], HotelController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':hotelID'),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     (0, swagger_1.ApiParam)({ name: "hotelID", type: "string" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
@@ -93,6 +148,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':hotelID'),
     (0, swagger_1.ApiParam)({ name: "hotelID", type: "string" }),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [hotel_dto_1.HotelDto]),
@@ -100,7 +156,7 @@ __decorate([
 ], HotelController.prototype, "remove", null);
 HotelController = __decorate([
     (0, common_1.Controller)('hotel'),
-    (0, swagger_1.ApiTags)("hotel-admin"),
+    (0, swagger_1.ApiTags)("hotel-supperAdmin"),
     (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.SUPERADMIN),
     __metadata("design:paramtypes", [hotel_service_1.HotelService])
 ], HotelController);

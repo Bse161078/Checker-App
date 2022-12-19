@@ -36,9 +36,9 @@ export declare class RoomTypeService {
     create(createRoomTypeDto: CreateRoomTypeDto): Promise<import("mongoose").Document<unknown, any, RoomTypeDocument> & RoomType & Document & {
         _id: Types.ObjectId;
     }>;
-    findAll(): Promise<(import("mongoose").Document<unknown, any, RoomTypeDocument> & RoomType & Document & {
+    findAll(): Promise<Omit<import("mongoose").Document<unknown, any, RoomTypeDocument> & RoomType & Document & {
         _id: Types.ObjectId;
-    })[]>;
+    }, never>[]>;
     findOne(_id: string): Promise<import("mongoose").Document<unknown, any, RoomTypeDocument> & RoomType & Document & {
         _id: Types.ObjectId;
     }>;

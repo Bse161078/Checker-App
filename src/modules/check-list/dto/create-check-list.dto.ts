@@ -1,13 +1,24 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Length } from "class-validator";
+import { IMaterialList } from "../entities/check-list.entity";
+import { Types } from "mongoose";
+import { CheckListSupplier } from "../enum/check-list-supplier.enum";
 
 export class CreateCheckListDto {
-    @ApiProperty({default: "check-list item"})
-    @Length(3)
-    title: string;
-    @ApiProperty({default: "item question"})
-    @Length(10, 200)
-    topQuestion: string;
-    @ApiProperty({type: "array", format: "string", isArray: true})
-    comments: string[];
+ @ApiProperty({default: [
+    {
+        material: "materialObjectID",
+        quantity: 0
+    },
+    {
+        material: "materialObjectID",
+        quantity: 2
+    },
+ ]})
+ materials : IMaterialList[];
+ @ApiProperty({type: "string", enum: CheckListSupplier})
+ supplier: CheckListSupplier
+ hotel: Types.ObjectId;
+ company: Types.ObjectId;
+ checker: Types.ObjectId;
 }

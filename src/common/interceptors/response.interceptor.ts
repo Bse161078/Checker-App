@@ -9,7 +9,7 @@ export class ResponseInterceptor implements NestInterceptor  {
             map(data => {
                 return {
                     statusCode: statusCode ?? HttpStatus.OK,
-                    data,
+                    data: data,
                 }
             })
         )

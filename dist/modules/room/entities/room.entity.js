@@ -19,6 +19,10 @@ __decorate([
     __metadata("design:type", String)
 ], Room.prototype, "name", void 0);
 __decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Room.prototype, "name_de", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ ref: 'RoomType' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], Room.prototype, "roomType", void 0);

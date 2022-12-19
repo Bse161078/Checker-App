@@ -24,10 +24,17 @@ __decorate([
 ], RoomType.prototype, "title", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
+    (0, swagger_1.ApiPropertyOptional)(),
+    __metadata("design:type", String)
+], RoomType.prototype, "title_de", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ ref: "User" }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], RoomType.prototype, "hotel", void 0);
 RoomType = __decorate([
-    (0, mongoose_1.Schema)()
+    (0, mongoose_1.Schema)({ toObject: {
+            virtuals: true
+        } })
 ], RoomType);
 exports.RoomType = RoomType;
 exports.RoomTypeSchema = mongoose_1.SchemaFactory.createForClass(RoomType);

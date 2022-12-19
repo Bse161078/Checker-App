@@ -25,6 +25,7 @@
 import { Types } from "mongoose";
 export declare class Room {
     name: string;
+    name_de: string;
     roomType: Types.ObjectId;
     level: Types.ObjectId;
     hotel: Types.ObjectId;

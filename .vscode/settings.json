@@ -2,7 +2,12 @@
     "dotenv.enableAutocloaking": false,
     "cSpell.words": [
         "COMPANYADMIN",
+        "fullname",
         "HOTELADMIN",
-        "SUPERADMIN"
+        "HOTELRECEPTION",
+        "nestjs",
+        "roomtype",
+        "SUPERADMIN",
+        "virtuals"
     ]
 }

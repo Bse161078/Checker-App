@@ -41,6 +41,7 @@ __decorate([
     (0, common_1.Post)("/:roomID"),
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
     (0, common_1.UseInterceptors)(upload_file_bathroom_interceptor_1.CurtainFileUpload),
     __param(0, (0, common_1.UploadedFiles)()),
     __param(1, (0, common_1.Body)()),
@@ -53,6 +54,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)("/:roomID"),
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [room_dto_1.RoomIdDto]),

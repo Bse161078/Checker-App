@@ -19,13 +19,16 @@ const mongoose_2 = require("mongoose");
 const role_enum_1 = require("../../common/enums/role.enum");
 const functions_1 = require("../../common/utils/functions");
 const user_entity_1 = require("./entities/user.entity");
+const auth_service_1 = require("../auth/services/auth.service");
 let UserService = class UserService {
-    constructor(userRepository) {
+    constructor(userRepository, authService) {
         this.userRepository = userRepository;
+        this.authService = authService;
     }
     async create(createUserDto) {
         const newObjectDto = (0, functions_1.removeEmptyFieldsObject)(createUserDto);
         await this.checkExistUser(newObjectDto);
+        createUserDto.password = this.authService.hashPassword(createUserDto.password);
         const user = await this.userRepository.create(createUserDto);
         if (createUserDto.role == role_enum_1.ADMIN_ROLES.HOTELADMIN) {
             await this.update(user._id.toString(), { hotel: user._id });
@@ -74,7 +77,8 @@ let UserService = class UserService {
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_entity_1.User.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        auth_service_1.AuthService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

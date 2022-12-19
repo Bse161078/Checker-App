@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
-import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import { AuthDecorator } from 'src/common/decorators/auth.decorator';
 import { SwaggerConsumes } from 'src/common/enums';
@@ -20,6 +20,7 @@ export class CurtainsController {
   @Post("/:roomID")
   @ApiParam({ name: "roomID", type: "string", required: true })
   @ApiConsumes(SwaggerConsumes.MULTIPART)
+  @ApiOperation({ summary: "checker role access" })
   @UseInterceptors(CurtainFileUpload)
   async create(
     @UploadedFiles() files: ICurtainFilesUpload,
@@ -32,6 +33,7 @@ export class CurtainsController {
 
   @Get("/:roomID")
   @ApiParam({ name: "roomID", type: "string", required: true })
+  @ApiOperation({ summary: "checker role access" })
   async getBathRoomDetail(@Param() param: RoomIdDto) {
     const roomId = new Types.ObjectId(param.roomID)
     const curtain = await this.curtainsService.getCurtainStatus(roomId)

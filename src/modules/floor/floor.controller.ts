@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Upl
 import { FloorService } from './floor.service';
 import { CreateFloorDto } from './dto/create-floor.dto';
 import { UpdateFloorDto } from './dto/update-floor.dto';
-import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums';
 import { FloorFileUpload } from './interceptors/upload-image.interceptor';
 import { IFloorFilesUpload } from './interfaces/files.interface';
@@ -21,18 +21,20 @@ export class FloorController {
   @ApiParam({ name: "roomID", type: "string", required: true })
   @ApiConsumes(SwaggerConsumes.MULTIPART)
   @UseInterceptors(FloorFileUpload)
+  @ApiOperation({summary: "checker role access"})
   async saveFloorData(
     @UploadedFiles() files: IFloorFilesUpload,
     @Body() createFloorDto: CreateFloorDto,
     @Param() param: RoomIdDto
   ) {
     createFloorDto.room = new Types.ObjectId(param.roomID)
-    const reusult = await this.floorService.create(createFloorDto, files);
+    await this.floorService.create(createFloorDto, files);
     return { message: "save floor data successfully" }
   }
 
   @Get("/:roomID")
   @ApiParam({ name: "roomID", type: "string", required: true })
+  @ApiOperation({summary: "checker role access"})
   async getFloorDetail(@Param() param: RoomIdDto) {
     const roomId = new Types.ObjectId(param.roomID)
     const floor = await this.floorService.getFloorStatus(roomId)

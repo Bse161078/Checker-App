@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UseFilters, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
-import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthDecorator } from 'src/common/decorators/auth.decorator';
 import { UploadedFileDecorator } from 'src/common/decorators/upload.decorators';
 import { SwaggerConsumes } from 'src/common/enums';
@@ -23,6 +23,7 @@ export class CheckerController {
   @Post()
   @ApiConsumes(SwaggerConsumes.MULTIPART)
   @UseInterceptors(UploadImageInterceptor('avatar'))
+  @ApiOperation({summary: "hotel and company role access"})
   async create(@UploadedFileDecorator('image/*') avatar: MulterFile, @Body() createCheckerDto: CreateCheckerDto) {
     createCheckerDto.avatar = avatar.path.slice(7);
     const checker = await this.checkerService.create(createCheckerDto);
@@ -35,6 +36,7 @@ export class CheckerController {
     return { checkers }
   }
   @Get("/get-company-checkers/:companyID")
+  @ApiOperation({summary: "supper-admin role access"})
   @ApiParam({ name: "companyID", type: 'string' })
   @Roles(ROLES.SUPERADMIN)
   async getCheckerCompany(@Param() param: CompanyIdDto, @GetUser() user: Express.User) {
@@ -46,6 +48,7 @@ export class CheckerController {
   }
 
   @Get("/get-company-checker-by-id/:checkerID")
+  @ApiOperation({summary: "supper-admin role access"})
   @ApiParam({ name: "cleanerID", type: 'string' })
   @Roles(ROLES.SUPERADMIN)
   async getCheckerCompanyById(@Param() param: CheckerIdDto, @GetUser() user: Express.User) {
@@ -56,6 +59,7 @@ export class CheckerController {
     }
   }
   @Get("/get-hotel-checkers/:hotelID")
+  @ApiOperation({summary: "supper-admin role access"})
   @ApiParam({ name: "hotelID", type: 'string' })
   @Roles(ROLES.SUPERADMIN)
   async getCleanerHotel(@Param() param: HotelIdDto, @GetUser() user: Express.User) {
@@ -66,7 +70,8 @@ export class CheckerController {
     }
   }
 
-  @Get("/get-hotel-cleaner-by-id/:cleanerID")
+  @Get("/get-hotel-checker-by-id/:cleanerID")
+  @ApiOperation({summary: "supper-admin role access"})
   @ApiParam({ name: "cleanerID", type: 'string' })
   @Roles(ROLES.SUPERADMIN)
   async getCleanerHotelById(@Param() param: CheckerIdDto, @GetUser() user: Express.User) {
@@ -76,21 +81,27 @@ export class CheckerController {
       checker
     }
   }
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    const checker = this.checkerService.findOne(id);
+  @Get(':checkerID')
+  @ApiParam({name: "checkerID"})
+  @ApiOperation({summary: "hotel and company role access"})
+  findOne(@Param() checkerIdDto: CheckerIdDto) {
+    const checker = this.checkerService.findOne(checkerIdDto.checkerID);
     return { checker }
   }
 
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateCheckerDto: UpdateCheckerDto) {
-    await this.checkerService.update(id, updateCheckerDto);
+  @Patch(':checkerID')
+  @ApiParam({name: "checkerID"})
+  @ApiOperation({summary: "hotel and company role access"})
+  async update(@Param() checkerIdDto: CheckerIdDto, @Body() updateCheckerDto: UpdateCheckerDto) {
+    await this.checkerService.update(checkerIdDto.checkerID, updateCheckerDto);
     return { message: "updated checker successfully" }
   }
-
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    await this.checkerService.remove(id);
+  
+  @Delete(':checkerID')
+  @ApiParam({name: "checkerID"})
+  @ApiOperation({summary: "hotel and company role access"})
+  async remove(@Param() checkerIdDto: CheckerIdDto) {
+    await this.checkerService.remove(checkerIdDto.checkerID);
     return { message: "deleted checker successfully" }
   }
 

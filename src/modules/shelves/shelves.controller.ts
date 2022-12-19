@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Upl
 import { ShelvesService } from './shelves.service';
 import { CreateShelvesDto } from './dto/create-shelf.dto';
 import { UpdateShelfDto } from './dto/update-shelf.dto';
-import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SwaggerConsumes } from 'src/common/enums';
 import { IShelvesFilesUpload } from './interfaces/files.interface';
 import { ShelvesFileUpload } from './interceptors/upload-file-shelves.interceptor';
@@ -20,6 +20,7 @@ export class ShelvesController {
   @Post("/:roomID")
   @ApiParam({ name: "roomID", type: "string", required: true })
   @ApiConsumes(SwaggerConsumes.MULTIPART)
+  @ApiOperation({ summary: "checker role access" })
   @UseInterceptors(ShelvesFileUpload)
   async create(
     @UploadedFiles() files: IShelvesFilesUpload,
@@ -32,6 +33,7 @@ export class ShelvesController {
   }
 
   @Get("/:roomID")
+  @ApiOperation({ summary: "checker role access" })
   @ApiParam({ name: "roomID", type: "string", required: true })
   async getBathRoomDetail(@Param() param: RoomIdDto) {
     const roomId = new Types.ObjectId(param.roomID)

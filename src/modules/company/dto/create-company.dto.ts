@@ -5,6 +5,8 @@ export class CreateCompanyDto {
     @ApiProperty()
     fullName: string;
     @ApiProperty()
+    company_name: string;
+    @ApiProperty()
     username: string;
     @ApiProperty()
     password: string;

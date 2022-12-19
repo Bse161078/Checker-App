@@ -27,9 +27,12 @@ let BedController = class BedController {
     constructor(bedService) {
         this.bedService = bedService;
     }
-    create(createBedDto, param, files) {
+    async create(createBedDto, param, files) {
         createBedDto.room = new mongoose_1.Types.ObjectId(param.roomID);
-        return this.bedService.create(createBedDto, files);
+        const bed = await this.bedService.create(createBedDto, files);
+        return {
+            message: "created bed report successfully"
+        };
     }
     async getBedDetail(param) {
         const roomId = new mongoose_1.Types.ObjectId(param.roomID);
@@ -42,17 +45,19 @@ __decorate([
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
     (0, common_1.UseInterceptors)(upload_file_bed_interceptor_1.BedFileUpload),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)()),
     __param(2, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_bed_dto_1.CreateBedDto,
         room_dto_1.RoomIdDto, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], BedController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)("/:roomID"),
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [room_dto_1.RoomIdDto]),

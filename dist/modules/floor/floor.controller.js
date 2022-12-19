@@ -29,7 +29,7 @@ let FloorController = class FloorController {
     }
     async saveFloorData(files, createFloorDto, param) {
         createFloorDto.room = new mongoose_1.Types.ObjectId(param.roomID);
-        const reusult = await this.floorService.create(createFloorDto, files);
+        await this.floorService.create(createFloorDto, files);
         return { message: "save floor data successfully" };
     }
     async getFloorDetail(param) {
@@ -43,6 +43,7 @@ __decorate([
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
     (0, common_1.UseInterceptors)(upload_image_interceptor_1.FloorFileUpload),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
     __param(0, (0, common_1.UploadedFiles)()),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Param)()),
@@ -54,6 +55,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)("/:roomID"),
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [room_dto_1.RoomIdDto]),

@@ -9,14 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateHotelDto = void 0;
+exports.AddCompanyToHotel = exports.CreateHotelDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const mongoose_1 = require("mongoose");
 class CreateHotelDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateHotelDto.prototype, "fullName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], CreateHotelDto.prototype, "hotel_name", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
@@ -30,4 +35,11 @@ __decorate([
     __metadata("design:type", String)
 ], CreateHotelDto.prototype, "email", void 0);
 exports.CreateHotelDto = CreateHotelDto;
+class AddCompanyToHotel {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: 'string' }),
+    __metadata("design:type", mongoose_1.Types.ObjectId)
+], AddCompanyToHotel.prototype, "company", void 0);
+exports.AddCompanyToHotel = AddCompanyToHotel;
 //# sourceMappingURL=create-hotel.dto.js.map

@@ -39,6 +39,21 @@ let CompanyService = class CompanyService {
         const createdResult = await this.userRepository.create(createCompanyDto);
         return createdResult;
     }
+    async createCleaner(createCleanerDto) {
+        createCleanerDto.hotel = new mongoose_2.Types.ObjectId(createCleanerDto.hotel);
+        createCleanerDto.password = this.authService.hashPassword(createCleanerDto.password);
+        createCleanerDto.role = role_enum_1.ROLES.CLEANER;
+        const cleaner = await this.userRepository.create(createCleanerDto);
+        return cleaner;
+    }
+    async createChecker(createCheckerDto) {
+        createCheckerDto.hotel = new mongoose_2.Types.ObjectId(createCheckerDto.hotel);
+        createCheckerDto.company = new mongoose_2.Types.ObjectId(createCheckerDto.company);
+        createCheckerDto.password = this.authService.hashPassword(createCheckerDto.password);
+        createCheckerDto.role = role_enum_1.ROLES.CHECKER;
+        const cleaner = await this.userRepository.create(createCheckerDto);
+        return cleaner;
+    }
     async findAll() {
         const companies = await this.userRepository.find({ role: role_enum_1.ROLES.COMPANYADMIN });
         return companies;

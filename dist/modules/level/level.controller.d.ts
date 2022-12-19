@@ -27,6 +27,7 @@ import { HttpStatus } from '@nestjs/common';
 import { LevelService } from './level.service';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
+import { LevelIdDto } from './dto/level.dto';
 export declare class LevelController {
     private readonly levelService;
     constructor(levelService: LevelService);
@@ -36,13 +37,13 @@ export declare class LevelController {
     findAll(): Promise<{
         levels: any[];
     }>;
-    findOne(id: string): Promise<{
+    findOne(levelIdDto: LevelIdDto): Promise<{
         level: any;
     }>;
-    update(id: string, updateLevelDto: UpdateLevelDto): Promise<{
+    update(levelIdDto: LevelIdDto, updateLevelDto: UpdateLevelDto): Promise<{
         message: string;
     }>;
-    remove(id: string): Promise<{
+    remove(levelIdDto: LevelIdDto): Promise<{
         statusCode: HttpStatus;
         data: {
             message: string;

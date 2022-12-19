@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateHotelDto } from './dto/create-hotel.dto';
+import { AddCompanyToHotel, CreateHotelDto } from './dto/create-hotel.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../user/entities/user.entity';
 import { Model, Types } from 'mongoose';
 import { ROLES } from 'src/common/enums/role.enum';
 import { AuthService } from '../auth/services/auth.service';
-import { CreateHotelCheckerDto, CreateHotelCleanerDto } from './dto/hotel.dto';
+import { CreateHotelCheckerDto, CreateHotelCleanerDto, CreateHotelReceptionDto } from './dto/hotel.dto';
 
 @Injectable()
 export class HotelService {
@@ -15,7 +15,7 @@ export class HotelService {
   ) { }
   async create(createHotelDto: CreateHotelDto) {
     createHotelDto.password = this.authService.hashPassword(createHotelDto.password);
-    createHotelDto.role = ROLES.COMPANYADMIN;
+    createHotelDto.role = ROLES.HOTELADMIN;
     let hotel = null;
     if (createHotelDto.username) hotel = await this.userRepository.findOne({ username: createHotelDto.username })
     if (hotel) throw new BadRequestException("username already exists");
@@ -31,12 +31,25 @@ export class HotelService {
     const cleaner = await this.userRepository.create(createCleanerDto);
     return cleaner;
   }
-  async createChecker(createCleanerDto: CreateHotelCheckerDto){
-    createCleanerDto.hotel = new Types.ObjectId(createCleanerDto.hotel)
-    createCleanerDto.password = this.authService.hashPassword(createCleanerDto.password);
-    createCleanerDto.role = ROLES.CHECKER;
-    const cleaner = await this.userRepository.create(createCleanerDto);
-    return cleaner;
+  async addCompanyToHotel(hotelID: string, addCompanyDto: AddCompanyToHotel){
+    await this.userRepository.updateOne({_id: hotelID}, {
+      $set: {company: new Types.ObjectId(addCompanyDto.company)}
+    });
+    return true;
+  }
+  async createChecker(createCheckerDto: CreateHotelCheckerDto){
+    createCheckerDto.hotel = new Types.ObjectId(createCheckerDto.hotel)
+    createCheckerDto.password = this.authService.hashPassword(createCheckerDto.password);
+    createCheckerDto.role = ROLES.CHECKER;
+    const checker = await this.userRepository.create(createCheckerDto);
+    return checker;
+  }
+  async createReception(createReceptionDto: CreateHotelReceptionDto){
+    createReceptionDto.hotel = new Types.ObjectId(createReceptionDto.hotel)
+    createReceptionDto.password = this.authService.hashPassword(createReceptionDto.password);
+    createReceptionDto.role = ROLES.HOTELRECEPTION;
+    const reception = await this.userRepository.create(createReceptionDto);
+    return reception;
   }
   async findAll() {
     const hotels = await this.userRepository.find({ role: ROLES.HOTELADMIN });

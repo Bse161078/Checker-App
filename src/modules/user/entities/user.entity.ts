@@ -9,6 +9,10 @@ export class User {
     @Prop()
     fullname: string
     @Prop()
+    hotel_name: string
+    @Prop()
+    company_name: string
+    @Prop()
     avatar: string;
     @Prop({unique: true, index: true, type: String})
     username: string

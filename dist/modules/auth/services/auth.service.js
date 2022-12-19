@@ -28,6 +28,7 @@ let AuthService = class AuthService {
     async login(loginDto) {
         var _a;
         const user = await this.userRepository.findOne({ username: loginDto.username });
+        console.log(user);
         if (!user)
             throw new common_1.UnauthorizedException("username or password is incorrect");
         if (!this.comparePassword(loginDto.password, user.password)) {

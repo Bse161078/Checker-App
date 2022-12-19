@@ -44,3 +44,17 @@ export class CreateHotelCheckerDto {
     hotel: Types.ObjectId;
     role: ROLES = ROLES.CHECKER;
 }
+export class CreateHotelReceptionDto {
+    @ApiProperty({type: "string"})
+    @Length(3)
+    fullname: string;
+    @ApiProperty()
+    @Length(3)
+    username: string;
+    @ApiProperty()
+    @Length(6, 16)
+    password: string;
+    @ApiProperty({type: "string"})
+    hotel: Types.ObjectId;
+    role: ROLES = ROLES.HOTELRECEPTION;
+}

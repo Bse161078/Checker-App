@@ -2,9 +2,7 @@ import { Types } from "mongoose";
 import { ROLES } from "src/common/enums/role.enum";
 export declare class CreateCleanerDto {
     fullname: string;
-    avatar: string;
-    startAt: string;
-    endAt: string;
+    avatar?: string;
     username: string;
     password: string;
     salaryPerRoom: number;

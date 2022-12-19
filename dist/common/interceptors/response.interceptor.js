@@ -9,7 +9,7 @@ class ResponseInterceptor {
         return next.handle().pipe((0, rxjs_1.map)(data => {
             return {
                 statusCode: statusCode !== null && statusCode !== void 0 ? statusCode : common_1.HttpStatus.OK,
-                data,
+                data: data,
             };
         }));
     }

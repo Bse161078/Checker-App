@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import { AuthDecorator } from 'src/common/decorators/auth.decorator';
 import { SwaggerConsumes } from 'src/common/enums';
@@ -21,6 +21,7 @@ export class BathroomController {
   @ApiConsumes(SwaggerConsumes.MULTIPART)
   @UseInterceptors(BathRoomFileUpload)
   @ApiParam({ name: "roomID", type: "string", required: true })
+  @ApiOperation({summary: "checker role access"})
   async saveBathRoomData(
     @UploadedFiles() files: IBathRoomFilesUpload,
     @Body() createBathroomDto: CreateBathroomDto,
@@ -32,6 +33,7 @@ export class BathroomController {
   }
   @Get("/:roomID")
   @ApiParam({ name: "roomID", type: "string", required: true })
+  @ApiOperation({summary: "checker role access"})
   async getBathRoomDetail(@Param() param: RoomIdDto) {
     const roomId = new Types.ObjectId(param.roomID)
     const bathroom = await this.bathroomService.getBathRoomStatus(roomId)
