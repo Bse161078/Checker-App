@@ -50,7 +50,7 @@ export class HotelService {
     createReceptionDto.role = ROLES.HOTELRECEPTION;
     const reception = await this.userRepository.create(createReceptionDto);
     return reception;
-  }
+  } 
   async findAll() {
     const hotels = await this.userRepository.find({ role: ROLES.HOTELADMIN });
     return hotels;
@@ -67,5 +67,9 @@ export class HotelService {
       $unset: { hotel: "" }
     });
     return true;
+  }
+  async receptions(hotel: string){
+    const receptions = await this.userRepository.find({hotel});
+    return receptions
   }
 }

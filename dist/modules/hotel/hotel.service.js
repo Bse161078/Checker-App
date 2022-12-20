@@ -82,6 +82,10 @@ let HotelService = class HotelService {
         });
         return true;
     }
+    async receptions(hotel) {
+        const receptions = await this.userRepository.find({ hotel });
+        return receptions;
+    }
 };
 HotelService = __decorate([
     (0, common_1.Injectable)(),

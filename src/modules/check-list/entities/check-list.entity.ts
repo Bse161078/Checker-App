@@ -20,7 +20,7 @@ export class CheckList {
     materials: IMaterialList[];
     @Prop()
     @ApiProperty({type: "string", enum: CheckListSupplier})
-    supplierIsCompany: CheckListSupplier
+    supplier: CheckListSupplier
     @Prop({type: Types.ObjectId, ref: "User"})
     company: Types.ObjectId;
     @Prop({type: Types.ObjectId, ref: "User"})

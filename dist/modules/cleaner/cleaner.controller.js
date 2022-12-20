@@ -78,8 +78,8 @@ let CleanerController = class CleanerController {
             cleaner
         };
     }
-    findOne(cleanerIdDto) {
-        const cleaner = this.cleanerService.findOne(cleanerIdDto.cleanerID);
+    async findOne(cleanerIdDto) {
+        const cleaner = await this.cleanerService.findOne(cleanerIdDto.cleanerID);
         return { cleaner };
     }
     async update(cleanerIdDto, updateCleanerDto) {
@@ -184,7 +184,7 @@ __decorate([
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [cleaner_dto_1.CleanerIdDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], CleanerController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':cleanerID'),

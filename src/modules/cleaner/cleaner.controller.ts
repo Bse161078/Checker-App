@@ -105,8 +105,8 @@ export class CleanerController {
   @Roles(ROLES.CHECKER, ROLES.COMPANYADMIN, ROLES.HOTELADMIN)
   @ApiOperation({summary: "hotel and company and checker role access"})
   @ApiParam({name: "cleanerID", type: 'string'})
-  findOne(@Param() cleanerIdDto: CleanerIdDto) {
-    const cleaner = this.cleanerService.findOne(cleanerIdDto.cleanerID);
+  async findOne(@Param() cleanerIdDto: CleanerIdDto) {
+    const cleaner = await this.cleanerService.findOne(cleanerIdDto.cleanerID);
     return { cleaner }
   }
   

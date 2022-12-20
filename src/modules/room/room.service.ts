@@ -7,11 +7,15 @@ import { Room, RoomDocument } from './entities/room.entity';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { ROLES } from 'src/common/enums/role.enum';
+import { SendAlertDto, SetRoomStatus } from './dto/send-alert.dto';
+import { CleaningHistoryDocument } from './entities/cleaning-history.entity';
+import { CheckerRoomStatus } from './enum/room-type.enum';
 
 @Injectable({ scope: Scope.REQUEST })
 export class AdminRoomService {
   constructor(
     @InjectModel(Room.name) private readonly adminRoomRepository: Model<RoomDocument>,
+    @InjectModel(Room.name) private readonly cleaningHistoryRepository: Model<CleaningHistoryDocument>,
     @Inject(REQUEST) private request: Request
   ) { }
   async create(createRoomDto: CreateRoomDto) {
@@ -26,8 +30,9 @@ export class AdminRoomService {
 
   async findAll(filter: FilterQuery<RoomDocument> = {}) {
     const user = this.request.user;
-    if (user.hotel) filter['hotel'] = user.hotel;
     if (user.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
+    else if (user.hotel) filter['hotel'] = user.hotel;
+    else return []
     const rooms = await this.adminRoomRepository.aggregate([
       {
         $match: filter
@@ -95,7 +100,7 @@ export class AdminRoomService {
       },
       {
         $unwind: {
-          path:  "$roomType",
+          path: "$roomType",
           preserveNullAndEmptyArrays: true
         }
       },
@@ -161,5 +166,35 @@ export class AdminRoomService {
     const deletedResult = await this.adminRoomRepository.deleteOne({ _id: id });
     if (deletedResult.deletedCount == 0) throw new BadRequestException("deleted was failed");
     return deletedResult
+  }
+
+  async sendAlert(sendAlertDto: SendAlertDto) {
+    const { roomID, status } = sendAlertDto;
+    await this.adminRoomRepository.updateOne({ _id: roomID }, {
+      $set: { report: status }
+    })
+    return {
+      message: "set room report successfully"
+    }
+  }
+  async setRoomStatus(setRoomStatusDto: SetRoomStatus) {
+    const { roomID, status } = setRoomStatusDto;
+    const user = this.request.user;
+    let checker: any;
+    if (user.role == ROLES.CHECKER) checker = user._id;
+    const room = await this.adminRoomRepository.findOne({ _id: roomID })
+    await this.adminRoomRepository.updateOne({ _id: roomID }, {
+      $set: { status }
+    })
+    await this.cleaningHistoryRepository.updateOne({
+      cleaner: room.cleaner,
+      room: room._id,
+      checkerStatus: "no-status"
+    }, {
+      $set: { checkerStatus: status, checker }
+    })
+    return {
+      message: "set room status successfully"
+    }
   }
 }

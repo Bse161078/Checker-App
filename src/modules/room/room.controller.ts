@@ -7,6 +7,7 @@ import { AuthDecorator } from 'src/common/decorators/auth.decorator';
 import { ROLES } from 'src/common/enums/role.enum';
 import { SwaggerConsumes } from 'src/common/enums';
 import { Roles } from 'src/common/decorators/role.decorator';
+import { SendAlertDto, SetRoomStatus } from './dto/send-alert.dto';
 
 @Controller('room')
 @ApiTags("Admin-room")
@@ -64,9 +65,18 @@ export class AdminRoomController {
     }
   }
   
-  @Get('cleaner-bills')
-  @ApiOperation({summary: "hotel and hotelReception role access"})
-  async getCleanerBills(){
-    // const bill
+  @Post('send-alert')
+  @ApiOperation({summary: "hotelReception role access for send alert"})
+  @Roles(ROLES.HOTELRECEPTION)
+  @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
+  async sendAlert(@Body() sendAlertDto: SendAlertDto){
+    const result = await this.roomService.sendAlert(sendAlertDto)
+  }
+  @Post('set-room-status')
+  @ApiOperation({summary: "checker role access for send alert"})
+  @Roles(ROLES.CHECKER)
+  @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
+  async setRoomStatus(@Body() setRoomStatusDto: SetRoomStatus){
+    const result = await this.roomService.setRoomStatus(setRoomStatusDto)
   }
 }

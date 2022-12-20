@@ -3,5 +3,6 @@ export interface IBedFilesUpload {
     samplePhotoTopQuestion: MulterFile[];
     bedDoesNotLookFreshPhotos: MulterFile[];
     bedSheetInNotProperlyTightenedPhotos: MulterFile[];
+    extraBedPhotos: MulterFile[];
     DamageReportPhotos: MulterFile[];
 }

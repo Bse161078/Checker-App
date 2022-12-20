@@ -36,6 +36,10 @@ export class BedService {
           status: createBedDto.bedSheetInNotProperlyTightenedStatus,
           photos: newFile.bedSheetInNotProperlyTightenedPhotos,
         },
+        extraBed: {
+          status: createBedDto.extraBedStatus,
+          photos: newFile.extraBedPhotos,
+        },
       },
       checker,
       hotel: new Types.ObjectId(hotel),

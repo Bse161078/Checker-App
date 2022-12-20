@@ -50,6 +50,11 @@ export declare class HotelController {
             _id: import("mongoose").Types.ObjectId;
         }>)[];
     }>;
+    receptions(hotelDto: HotelDto): Promise<{
+        receptions: (import("mongoose").Document<unknown, any, import("../user/entities/user.entity").UserDocument> & import("../user/entities/user.entity").User & Document & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }>)[];
+    }>;
     findOne(hotelDto: HotelDto): Promise<{
         hotel: import("mongoose").Document<unknown, any, import("../user/entities/user.entity").UserDocument> & import("../user/entities/user.entity").User & Document & Required<{
             _id: import("mongoose").Types.ObjectId;

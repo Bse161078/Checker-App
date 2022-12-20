@@ -47,7 +47,8 @@ export class HotelController {
   }
   @Post("/create-hotel-reception")
   @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
-  @ApiOperation({summary: "supper-admin role access"})
+  @ApiOperation({summary: "supper-admin and hotel-admin role access"})
+  @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN)
   async createHotelReception(@Body() createReceptionDto: CreateHotelReceptionDto) {
     const reception = await this.hotelService.createReception(createReceptionDto);
     return {
@@ -71,6 +72,15 @@ export class HotelController {
     const hotels = await this.hotelService.findAll();
     return {
       hotels
+    }
+  }
+  @Get("/receptions/:hotelID")
+  @ApiOperation({summary: "supper-admin admin hotel-admin role access"})
+  @ApiParam({name: "hotelID", type: "string"})
+  async receptions(@Param() hotelDto: HotelDto) {
+    const receptions = await this.hotelService.receptions(hotelDto.hotelID);
+    return {
+      receptions
     }
   }
   

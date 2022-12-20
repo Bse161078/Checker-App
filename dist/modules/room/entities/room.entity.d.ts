@@ -26,9 +26,12 @@ import { Types } from "mongoose";
 export declare class Room {
     name: string;
     name_de: string;
+    report: string;
+    status: string;
     roomType: Types.ObjectId;
     level: Types.ObjectId;
     hotel: Types.ObjectId;
+    cleaner: Types.ObjectId;
 }
 export type RoomDocument = Room & Document;
 export declare const RoomSchema: import("mongoose").Schema<Room, import("mongoose").Model<Room, any, any, any, any>, {}, {}, {}, {}, "type", Room>;

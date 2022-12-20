@@ -1,10 +1,11 @@
-export declare enum RoomType {
-    SINGLE_BED = "single",
-    DOUBLE_BED = "double",
-    TRIPLE = "triple",
-    QUAD = "quad",
-    QUEEN = "queen",
-    KING = "king",
-    TWIN = "twin",
-    SUITE = "suite"
+export declare enum RoomStatus {
+    CleanQuick = "CleanQuick",
+    ExtraBedNormal = "ExtraBedNormal",
+    ExtraBedChild = "ExtraBedChild",
+    RedCard = "RedCard"
+}
+export declare enum CheckerRoomStatus {
+    Cleaned = "Cleaned",
+    NotCleaned = "NotCleaned",
+    Damaged = "Damaged"
 }

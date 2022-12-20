@@ -23,10 +23,14 @@ const functions_1 = require("../../common/utils/functions");
 const auth_service_1 = require("../auth/services/auth.service");
 const cleaning_history_entity_1 = require("../room/entities/cleaning-history.entity");
 const user_entity_1 = require("../user/entities/user.entity");
+const room_entity_1 = require("../room/entities/room.entity");
+const bill_entity_1 = require("../bills/entities/bill.entity");
 let CleanerService = class CleanerService {
-    constructor(userRepository, cleaningHistoryRepository, request, authService) {
+    constructor(userRepository, cleaningHistoryRepository, billRepository, roomRepository, request, authService) {
         this.userRepository = userRepository;
         this.cleaningHistoryRepository = cleaningHistoryRepository;
+        this.billRepository = billRepository;
+        this.roomRepository = roomRepository;
         this.request = request;
         this.authService = authService;
     }
@@ -57,8 +61,11 @@ let CleanerService = class CleanerService {
         else if (user.role == role_enum_1.ROLES.SUPERADMIN) {
             filter = { role: role_enum_1.ROLES.CLEANER };
         }
-        else {
+        else if (user.role == role_enum_1.ROLES.HOTELRECEPTION) {
             filter['hotel'] = user.hotel;
+        }
+        else {
+            return [];
         }
         if (user.role != role_enum_1.ROLES.SUPERADMIN && Object.values(filter).length == 0)
             return [];
@@ -66,10 +73,25 @@ let CleanerService = class CleanerService {
         return cleaners;
     }
     async findOne(id) {
+        var _a, _b, _c;
         const cleanerID = new mongoose_2.Types.ObjectId(id);
         const cleaner = await this.userRepository.findOne({ _id: cleanerID, role: role_enum_1.ROLES.CLEANER });
+        const bill = await this.billRepository.findOne({
+            cleaner: cleanerID,
+            checkout: false
+        });
+        const notCleanedHistory = await this.cleaningHistoryRepository.find({
+            cleaner: cleanerID,
+            status: room_status_enum_1.ROOM_STATUS.FINISH,
+            checkerStatus: room_status_enum_1.ROOM_STATUS.NOT_CLEANED
+        });
+        const cleanedHistory = await this.cleaningHistoryRepository.find({
+            cleaner: cleanerID,
+            status: room_status_enum_1.ROOM_STATUS.FINISH,
+            checkerStatus: room_status_enum_1.ROOM_STATUS.CLEANED
+        });
         if (cleaner)
-            return cleaner;
+            return Object.assign(Object.assign({}, cleaner._doc), { billAmount: (_a = bill === null || bill === void 0 ? void 0 : bill.checkoutAmount) !== null && _a !== void 0 ? _a : 0, roomNotCleanedCount: (_b = notCleanedHistory === null || notCleanedHistory === void 0 ? void 0 : notCleanedHistory.length) !== null && _b !== void 0 ? _b : 0, roomCleanedCount: (_c = cleanedHistory === null || cleanedHistory === void 0 ? void 0 : cleanedHistory.length) !== null && _c !== void 0 ? _c : 0 });
         throw new common_1.NotFoundException("cleaner not found");
     }
     async update(id, updateCleanerDto) {
@@ -101,9 +123,12 @@ let CleanerService = class CleanerService {
             cleaner,
             cleaningStartAt,
             room,
-            status: room_status_enum_1.ROOM_STATUS.START
+            status: room_status_enum_1.ROOM_STATUS.START,
+            checkerStatus: "no-status"
         });
-        ;
+        await this.roomRepository.updateOne({ _id: room }, {
+            $set: { cleaner }
+        });
         return createResult;
     }
     async endCleaningRoom(roomID) {
@@ -119,6 +144,9 @@ let CleanerService = class CleanerService {
                 status: room_status_enum_1.ROOM_STATUS.FINISH,
                 cleaningEndAt
             }
+        });
+        await this.roomRepository.updateOne({ _id: room }, {
+            $set: { cleaner }
         });
         return { updatedResult, cleaningEndAt };
     }
@@ -147,8 +175,12 @@ CleanerService = __decorate([
     (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),
     __param(0, (0, mongoose_1.InjectModel)(user_entity_1.User.name)),
     __param(1, (0, mongoose_1.InjectModel)(cleaning_history_entity_1.CleaningHistory.name)),
-    __param(2, (0, common_1.Inject)(core_1.REQUEST)),
+    __param(2, (0, mongoose_1.InjectModel)(bill_entity_1.Bill.name)),
+    __param(3, (0, mongoose_1.InjectModel)(room_entity_1.Room.name)),
+    __param(4, (0, common_1.Inject)(core_1.REQUEST)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
+        mongoose_2.Model,
         mongoose_2.Model, Object, auth_service_1.AuthService])
 ], CleanerService);
 exports.CleanerService = CleanerService;

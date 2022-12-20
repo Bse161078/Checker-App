@@ -22,7 +22,6 @@ const cleaning_history_entity_1 = require("../room/entities/cleaning-history.ent
 const user_entity_1 = require("../user/entities/user.entity");
 const role_enum_1 = require("../../common/enums/role.enum");
 const room_status_enum_1 = require("../../common/enums/room-status.enum");
-const rxjs_1 = require("rxjs");
 let BillsService = class BillsService {
     constructor(request, billRepository, cleaningHistoryRepository, userRepository) {
         this.request = request;
@@ -70,15 +69,17 @@ let BillsService = class BillsService {
     async findAll() {
         const filter = {};
         const user = this.request.user;
-        if (user.role == role_enum_1.ROLES.HOTELADMIN)
+        if ((user === null || user === void 0 ? void 0 : user.role) == role_enum_1.ROLES.HOTELADMIN)
             filter['hotel'] = user._id;
-        if (user.role == role_enum_1.ROLES.HOTELADMIN)
+        if ((user === null || user === void 0 ? void 0 : user.role) == role_enum_1.ROLES.COMPANYADMIN)
             filter['company'] = user._id;
+        if (!(filter === null || filter === void 0 ? void 0 : filter.hotel) && !(filter === null || filter === void 0 ? void 0 : filter.company))
+            return [];
         const bills = await this.billRepository.find(filter);
         return bills;
     }
     async findOne(id) {
-        const bill = await this.billRepository.findOne({ _id: rxjs_1.identity });
+        const bill = await this.billRepository.findOne({ _id: id });
         return bill;
     }
     async getCleanerBill(cleanerID) {

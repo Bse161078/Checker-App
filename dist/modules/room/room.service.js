@@ -20,8 +20,9 @@ const room_entity_1 = require("./entities/room.entity");
 const core_1 = require("@nestjs/core");
 const role_enum_1 = require("../../common/enums/role.enum");
 let AdminRoomService = class AdminRoomService {
-    constructor(adminRoomRepository, request) {
+    constructor(adminRoomRepository, cleaningHistoryRepository, request) {
         this.adminRoomRepository = adminRoomRepository;
+        this.cleaningHistoryRepository = cleaningHistoryRepository;
         this.request = request;
     }
     async create(createRoomDto) {
@@ -37,10 +38,12 @@ let AdminRoomService = class AdminRoomService {
     }
     async findAll(filter = {}) {
         const user = this.request.user;
-        if (user.hotel)
-            filter['hotel'] = user.hotel;
         if (user.role == role_enum_1.ROLES.HOTELADMIN)
             filter['hotel'] = user._id;
+        else if (user.hotel)
+            filter['hotel'] = user.hotel;
+        else
+            return [];
         const rooms = await this.adminRoomRepository.aggregate([
             {
                 $match: filter
@@ -174,12 +177,44 @@ let AdminRoomService = class AdminRoomService {
             throw new common_1.BadRequestException("deleted was failed");
         return deletedResult;
     }
+    async sendAlert(sendAlertDto) {
+        const { roomID, status } = sendAlertDto;
+        await this.adminRoomRepository.updateOne({ _id: roomID }, {
+            $set: { report: status }
+        });
+        return {
+            message: "set room report successfully"
+        };
+    }
+    async setRoomStatus(setRoomStatusDto) {
+        const { roomID, status } = setRoomStatusDto;
+        const user = this.request.user;
+        let checker;
+        if (user.role == role_enum_1.ROLES.CHECKER)
+            checker = user._id;
+        const room = await this.adminRoomRepository.findOne({ _id: roomID });
+        await this.adminRoomRepository.updateOne({ _id: roomID }, {
+            $set: { status }
+        });
+        await this.cleaningHistoryRepository.updateOne({
+            cleaner: room.cleaner,
+            room: room._id,
+            checkerStatus: "no-status"
+        }, {
+            $set: { checkerStatus: status, checker }
+        });
+        return {
+            message: "set room status successfully"
+        };
+    }
 };
 AdminRoomService = __decorate([
     (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),
     __param(0, (0, mongoose_1.InjectModel)(room_entity_1.Room.name)),
-    __param(1, (0, common_1.Inject)(core_1.REQUEST)),
-    __metadata("design:paramtypes", [mongoose_2.Model, Object])
+    __param(1, (0, mongoose_1.InjectModel)(room_entity_1.Room.name)),
+    __param(2, (0, common_1.Inject)(core_1.REQUEST)),
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model, Object])
 ], AdminRoomService);
 exports.AdminRoomService = AdminRoomService;
 //# sourceMappingURL=room.service.js.map

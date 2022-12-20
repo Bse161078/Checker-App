@@ -27,10 +27,13 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { Room, RoomDocument } from './entities/room.entity';
 import { Request } from 'express';
+import { SendAlertDto, SetRoomStatus } from './dto/send-alert.dto';
+import { CleaningHistoryDocument } from './entities/cleaning-history.entity';
 export declare class AdminRoomService {
     private readonly adminRoomRepository;
+    private readonly cleaningHistoryRepository;
     private request;
-    constructor(adminRoomRepository: Model<RoomDocument>, request: Request);
+    constructor(adminRoomRepository: Model<RoomDocument>, cleaningHistoryRepository: Model<CleaningHistoryDocument>, request: Request);
     create(createRoomDto: CreateRoomDto): Promise<import("mongoose").Document<unknown, any, RoomDocument> & Room & Document & {
         _id: Types.ObjectId;
     }>;
@@ -38,4 +41,10 @@ export declare class AdminRoomService {
     findOne(id: string): Promise<any>;
     update(id: string, updateRoomDto: UpdateRoomDto): Promise<import("mongodb").UpdateResult>;
     remove(id: string): Promise<import("mongodb").DeleteResult>;
+    sendAlert(sendAlertDto: SendAlertDto): Promise<{
+        message: string;
+    }>;
+    setRoomStatus(setRoomStatusDto: SetRoomStatus): Promise<{
+        message: string;
+    }>;
 }

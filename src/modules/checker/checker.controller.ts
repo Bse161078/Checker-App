@@ -24,8 +24,8 @@ export class CheckerController {
   @ApiConsumes(SwaggerConsumes.MULTIPART)
   @UseInterceptors(UploadImageInterceptor('avatar'))
   @ApiOperation({summary: "hotel and company role access"})
-  async create(@UploadedFileDecorator('image/*') avatar: MulterFile, @Body() createCheckerDto: CreateCheckerDto) {
-    createCheckerDto.avatar = avatar.path.slice(7);
+  async create(@UploadedFile() avatar: MulterFile, @Body() createCheckerDto: CreateCheckerDto) {
+    if(avatar) createCheckerDto.avatar = avatar.path.slice(7);
     const checker = await this.checkerService.create(createCheckerDto);
     return { checker }
   }

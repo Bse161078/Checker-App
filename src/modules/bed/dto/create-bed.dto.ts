@@ -14,6 +14,10 @@ export class CreateBedDto {
     bedSheetInNotProperlyTightenedStatus: boolean
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
     bedSheetInNotProperlyTightenedPhotos: string[]
+    @ApiPropertyOptional({ type: "boolean" })
+    extraBedStatus: boolean
+    @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
+    extraBedPhotos: string[]
 
     @ApiPropertyOptional()
     DamageReportText: string

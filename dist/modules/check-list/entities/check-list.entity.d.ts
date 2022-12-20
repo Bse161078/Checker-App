@@ -34,7 +34,7 @@ export interface IMaterialList {
 }
 export declare class CheckList {
     materials: IMaterialList[];
-    supplierIsCompany: CheckListSupplier;
+    supplier: CheckListSupplier;
     company: Types.ObjectId;
     hotel: Types.ObjectId;
     checker: Types.ObjectId;

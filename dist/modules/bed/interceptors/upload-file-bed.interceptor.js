@@ -8,6 +8,7 @@ class BedFileUpload extends (0, platform_express_1.FileFieldsInterceptor)([
     { name: "samplePhotoTopQuestion", maxCount: 1 },
     { name: "bedDoesNotLookFreshPhotos", maxCount: 5 },
     { name: "bedSheetInNotProperlyTightenedPhotos", maxCount: 5 },
+    { name: "extraBedPhotos", maxCount: 5 },
     { name: "DamageReportPhotos", maxCount: 5 },
 ], {
     storage: (0, multer_1.diskStorage)({

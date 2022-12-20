@@ -3,11 +3,12 @@ import { CreateRoomTypeDto } from './dto/create-room-type.dto';
 import { UpdateRoomTypeDto } from './dto/update-room-type.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { RoomType, RoomTypeDocument } from './entities/room-type.entity';
-import { Model, Types } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { removeEmptyFieldsObject } from 'src/common/utils/functions';
 import { Room, RoomDocument } from '../room/entities/room.entity';
+import { ROLES } from 'src/common/enums/role.enum';
 
 @Injectable({ scope: Scope.REQUEST })
 export class RoomTypeService {
@@ -28,8 +29,13 @@ export class RoomTypeService {
   }
 
   async findAll() {
-    const roomTypes = await this.roomtypeRepository.find({}).populate(
-      {path: "hotel", select: {username: 1} }
+    const user = this.request.user;
+    const filter: FilterQuery<RoomTypeDocument> = {}
+    if (user.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
+    else filter['hotel'] = user.hotel;
+    if(!filter.hotel) return []
+    const roomTypes = await this.roomtypeRepository.find(filter).populate(
+      { path: "hotel", select: { username: 1 } }
     );
     return roomTypes;
   }
@@ -47,15 +53,15 @@ export class RoomTypeService {
     const updatedResult = await this.roomtypeRepository.updateOne({ _id: id }, {
       $set: updateRoomTypeDto
     });
-    if(updatedResult.modifiedCount) throw new BadRequestException("No new changes were registered");
+    if (updatedResult.modifiedCount) throw new BadRequestException("No new changes were registered");
     return updatedResult;
   }
 
   async remove(id: string) {
     const roomType = await this.findOne(id);
-    const deletedResult = await this.roomtypeRepository.deleteOne({_id: id});
-    if(deletedResult.deletedCount == 0 )throw new BadRequestException("deleted room type failed");
-    await this.roomRepository.updateMany({roomType : roomType._id}, {$unset: {roomType: ""}});
+    const deletedResult = await this.roomtypeRepository.deleteOne({ _id: id });
+    if (deletedResult.deletedCount == 0) throw new BadRequestException("deleted room type failed");
+    await this.roomRepository.updateMany({ roomType: roomType._id }, { $unset: { roomType: "" } });
     return true;
   }
 }

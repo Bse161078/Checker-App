@@ -6,6 +6,8 @@ export declare class CreateBedDto {
     bedDoesNotLookFreshPhotos: string[];
     bedSheetInNotProperlyTightenedStatus: boolean;
     bedSheetInNotProperlyTightenedPhotos: string[];
+    extraBedStatus: boolean;
+    extraBedPhotos: string[];
     DamageReportText: string;
     DamageReportPhotos: string[];
     room: Types.ObjectId;

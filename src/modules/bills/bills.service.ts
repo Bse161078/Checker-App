@@ -57,14 +57,15 @@ export class BillsService {
   async findAll() {
     const filter: FilterQuery<BillDocument> = {}
     const user = this.request.user;
-    if(user.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
-    if(user.role == ROLES.HOTELADMIN) filter['company'] = user._id;
+    if(user?.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
+    if(user?.role == ROLES.COMPANYADMIN) filter['company'] = user._id;
+    if(!filter?.hotel && !filter?.company) return []
     const bills = await this.billRepository.find(filter);
     return bills;
   }
 
   async findOne(id: string) {
-    const bill = await this.billRepository.findOne({_id: identity});
+    const bill = await this.billRepository.findOne({_id: id});
     return bill;
   }
 

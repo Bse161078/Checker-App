@@ -29,21 +29,23 @@ import { CleaningHistory, CleaningHistoryDocument } from '../room/entities/clean
 import { User, UserDocument } from '../user/entities/user.entity';
 import { CreateCleanerDto } from './dto/create-cleaner.dto';
 import { UpdateCleanerDto } from './dto/update-cleaner.dto';
+import { RoomDocument } from '../room/entities/room.entity';
+import { BillDocument } from '../bills/entities/bill.entity';
 export declare class CleanerService {
     private userRepository;
     private cleaningHistoryRepository;
+    private billRepository;
+    private roomRepository;
     private request;
     private authService;
-    constructor(userRepository: Model<UserDocument>, cleaningHistoryRepository: Model<CleaningHistoryDocument>, request: Request, authService: AuthService);
+    constructor(userRepository: Model<UserDocument>, cleaningHistoryRepository: Model<CleaningHistoryDocument>, billRepository: Model<BillDocument>, roomRepository: Model<RoomDocument>, request: Request, authService: AuthService);
     create(createCleanerDto: CreateCleanerDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
     }>>;
     findAll(): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
     }>)[]>;
-    findOne(id: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
-        _id: Types.ObjectId;
-    }>>;
+    findOne(id: string): Promise<any>;
     update(id: string, updateCleanerDto: UpdateCleanerDto): Promise<boolean>;
     remove(id: string): Promise<boolean>;
     startCleaningRoom(roomID: string): Promise<import("mongoose").Document<unknown, any, CleaningHistoryDocument> & CleaningHistory & Document & {

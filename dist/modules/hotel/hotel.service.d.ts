@@ -51,4 +51,7 @@ export declare class HotelService {
         _id: Types.ObjectId;
     }>>;
     remove(id: string): Promise<boolean>;
+    receptions(hotel: string): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>)[]>;
 }

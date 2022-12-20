@@ -9,11 +9,14 @@ class CommentsClass extends Document {
     bedDoesNotLookFresh: ICommentValue;
     @Prop({type: CommentsValueSchema })
     bedSheetInNotProperlyTightened: ICommentValue;
+    @Prop({type: CommentsValueSchema })
+    extraBed: ICommentValue;
 }
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
 interface IBedComments {
     bedDoesNotLookFresh: ICommentValue
     bedSheetInNotProperlyTightened: ICommentValue
+    extraBed: ICommentValue
 }
 @Schema()
 export class Bed {

@@ -39,7 +39,7 @@ __decorate([
     (0, mongoose_1.Prop)(),
     (0, swagger_1.ApiProperty)({ type: "string", enum: check_list_supplier_enum_1.CheckListSupplier }),
     __metadata("design:type", String)
-], CheckList.prototype, "supplierIsCompany", void 0);
+], CheckList.prototype, "supplier", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: "User" }),
     __metadata("design:type", mongoose_2.Types.ObjectId)

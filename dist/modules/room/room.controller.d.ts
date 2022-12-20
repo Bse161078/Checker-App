@@ -1,6 +1,7 @@
 import { AdminRoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { SendAlertDto, SetRoomStatus } from './dto/send-alert.dto';
 export declare class AdminRoomController {
     private readonly roomService;
     constructor(roomService: AdminRoomService);
@@ -19,5 +20,6 @@ export declare class AdminRoomController {
     remove(id: string): Promise<{
         message: string;
     }>;
-    getCleanerBills(): Promise<void>;
+    sendAlert(sendAlertDto: SendAlertDto): Promise<void>;
+    setRoomStatus(setRoomStatusDto: SetRoomStatus): Promise<void>;
 }

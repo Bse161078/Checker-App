@@ -23,6 +23,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: index_schema_1.CommentsValueSchema }),
     __metadata("design:type", Object)
 ], CommentsClass.prototype, "bedSheetInNotProperlyTightened", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: index_schema_1.CommentsValueSchema }),
+    __metadata("design:type", Object)
+], CommentsClass.prototype, "extraBed", void 0);
 CommentsClass = __decorate([
     (0, mongoose_1.Schema)()
 ], CommentsClass);

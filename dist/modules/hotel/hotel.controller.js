@@ -66,6 +66,12 @@ let HotelController = class HotelController {
             hotels
         };
     }
+    async receptions(hotelDto) {
+        const receptions = await this.hotelService.receptions(hotelDto.hotelID);
+        return {
+            receptions
+        };
+    }
     async findOne(hotelDto) {
         const hotel = await this.hotelService.findOne(hotelDto.hotelID);
         return {
@@ -113,7 +119,8 @@ __decorate([
 __decorate([
     (0, common_1.Post)("/create-hotel-reception"),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
-    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin and hotel-admin role access" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [hotel_dto_1.CreateHotelReceptionDto]),
@@ -136,6 +143,15 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], HotelController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)("/receptions/:hotelID"),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin admin hotel-admin role access" }),
+    (0, swagger_1.ApiParam)({ name: "hotelID", type: "string" }),
+    __param(0, (0, common_1.Param)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [hotel_dto_1.HotelDto]),
+    __metadata("design:returntype", Promise)
+], HotelController.prototype, "receptions", null);
 __decorate([
     (0, common_1.Get)(':hotelID'),
     (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),

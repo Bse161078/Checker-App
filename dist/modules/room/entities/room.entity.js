@@ -23,6 +23,14 @@ __decorate([
     __metadata("design:type", String)
 ], Room.prototype, "name_de", void 0);
 __decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Room.prototype, "report", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Room.prototype, "status", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ ref: 'RoomType' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], Room.prototype, "roomType", void 0);
@@ -34,6 +42,10 @@ __decorate([
     (0, mongoose_1.Prop)({ ref: 'User' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], Room.prototype, "hotel", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ ref: 'User' }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Room.prototype, "cleaner", void 0);
 Room = __decorate([
     (0, mongoose_1.Schema)()
 ], Room);

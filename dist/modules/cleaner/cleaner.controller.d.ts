@@ -68,11 +68,9 @@ export declare class CleanerController {
             _id: import("mongoose").Types.ObjectId;
         }>;
     }>;
-    findOne(cleanerIdDto: CleanerIdDto): {
-        cleaner: Promise<import("mongoose").Document<unknown, any, import("../user/entities/user.entity").UserDocument> & import("../user/entities/user.entity").User & Document & Required<{
-            _id: import("mongoose").Types.ObjectId;
-        }>>;
-    };
+    findOne(cleanerIdDto: CleanerIdDto): Promise<{
+        cleaner: any;
+    }>;
     update(cleanerIdDto: CleanerIdDto, updateCleanerDto: UpdateCleanerDto): Promise<{
         message: string;
     }>;

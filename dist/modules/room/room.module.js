@@ -13,6 +13,7 @@ const room_controller_1 = require("./room.controller");
 const mongoose_1 = require("@nestjs/mongoose");
 const room_entity_1 = require("./entities/room.entity");
 const user_entity_1 = require("../user/entities/user.entity");
+const cleaning_history_entity_1 = require("./entities/cleaning-history.entity");
 let AdminRoomModule = class AdminRoomModule {
 };
 AdminRoomModule = __decorate([
@@ -20,6 +21,7 @@ AdminRoomModule = __decorate([
         imports: [
             mongoose_1.MongooseModule.forFeature([
                 { name: room_entity_1.Room.name, schema: room_entity_1.RoomSchema },
+                { name: cleaning_history_entity_1.CleaningHistory.name, schema: cleaning_history_entity_1.CleaningHistorySchema },
                 { name: user_entity_1.User.name, schema: user_entity_1.UserSchema },
             ])
         ],

@@ -27,6 +27,7 @@ import { ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/int
 interface IBedComments {
     bedDoesNotLookFresh: ICommentValue;
     bedSheetInNotProperlyTightened: ICommentValue;
+    extraBed: ICommentValue;
 }
 export declare class Bed {
     title: string;

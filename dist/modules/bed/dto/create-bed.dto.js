@@ -38,6 +38,14 @@ __decorate([
     __metadata("design:type", Array)
 ], CreateBedDto.prototype, "bedSheetInNotProperlyTightenedPhotos", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
+    __metadata("design:type", Boolean)
+], CreateBedDto.prototype, "extraBedStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),
+    __metadata("design:type", Array)
+], CreateBedDto.prototype, "extraBedPhotos", void 0);
+__decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     __metadata("design:type", String)
 ], CreateBedDto.prototype, "DamageReportText", void 0);

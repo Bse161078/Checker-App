@@ -16,7 +16,6 @@ exports.CheckerController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const auth_decorator_1 = require("../../common/decorators/auth.decorator");
-const upload_decorators_1 = require("../../common/decorators/upload.decorators");
 const enums_1 = require("../../common/enums");
 const role_enum_1 = require("../../common/enums/role.enum");
 const file_upload_interceptor_1 = require("../../common/interceptors/file-upload.interceptor");
@@ -32,7 +31,8 @@ let CheckerController = class CheckerController {
         this.checkerService = checkerService;
     }
     async create(avatar, createCheckerDto) {
-        createCheckerDto.avatar = avatar.path.slice(7);
+        if (avatar)
+            createCheckerDto.avatar = avatar.path.slice(7);
         const checker = await this.checkerService.create(createCheckerDto);
         return { checker };
     }
@@ -86,7 +86,7 @@ __decorate([
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
     (0, common_1.UseInterceptors)((0, file_upload_interceptor_1.UploadImageInterceptor)('avatar')),
     (0, swagger_1.ApiOperation)({ summary: "hotel and company role access" }),
-    __param(0, (0, upload_decorators_1.UploadedFileDecorator)('image/*')),
+    __param(0, (0, common_1.UploadedFile)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, create_checker_dto_1.CreateCheckerDto]),

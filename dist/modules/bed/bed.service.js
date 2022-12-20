@@ -44,6 +44,10 @@ let BedService = class BedService {
                     status: createBedDto.bedSheetInNotProperlyTightenedStatus,
                     photos: newFile.bedSheetInNotProperlyTightenedPhotos,
                 },
+                extraBed: {
+                    status: createBedDto.extraBedStatus,
+                    photos: newFile.extraBedPhotos,
+                },
             },
             checker,
             hotel: new mongoose_2.Types.ObjectId(hotel),

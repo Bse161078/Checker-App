@@ -13,6 +13,8 @@ const cleaner_controller_1 = require("./cleaner.controller");
 const mongoose_1 = require("@nestjs/mongoose");
 const user_entity_1 = require("../user/entities/user.entity");
 const cleaning_history_entity_1 = require("../room/entities/cleaning-history.entity");
+const room_entity_1 = require("../room/entities/room.entity");
+const bill_entity_1 = require("../bills/entities/bill.entity");
 let CleanerModule = class CleanerModule {
 };
 CleanerModule = __decorate([
@@ -20,6 +22,8 @@ CleanerModule = __decorate([
         imports: [mongoose_1.MongooseModule.forFeature([
                 { name: user_entity_1.User.name, schema: user_entity_1.UserSchema },
                 { name: cleaning_history_entity_1.CleaningHistory.name, schema: cleaning_history_entity_1.CleaningHistorySchema },
+                { name: room_entity_1.Room.name, schema: room_entity_1.RoomSchema },
+                { name: bill_entity_1.Bill.name, schema: bill_entity_1.BillSchema },
             ])],
         controllers: [cleaner_controller_1.CleanerController],
         providers: [cleaner_service_1.CleanerService]

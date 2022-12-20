@@ -20,6 +20,7 @@ const mongoose_2 = require("mongoose");
 const core_1 = require("@nestjs/core");
 const functions_1 = require("../../common/utils/functions");
 const room_entity_1 = require("../room/entities/room.entity");
+const role_enum_1 = require("../../common/enums/role.enum");
 let RoomTypeService = class RoomTypeService {
     constructor(roomtypeRepository, roomRepository, request) {
         this.roomtypeRepository = roomtypeRepository;
@@ -37,7 +38,15 @@ let RoomTypeService = class RoomTypeService {
         return createdResult;
     }
     async findAll() {
-        const roomTypes = await this.roomtypeRepository.find({}).populate({ path: "hotel", select: { username: 1 } });
+        const user = this.request.user;
+        const filter = {};
+        if (user.role == role_enum_1.ROLES.HOTELADMIN)
+            filter['hotel'] = user._id;
+        else
+            filter['hotel'] = user.hotel;
+        if (!filter.hotel)
+            return [];
+        const roomTypes = await this.roomtypeRepository.find(filter).populate({ path: "hotel", select: { username: 1 } });
         return roomTypes;
     }
     async findOne(_id) {

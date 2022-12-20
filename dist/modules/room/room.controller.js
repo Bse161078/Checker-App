@@ -22,6 +22,7 @@ const auth_decorator_1 = require("../../common/decorators/auth.decorator");
 const role_enum_1 = require("../../common/enums/role.enum");
 const enums_1 = require("../../common/enums");
 const role_decorator_1 = require("../../common/decorators/role.decorator");
+const send_alert_dto_1 = require("./dto/send-alert.dto");
 let AdminRoomController = class AdminRoomController {
     constructor(roomService) {
         this.roomService = roomService;
@@ -56,7 +57,11 @@ let AdminRoomController = class AdminRoomController {
             message: "deleted room successfully"
         };
     }
-    async getCleanerBills() {
+    async sendAlert(sendAlertDto) {
+        const result = await this.roomService.sendAlert(sendAlertDto);
+    }
+    async setRoomStatus(setRoomStatusDto) {
+        const result = await this.roomService.setRoomStatus(setRoomStatusDto);
     }
 };
 __decorate([
@@ -105,12 +110,25 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminRoomController.prototype, "remove", null);
 __decorate([
-    (0, common_1.Get)('cleaner-bills'),
-    (0, swagger_1.ApiOperation)({ summary: "hotel and hotelReception role access" }),
+    (0, common_1.Post)('send-alert'),
+    (0, swagger_1.ApiOperation)({ summary: "hotelReception role access for send alert" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.HOTELRECEPTION),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [send_alert_dto_1.SendAlertDto]),
     __metadata("design:returntype", Promise)
-], AdminRoomController.prototype, "getCleanerBills", null);
+], AdminRoomController.prototype, "sendAlert", null);
+__decorate([
+    (0, common_1.Post)('set-room-status'),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access for send alert" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [send_alert_dto_1.SetRoomStatus]),
+    __metadata("design:returntype", Promise)
+], AdminRoomController.prototype, "setRoomStatus", null);
 AdminRoomController = __decorate([
     (0, common_1.Controller)('room'),
     (0, swagger_1.ApiTags)("Admin-room"),
