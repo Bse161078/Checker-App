@@ -2,6 +2,11 @@ import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Types } from "mongoose";
 
 export class CreateFloorDto {
+
+    @ApiPropertyOptional({type: Boolean, default: false})
+    roomIsVacuumedStatus: boolean
+    @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
+    roomIsVacuumedPhotos: string[]
     @ApiPropertyOptional({default: false, type: "bool", })
     topQuestionStatus: boolean
     @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})

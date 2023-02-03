@@ -6,6 +6,8 @@ import { IComments, ICommentValue, IDamageReport, ITopQuestion } from "../../che
 @Schema()
 class CommentsClass extends Document {
     @Prop({type: CommentsValueSchema })
+    isMadeUp: ICommentValue;
+    @Prop({type: CommentsValueSchema })
     bedDoesNotLookFresh: ICommentValue;
     @Prop({type: CommentsValueSchema })
     bedSheetInNotProperlyTightened: ICommentValue;
@@ -14,9 +16,11 @@ class CommentsClass extends Document {
 }
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
 interface IBedComments {
+    isMadeUp: ICommentValue
     bedDoesNotLookFresh: ICommentValue
     bedSheetInNotProperlyTightened: ICommentValue
-    extraBed: ICommentValue
+    extraBed: ICommentValue,
+
 }
 @Schema()
 export class Bed {

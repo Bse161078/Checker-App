@@ -16,7 +16,7 @@ export class AdminRoomService {
   constructor(
     @InjectModel(Room.name) private readonly adminRoomRepository: Model<RoomDocument>,
     @InjectModel(Room.name) private readonly cleaningHistoryRepository: Model<CleaningHistoryDocument>,
-    @Inject(REQUEST) private request: Request
+    @Inject(REQUEST) private request: any
   ) { }
   async create(createRoomDto: CreateRoomDto) {
     const user = this.request.user;

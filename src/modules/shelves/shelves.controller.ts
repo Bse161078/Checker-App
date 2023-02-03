@@ -1,19 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
-import { ShelvesService } from './shelves.service';
-import { CreateShelvesDto } from './dto/create-shelf.dto';
-import { UpdateShelfDto } from './dto/update-shelf.dto';
-import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { SwaggerConsumes } from 'src/common/enums';
-import { IShelvesFilesUpload } from './interfaces/files.interface';
-import { ShelvesFileUpload } from './interceptors/upload-file-shelves.interceptor';
-import { RoomIdDto } from '../room/dto/room.dto';
-import { Types } from 'mongoose';
-import { AuthDecorator } from 'src/common/decorators/auth.decorator';
-import { ROLES } from 'src/common/enums/role.enum';
+import {Body, Controller, Get, Param, Post, UploadedFiles, UseInterceptors} from '@nestjs/common';
+import {ShelvesService} from './shelves.service';
+import {CreateShelvesDto} from './dto/create-shelf.dto';
+import {ApiConsumes, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
+import {SwaggerConsumes} from 'src/common/enums';
+import {IShelvesFilesUpload} from './interfaces/files.interface';
+import {ShelvesFileUpload} from './interceptors/upload-file-shelves.interceptor';
+import {RoomIdDto} from '../room/dto/room.dto';
+import {Types} from 'mongoose';
+import {AuthDecorator} from 'src/common/decorators/auth.decorator';
+import {ROLES} from 'src/common/enums/role.enum';
 
 @Controller('shelves')
 @ApiTags("Shelves")
-@AuthDecorator(ROLES.CHECKER)
+@AuthDecorator(ROLES.CHECKER,ROLES.SUPERADMIN)
 export class ShelvesController {
   constructor(private readonly shelvesService: ShelvesService) { }
 

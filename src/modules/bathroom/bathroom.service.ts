@@ -12,7 +12,7 @@ import { IBathRoomFilesUpload } from './interfaces/files.interface';
 @Injectable({ scope: Scope.REQUEST })
 export class BathroomService {
   constructor(
-    @Inject(REQUEST) private request: Request,
+    @Inject(REQUEST) private request: any,
     @InjectModel(BathRoom.name) private bathroomRepository: Model<BathRoomDocument>
   ) { }
   async create(createBathroomDto: CreateBathroomDto | any, files: IBathRoomFilesUpload) {
@@ -27,7 +27,11 @@ export class BathroomService {
         samplePhoto: newFile.samplePhotoTopQuestion,
       },
       comments: {
-        tilesAreNotMopped: {
+          isCleaned: {
+              status: createBathroomDto.isCleanedStatus,
+              photos: newFile.isCleanedPhotos
+          },
+          tilesAreNotMopped: {
           status: createBathroomDto.tilesAreNotMoppedStatus,
           photos: newFile.tilesAreNotMoppedPhotos
         },

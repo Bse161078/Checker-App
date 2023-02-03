@@ -6,6 +6,8 @@ import { ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/int
 @Schema()
 class CommentsClass extends Document {
     @Prop({type: CommentsValueSchema })
+    isCleaned: ICommentValue;
+    @Prop({type: CommentsValueSchema })
     tilesAreNotMopped: ICommentValue;
     @Prop({type: CommentsValueSchema })
     toiletIsNotWiped: ICommentValue;
@@ -19,6 +21,7 @@ class CommentsClass extends Document {
 }
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
 export interface IBathRoomComment {
+    isCleaned: ICommentValue;
     tilesAreNotMopped: ICommentValue;
     toiletIsNotWiped: ICommentValue;
     thereIsDirtInTheShowe: ICommentValue;

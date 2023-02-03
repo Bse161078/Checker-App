@@ -10,7 +10,7 @@ const common_1 = require("@nestjs/common");
 const class_validator_1 = require("class-validator");
 const fs_1 = require("fs");
 const path_1 = require("path");
-const enums_1 = require("../enums");
+const enums_1 = require("../../common/enums");
 let AllExceptionFilter = class AllExceptionFilter {
     catch(exception, host) {
         var _a;

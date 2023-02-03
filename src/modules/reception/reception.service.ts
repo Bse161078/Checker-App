@@ -14,7 +14,7 @@ export class ReceptionService {
   constructor(
     @InjectModel(Room.name) private roomRepository: Model<RoomDocument>,
     @InjectModel(Cleaner.name) private cleanerRepository: Model<UserDocument>,
-    @Inject(REQUEST) private request: Request
+    @Inject(REQUEST) private request: any
   ){
 
   }

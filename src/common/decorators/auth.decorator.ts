@@ -9,7 +9,7 @@ import { Roles } from "./role.decorator";
 export function AuthDecorator(...permissions: ROLES[]) {
     permissions = permissions ?? []
     return applyDecorators(
-        ApiBearerAuth("bearer"),
+        ApiBearerAuth("Bearer"),
         Roles(...permissions),
         UseGuards(JwtGuard, RoleGuard)
     )

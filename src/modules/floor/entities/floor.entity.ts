@@ -9,12 +9,15 @@ class CommentsClass extends Document{
     @Prop({type: CommentsValueSchema })
     roomIsNotVacuumed: ICommentValue;
     @Prop({type: CommentsValueSchema })
+    roomIsVacuumed: ICommentValue;
+    @Prop({type: CommentsValueSchema })
     roomHasStrongStainsThatCanNotBeCleanedByUs: ICommentValue;
     @Prop({type: CommentsValueSchema })
     DamageCausedByGuests: ICommentValue;
 }
 const CommentsSchema = SchemaFactory.createForClass(CommentsClass);
 interface IFloorComments {
+    roomIsVacuumed: ICommentValue;
     roomIsNotVacuumed: ICommentValue;
     roomHasStrongStainsThatCanNotBeCleanedByUs: ICommentValue;
     DamageCausedByGuests: ICommentValue;

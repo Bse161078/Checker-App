@@ -15,7 +15,7 @@ export class MaterialListService {
   constructor(
     @InjectModel(Material.name) private materialRepository: Model<MaterialDocument>,
     @InjectModel(User.name) private userRepository: Model<UserDocument>,
-    @Inject(REQUEST) private request: Request
+    @Inject(REQUEST) private request: any
   ) { }
   async create(createMaterialListDto: CreateMaterialListDto) {
     const user = this.request.user;

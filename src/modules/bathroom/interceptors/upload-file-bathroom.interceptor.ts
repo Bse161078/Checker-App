@@ -5,6 +5,7 @@ import { destinationImageFile, editFileName, imageFileFilter } from "src/common/
 export class BathRoomFileUpload extends FileFieldsInterceptor(
     [
         {name: "samplePhotoTopQuestion", maxCount: 1},
+        {name: "isCleanedPhotos", maxCount: 5},
         {name: "tilesAreNotMoppedPhotos", maxCount: 5},
         {name: "toiletIsNotWipedPhotos", maxCount: 5},
         {name: "thereIsDirtInTheShowePhotos", maxCount: 5},

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
-const enums_1 = require("../enums");
+const enums_1 = require("../..//common/enums");
 const validation_exception_1 = require("./validation.exception");
 let ValidationFilter = class ValidationFilter {
     catch(exception, host) {

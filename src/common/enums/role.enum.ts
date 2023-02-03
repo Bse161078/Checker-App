@@ -9,7 +9,8 @@ export enum ROLES {
 }
 export enum ADMIN_ROLES {
     HOTELADMIN = "HotelAdmin",
-    COMPANYADMIN = "CompanyAdmin"
+    COMPANYADMIN = "CompanyAdmin",
+    SUPERADMIN = "SuperAdmin",
 }
 export enum HOTEL_ROLES {
     HOTELRECEPTION = "HotelReception",

@@ -23,7 +23,7 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Types } from "mongoose";
-import { ROLES } from "src/common/enums/role.enum";
+import { ROLES } from "../../../common/enums/role.enum";
 export declare class User {
     _id: Types.ObjectId;
     fullname: string;

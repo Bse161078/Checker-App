@@ -5,6 +5,7 @@ import { destinationImageFile, editFileName, imageFileFilter } from "src/common/
 export class FloorFileUpload extends FileFieldsInterceptor(
     [
         {name: "samplePhotoTopQuestion", maxCount: 1},
+        {name: "roomIsVacuumedPhotos", maxCount: 5},
         {name: "roomIsNotVacuumedPhotos", maxCount: 5},
         {name: "roomHasStrongStainsThatCanNotBeCleanedByUsPhotos", maxCount: 5},
         {name: "DamageCausedByGuestsPhotos", maxCount: 5},

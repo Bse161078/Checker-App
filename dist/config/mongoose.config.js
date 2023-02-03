@@ -8,6 +8,7 @@ function dbConfig() {
     const connection = NODE_ENV === enums_1.NodeEnvironments.PRODUCTION ?
         `mongodb://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?${DB_OPTION}` :
         `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
+    console.log(connection);
     return connection;
 }
 exports.default = dbConfig;

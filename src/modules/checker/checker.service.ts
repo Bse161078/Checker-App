@@ -14,7 +14,7 @@ import { UpdateCheckerDto } from './dto/update-checker.dto';
 export class CheckerService {
   constructor(
     @InjectModel(User.name) private userRepository: Model<UserDocument>,
-    @Inject(REQUEST) private request: Request,
+    @Inject(REQUEST) private request: any,
     private authService: AuthService
   ) { }
   async create(createCheckerDto: CreateCheckerDto) {

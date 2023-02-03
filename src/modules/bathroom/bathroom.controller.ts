@@ -1,23 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Types } from 'mongoose';
-import { AuthDecorator } from 'src/common/decorators/auth.decorator';
-import { SwaggerConsumes } from 'src/common/enums';
-import { ROLES } from 'src/common/enums/role.enum';
-import { RoomIdDto } from '../room/dto/room.dto';
-import { BathroomService } from './bathroom.service';
-import { CreateBathroomDto } from './dto/create-bathroom.dto';
-import { UpdateBathroomDto } from './dto/update-bathroom.dto';
-import { BathRoomFileUpload } from './interceptors/upload-file-bathroom.interceptor';
-import { IBathRoomFilesUpload } from './interfaces/files.interface';
+import {Body, Controller, Get, Param, Post, UploadedFiles, UseInterceptors} from '@nestjs/common';
+import {ApiConsumes, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
+import {Types} from 'mongoose';
+import {AuthDecorator} from 'src/common/decorators/auth.decorator';
+import {SwaggerConsumes} from 'src/common/enums';
+import {ROLES} from 'src/common/enums/role.enum';
+import {RoomIdDto} from '../room/dto/room.dto';
+import {BathroomService} from './bathroom.service';
+import {CreateBathroomDto} from './dto/create-bathroom.dto';
+import {BathRoomFileUpload} from './interceptors/upload-file-bathroom.interceptor';
+import {IBathRoomFilesUpload} from './interfaces/files.interface';
 
 @Controller('bathroom')
 @ApiTags("BathRoom")
-@AuthDecorator(ROLES.CHECKER)
+@AuthDecorator(ROLES.CHECKER,ROLES.SUPERADMIN)
 export class BathroomController {
   constructor(private readonly bathroomService: BathroomService) { }
 
-  @Post(":/roomID")
+  @Post("/:roomID")
   @ApiConsumes(SwaggerConsumes.MULTIPART)
   @UseInterceptors(BathRoomFileUpload)
   @ApiParam({ name: "roomID", type: "string", required: true })

@@ -7,9 +7,22 @@ export class CreateShelvesDto {
     @ApiPropertyOptional({type: "string", format: "binary"})
     samplePhotoTopQuestion: string
     @ApiPropertyOptional({type: "boolean"})
+    wipedStatus: boolean
+    @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
+    wipedPhotos: string[]
+    @ApiPropertyOptional({type: "boolean"})
     tableNotCleanStatus: boolean
     @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
     tableNotCleanPhotos: string[]
+    @ApiPropertyOptional({type: "boolean"})
+    tvStatus: boolean
+    @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
+    tvPhotos: string[]
+    @ApiPropertyOptional({type: "boolean"})
+    windowStatus: boolean
+    @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})
+    windowPhotos: string[]
+
     @ApiPropertyOptional({type: "boolean"})
     sideTableNotCleanStatus: boolean
     @ApiPropertyOptional({type: "array", items: {type: "string", format: "binary"}})

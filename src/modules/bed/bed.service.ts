@@ -13,7 +13,7 @@ import { IBedFilesUpload } from './interfaces/files.interface';
 @Injectable({scope: Scope.REQUEST})
 export class BedService {
   constructor(
-    @Inject(REQUEST) private request: Request,
+    @Inject(REQUEST) private request: any,
     @InjectModel(Bed.name) private bedRepository: Model<BedDocument>
   ) { }
   async create(createBedDto: CreateBedDto | any, files: IBedFilesUpload) {
@@ -28,6 +28,10 @@ export class BedService {
         samplePhoto: newFile.samplePhotoTopQuestion,
       },
       comments: {
+        isMadeUp:{
+            status: createBedDto.isMadeUpStatus,
+            photos: newFile.isMadeUpPhotos
+        },
         bedDoesNotLookFresh: {
           status: createBedDto.bedDoesNotLookFreshStatus,
           photos: newFile.bedDoesNotLookFreshPhotos

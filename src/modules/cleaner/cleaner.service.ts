@@ -21,7 +21,7 @@ export class CleanerService {
     @InjectModel(CleaningHistory.name) private cleaningHistoryRepository: Model<CleaningHistoryDocument>,
     @InjectModel(Bill.name) private billRepository: Model<BillDocument>,
     @InjectModel(Room.name) private roomRepository: Model<RoomDocument>,
-    @Inject(REQUEST) private request: Request,
+    @Inject(REQUEST) private request: any,
     private authService: AuthService
   ) { }
   async create(createCleanerDto: CreateCleanerDto) {

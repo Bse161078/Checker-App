@@ -5,6 +5,9 @@ import { destinationImageFile, editFileName, imageFileFilter } from "src/common/
 export class ShelvesFileUpload extends FileFieldsInterceptor(
     [
         {name: "samplePhotoTopQuestion", maxCount: 1},
+        {name: "wipedPhotos", maxCount: 5},
+        {name: "tvPhotos", maxCount: 5},
+        {name: "windowPhotos", maxCount: 5},
         {name: "tableNotCleanPhotos", maxCount: 5},
         {name: "sideTableNotCleanPhotos", maxCount: 5},
         {name: "tvStandNotCleanPhotos", maxCount: 5},

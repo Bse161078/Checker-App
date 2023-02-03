@@ -15,7 +15,7 @@ import { identity } from 'rxjs';
 @Injectable({scope: Scope.REQUEST})
 export class BillsService {
   constructor(
-    @Inject(REQUEST) private request: Request,
+    @Inject(REQUEST) private request: any,
     @InjectModel(Bill.name) private billRepository: Model<BillDocument>,
     @InjectModel(CleaningHistory.name) private cleaningHistoryRepository: Model<CleaningHistoryDocument>,
     @InjectModel(User.name) private userRepository: Model<UserDocument>,

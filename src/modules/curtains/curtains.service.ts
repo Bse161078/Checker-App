@@ -13,7 +13,7 @@ import { ICurtainFilesUpload } from './interfaces/files.interface';
 @Injectable({ scope: Scope.REQUEST })
 export class CurtainsService {
   constructor(
-    @Inject(REQUEST) private request: Request,
+    @Inject(REQUEST) private request: any,
     @InjectModel(Curtain.name) private curtainRepository: Model<CurtainDocument>
   ) { }
 

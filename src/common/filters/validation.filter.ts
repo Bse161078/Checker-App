@@ -6,7 +6,7 @@ import {
     HttpStatus,
   } from '@nestjs/common';
   import { Response } from 'express';
-  import { ResponseMessages } from 'src/common/enums';
+  import { ResponseMessages } from '../..//common/enums';
   import { ErrorResponse, ErrorType } from 'src/common/types/public';
   import ValidationException from './validation.exception';
   

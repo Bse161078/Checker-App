@@ -9,7 +9,7 @@ import { isArray, isObject } from 'class-validator';
 import { Request, Response } from 'express';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
-import { ResponseMessages } from 'src/common/enums';
+import { ResponseMessages } from '../../common/enums';
 import { ErrorResponse, ErrorType } from 'src/common/types/public';
 
 @Catch(HttpException)

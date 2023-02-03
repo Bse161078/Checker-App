@@ -15,7 +15,7 @@ export class RoomTypeService {
   constructor(
     @InjectModel(RoomType.name) private roomtypeRepository: Model<RoomTypeDocument>,
     @InjectModel(Room.name) private roomRepository: Model<RoomDocument>,
-    @Inject(REQUEST) private request: Request
+    @Inject(REQUEST) private request: any
   ) { }
   async create(createRoomTypeDto: CreateRoomTypeDto) {
     const user = this.request.user;

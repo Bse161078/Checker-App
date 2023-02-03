@@ -9,6 +9,7 @@ export class BedFileUpload extends FileFieldsInterceptor(
         {name: "bedSheetInNotProperlyTightenedPhotos", maxCount: 5},
         {name: "extraBedPhotos", maxCount: 5},
         {name: "DamageReportPhotos", maxCount: 5},
+        {name: "isMadeUpPhotos", maxCount: 5},
     ],
     {
         storage: diskStorage( {

@@ -6,9 +6,15 @@ import { IComments, ICommentValue, IDamageReport, ITopQuestion } from "../../che
 @Schema()
 class CommentsClass extends Document {
     @Prop({ type: CommentsValueSchema })
+    wiped: ICommentValue;
+    @Prop({ type: CommentsValueSchema })
     tableNotClean: ICommentValue;
     @Prop({ type: CommentsValueSchema })
     sideTableNotClean: ICommentValue;
+    @Prop({ type: CommentsValueSchema })
+    tv: ICommentValue;
+    @Prop({ type: CommentsValueSchema })
+    window: ICommentValue;
     @Prop({ type: CommentsValueSchema })
     tvStandNotClean: ICommentValue;
     @Prop({ type: CommentsValueSchema })
@@ -19,8 +25,11 @@ class CommentsClass extends Document {
     BrochuresNotNeatlyAndSortedInTheirPlace: ICommentValue;
 }
 export interface IShelvesComments {
+    wiped: ICommentValue
     tableNotClean: ICommentValue
     sideTableNotClean: ICommentValue
+    tv: ICommentValue
+    window: ICommentValue
     tvStandNotClean: ICommentValue
     cabinetTopAndInsideSurfacesNotClean: ICommentValue
     windowSillNotClean: ICommentValue

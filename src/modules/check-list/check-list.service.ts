@@ -14,7 +14,7 @@ export class CheckListService {
   constructor(
     @InjectModel(CheckList.name) private checkListRepository: Model<CheckListDocument>,
     @InjectModel(User.name) private  userRepository: Model<UserDocument>,
-    @Inject(REQUEST) private request: Request
+    @Inject(REQUEST) private request: any
   ) { }
   async create(createCheckListDto: CreateCheckListDto) {
     const user = this.request.user;

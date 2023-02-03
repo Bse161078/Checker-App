@@ -1,19 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
-import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { Types } from 'mongoose';
-import { AuthDecorator } from 'src/common/decorators/auth.decorator';
-import { SwaggerConsumes } from 'src/common/enums';
-import { ROLES } from 'src/common/enums/role.enum';
-import { RoomIdDto } from '../room/dto/room.dto';
-import { BedService } from './bed.service';
-import { CreateBedDto } from './dto/create-bed.dto';
-import { BedFileUpload } from './interceptors/upload-file-bed.interceptor';
-import { IBedFilesUpload } from './interfaces/files.interface';
+import {Body, Controller, Get, Param, Post, UploadedFiles, UseInterceptors} from '@nestjs/common';
+import {ApiConsumes, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
+import {Types} from 'mongoose';
+import {AuthDecorator} from 'src/common/decorators/auth.decorator';
+import {SwaggerConsumes} from 'src/common/enums';
+import {ROLES} from 'src/common/enums/role.enum';
+import {RoomIdDto} from '../room/dto/room.dto';
+import {BedService} from './bed.service';
+import {CreateBedDto} from './dto/create-bed.dto';
+import {BedFileUpload} from './interceptors/upload-file-bed.interceptor';
+import {IBedFilesUpload} from './interfaces/files.interface';
 
 @Controller('bed')
 @ApiTags("Bed")
-@AuthDecorator(ROLES.CHECKER)
+@AuthDecorator(ROLES.CHECKER,ROLES.SUPERADMIN)
 export class BedController {
   constructor(private readonly bedService: BedService) { }
 

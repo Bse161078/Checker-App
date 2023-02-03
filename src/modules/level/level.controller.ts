@@ -19,7 +19,7 @@ export class LevelController {
   @Post()
   @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
   @ApiOperation({summary: "hotel role access"})
-  async create(@Body() createLevelDto: CreateLevelDto, @GetUser() user: Express.User) {
+  async create(@Body() createLevelDto: CreateLevelDto, @GetUser() user: any) {
     const result = await this.levelService.create(createLevelDto, user._id);
     return result
   }

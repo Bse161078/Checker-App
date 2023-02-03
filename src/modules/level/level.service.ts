@@ -16,7 +16,7 @@ export class LevelService {
     @InjectModel(Level.name) private readonly adminLevelRepository: Model<LevelDocument>,
     @InjectModel(Room.name) private readonly adminRoomRepository: Model<RoomDocument>,
     @InjectModel(User.name) private readonly userRepository: Model<UserDocument>,
-    @Inject(REQUEST) private request: Request
+    @Inject(REQUEST) private request: any
   ) { }
 
   async create(createLevelDto: CreateLevelDto, userID: Types.ObjectId) {

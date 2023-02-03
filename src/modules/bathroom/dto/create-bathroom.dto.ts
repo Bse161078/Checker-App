@@ -11,6 +11,10 @@ export class CreateBathroomDto {
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
     tilesAreNotMoppedPhotos: string[]
     @ApiPropertyOptional({ type: "boolean" })
+    isCleanedStatus: boolean
+    @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
+    isCleanedPhotos: string[]
+    @ApiPropertyOptional({ type: "boolean" })
     toiletIsNotWipedStatus: boolean
     @ApiPropertyOptional({ type: "array", items: { type: "string", format: "binary" } })
     toiletIsNotWipedPhotos: string[]
