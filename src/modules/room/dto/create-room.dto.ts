@@ -1,18 +1,35 @@
-import { Optional } from "@nestjs/common";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Length } from "class-validator";
-import { Types } from "mongoose";
+import {Optional} from "@nestjs/common";
+import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
+import {IsEnum, IsNotEmpty, IsOptional, IsString, Length} from "class-validator";
+import {Types} from "mongoose";
+import {RoomOccupationStatus, RoomType} from "../enum/room-type.enum";
 
 export class CreateRoomDto {
-    @ApiProperty({type: "string"})
-    roomType: Types.ObjectId;
+
+    @ApiProperty({type: "string", enum: RoomType})
+    @IsEnum(RoomType)
+    roomType: string;
+
+
     @ApiProperty()
     @Length(3)
+    @IsString()
     name: string;
+
+
     @ApiPropertyOptional()
-    @Optional()
+    @IsOptional()
+    @IsString()
     name_de: string;
+
+
     @ApiProperty({type: "string"})
+    @IsNotEmpty()
+    @IsString()
     level: Types.ObjectId;
-    hotel: Types.ObjectId
+
+    @ApiProperty({type: "string"})
+    @IsOptional()
+    @IsString()
+    hotel: Types.ObjectId;
 }

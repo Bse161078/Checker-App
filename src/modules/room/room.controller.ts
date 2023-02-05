@@ -1,13 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
-import { AdminRoomService } from './room.service';
-import { CreateRoomDto } from './dto/create-room.dto';
-import { UpdateRoomDto } from './dto/update-room.dto';
-import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { AuthDecorator } from 'src/common/decorators/auth.decorator';
-import { ROLES } from 'src/common/enums/role.enum';
-import { SwaggerConsumes } from 'src/common/enums';
-import { Roles } from 'src/common/decorators/role.decorator';
-import { SendAlertDto, SetRoomStatus } from './dto/send-alert.dto';
+import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
+import {AdminRoomService} from './room.service';
+import {CreateRoomDto} from './dto/create-room.dto';
+import {UpdateRoomDto} from './dto/update-room.dto';
+import {ApiConsumes, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
+import {AuthDecorator} from 'src/common/decorators/auth.decorator';
+import {ROLES} from 'src/common/enums/role.enum';
+import {SwaggerConsumes} from 'src/common/enums';
+import {Roles} from 'src/common/decorators/role.decorator';
+import {SearchRoom, SendAlertDto, SetRoomStatus} from './dto/send-alert.dto';
 
 @Controller('room')
 @ApiTags("Admin-room")
@@ -72,11 +72,23 @@ export class AdminRoomController {
   async sendAlert(@Body() sendAlertDto: SendAlertDto){
     const result = await this.roomService.sendAlert(sendAlertDto)
   }
-  @Post('set-room-status')
+
+
   @ApiOperation({summary: "checker role access for send alert"})
   @Roles(ROLES.CHECKER)
   @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
+  @Post('set-room-status')
   async setRoomStatus(@Body() setRoomStatusDto: SetRoomStatus){
     const result = await this.roomService.setRoomStatus(setRoomStatusDto)
   }
+
+
+    @ApiOperation({summary: "search rooms"})
+    @Roles(ROLES.CHECKER,ROLES.HOTELADMIN,ROLES.CLEANER)
+    @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
+    @Post('search')
+    async searchRooms(@Body() search: SearchRoom){
+        const result = await this.roomService.search(search);
+        return result
+    }
 }

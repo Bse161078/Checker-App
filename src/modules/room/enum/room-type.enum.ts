@@ -9,3 +9,16 @@ export enum CheckerRoomStatus {
     NotCleaned="NotCleaned",
     Damaged="Damaged"
 }
+
+
+export enum RoomOccupationStatus {
+    Free="Free",
+    Occupied="Occupied"
+}
+
+export enum RoomType {
+    Single="Single",
+    Double="Double",
+    Suite="Suite",
+    King="King"
+}

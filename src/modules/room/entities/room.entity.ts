@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
+import {CheckerRoomStatus, RoomOccupationStatus, RoomType} from "../enum/room-type.enum";
 
 @Schema()
 export class Room {
@@ -9,10 +10,12 @@ export class Room {
     name_de: string;
     @Prop()
     report: string
-    @Prop()
-    status: string
-    @Prop({ref: 'RoomType'})
-    roomType: Types.ObjectId
+    @Prop({ type: String, enum: CheckerRoomStatus, default: CheckerRoomStatus.Cleaned })
+    cleaning_status:string;
+    @Prop({ type: String, enum: RoomOccupationStatus, default: RoomOccupationStatus.Free })
+    occupation_status:string;
+    @Prop({ type: String, enum: RoomType, default: RoomType.Single })
+    roomType: string
     @Prop({ref: 'Level'})
     level: Types.ObjectId
     @Prop({ref: 'User'})

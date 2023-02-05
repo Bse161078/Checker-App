@@ -8,6 +8,7 @@ import {ResponseInterceptor} from './common/interceptors/response.interceptor';
 import SwaggerInit from './config/swagger.config';
 import {AppModule} from './modules/app/app.module';
 import { urlencoded, json } from 'express';
+import {ValidationPipe} from '@nestjs/common';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -16,6 +17,7 @@ async function bootstrap() {
     app.use(json({limit: '50mb'}));
     app.enableCors();
     app.useStaticAssets(publicPath);
+    app.useGlobalPipes(new ValidationPipe());
     app.useGlobalInterceptors(new ResponseInterceptor());
     SwaggerInit(app);
     await app.listen(3000);

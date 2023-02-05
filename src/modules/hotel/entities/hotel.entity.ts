@@ -1,1 +1,3 @@
-export class Hotel {}
+export class Hotel {
+
+}
