@@ -1,12 +1,15 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Length } from "class-validator";
+import {IsNotEmpty, IsString, Length} from "class-validator";
 import { Types } from "mongoose";
 import { ROLES } from "src/common/enums/role.enum";
 
 export class HotelDto {
     @ApiProperty()
-    hotelID: string
+    hotelId: string
 }
+
+
+
 export class CreateHotelCleanerDto {
     @ApiProperty({type: "string"})
     @Length(3)
@@ -57,4 +60,11 @@ export class CreateHotelReceptionDto {
     @ApiProperty({type: "string"})
     hotel: Types.ObjectId;
     role: ROLES = ROLES.HOTELRECEPTION;
+}
+
+
+
+export class UpdateHotelLogoDto {
+    @ApiPropertyOptional({type: "string", format: "binary", })
+    logo: string;
 }

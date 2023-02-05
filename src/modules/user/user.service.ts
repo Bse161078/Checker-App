@@ -59,4 +59,7 @@ export class UserService {
     if (createUserDto.email) checkUser = await this.userRepository.findOne({ email: createUserDto.email });
     if (checkUser) throw new BadRequestException("email already exist")
   }
+
+
+
 }
