@@ -14,7 +14,7 @@ export class Room {
     cleaning_status:string;
     @Prop({ type: String, enum: RoomOccupationStatus, default: RoomOccupationStatus.Free })
     occupation_status:string;
-    @Prop({ type: String, enum: RoomType, default: RoomType.Single })
+    @Prop({ type: String, default:"" })
     roomType: string
     @Prop({ref: 'Level'})
     level: Types.ObjectId
