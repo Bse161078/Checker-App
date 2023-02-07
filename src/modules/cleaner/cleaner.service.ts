@@ -45,14 +45,14 @@ export class CleanerService {
       filter['company'] = user._id;
     } else if (user.role == ROLES.HOTELADMIN) {
       filter['hotel'] = user._id;
-    } else if (user.role == ROLES.SUPERADMIN) {
+    } else if (user.role == ROLES.SUPERADMIN || user.role === ROLES.CHECKER) {
       filter = { role: ROLES.CLEANER }
     } else if (user.role == ROLES.HOTELRECEPTION) {
       filter['hotel'] = user.hotel;
     } else {
       return []
     }
-    if (user.role != ROLES.SUPERADMIN && Object.values(filter).length == 0) return []
+    if ((user.role != ROLES.SUPERADMIN ) && Object.values(filter).length == 0) return []
     const cleaners = await this.userRepository.find(filter);
     return cleaners
   }
