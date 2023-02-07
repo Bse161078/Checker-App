@@ -14,6 +14,8 @@ export class User {
     company_name: string
     @Prop()
     avatar: string;
+    @Prop()
+    logo: string;
     @Prop({unique: true, index: true, type: String})
     username: string
     @Prop()

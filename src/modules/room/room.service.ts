@@ -10,22 +10,31 @@ import {ROLES} from 'src/common/enums/role.enum';
 import {SearchRoom, SendAlertDto, SetRoomStatus} from './dto/send-alert.dto';
 import {CleaningHistoryDocument} from './entities/cleaning-history.entity';
 import {CheckerRoomStatus} from './enum/room-type.enum';
+import {RoomType, RoomTypeDocument} from "../room-type/entities/room-type.entity";
 
 @Injectable({scope: Scope.REQUEST})
 export class AdminRoomService {
     constructor(
         @InjectModel(Room.name) private readonly adminRoomRepository: Model<RoomDocument>,
         @InjectModel(Room.name) private readonly cleaningHistoryRepository: Model<CleaningHistoryDocument>,
+        @InjectModel(RoomType.name) private roomtypeRepository: Model<RoomTypeDocument>,
         @Inject(REQUEST) private request: any
     ) {
     }
 
     async create(createRoomDto: CreateRoomDto) {
-        const user = this.request.user;
-        createRoomDto.level = new Types.ObjectId(createRoomDto.level)
-        if (user.role == ROLES.HOTELADMIN) createRoomDto.hotel = user._id;
-        const createdResult = await this.adminRoomRepository.create(createRoomDto);
-        return createdResult
+        const roomType=await this.roomtypeRepository.findById(new Types.ObjectId(createRoomDto.roomType));
+        if(roomType){
+            const user = this.request.user;
+            createRoomDto.level = new Types.ObjectId(createRoomDto.level);
+            createRoomDto.roomType=roomType.title;
+            if (user.role == ROLES.HOTELADMIN) createRoomDto.hotel = user._id;
+            const createdResult = await this.adminRoomRepository.create(createRoomDto);
+            return createdResult
+
+        }else{
+            throw new NotFoundException("room type not found")
+        }
     }
 
     async findAll(filter: FilterQuery<RoomDocument> = {}) {

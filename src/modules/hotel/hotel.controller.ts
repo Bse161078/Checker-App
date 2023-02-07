@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Param, Delete, UploadedFile, UseInterceptors, UploadedFiles} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, UploadedFile, UploadedFiles, UseInterceptors} from '@nestjs/common';
 import {HotelService} from './hotel.service';
 import {AddCompanyToHotel, CreateHotelDto} from './dto/create-hotel.dto';
 import {ApiConsumes, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
@@ -14,10 +14,7 @@ import {
 } from './dto/hotel.dto';
 import {MulterFile} from 'src/common/types/public';
 import {Roles} from 'src/common/decorators/role.decorator';
-import {FileInterceptor} from "@nestjs/platform-express";
-import {BathRoomFileUpload} from "../bathroom/interceptors/upload-file-bathroom.interceptor";
 import {HotelLogoUpload} from "./interceptors/upload-file-bathroom.interceptor";
-import {IBathRoomFilesUpload} from "../bathroom/interfaces/files.interface";
 import {LogoFileUploadDto} from "./interface/files.interface";
 import {getObjectFiles} from "../../common/utils/functions";
 
@@ -62,11 +59,13 @@ export class HotelController {
     }
 
     @Post("/create-hotel-reception")
+    @UseInterceptors(HotelLogoUpload)
     @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
     @ApiOperation({summary: "supper-admin and hotel-admin role access"})
     @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN)
-    async createHotelReception(@Body() createReceptionDto: CreateHotelReceptionDto) {
-        const reception = await this.hotelService.createReception(createReceptionDto);
+    async createHotelReception(@UploadedFiles() logo: LogoFileUploadDto,@Body() createReceptionDto: CreateHotelReceptionDto) {
+        const newFile: any = getObjectFiles(logo);
+        const reception = await this.hotelService.createReception((newFile?.logo[0]) || "",createReceptionDto);
         return {
             message: "created hotel reception account successfully"
         }
@@ -127,7 +126,7 @@ export class HotelController {
     @ApiConsumes(SwaggerConsumes.MULTIPART)
     @UseInterceptors(HotelLogoUpload)
     @ApiOperation({summary: "update hotel logo"})
-    @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN)
+    @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN,ROLES.HOTELRECEPTION)
     async updateHotelLogo(@UploadedFiles() logo: LogoFileUploadDto,@Body() updateHotelLogoDto: UpdateHotelLogoDto) {
         let hotelLogo="";
         const newFile: any = getObjectFiles(logo);
@@ -142,7 +141,7 @@ export class HotelController {
     @Get(':hotelId/logo')
     @ApiOperation({summary: "supper-admin role access"})
     @ApiParam({name: "hotelID", type: "string"})
-    @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN)
+    @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN,ROLES.HOTELRECEPTION)
     async findHotelLogo(@Param() hotelDto: HotelDto) {
         const hotel = await this.hotelService.findHotelLogo(hotelDto.hotelId);
         return {
