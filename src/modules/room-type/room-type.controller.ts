@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { RoomTypeService } from './room-type.service';
-import { CreateRoomTypeDto } from './dto/create-room-type.dto';
-import { UpdateRoomTypeDto } from './dto/update-room-type.dto';
-import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { SwaggerConsumes } from 'src/common/enums';
-import { AuthDecorator } from 'src/common/decorators/auth.decorator';
-import { ROLES } from 'src/common/enums/role.enum';
+import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
+import {RoomTypeService} from './room-type.service';
+import {CreateRoomTypeDto} from './dto/create-room-type.dto';
+import {UpdateRoomTypeDto} from './dto/update-room-type.dto';
+import {ApiConsumes, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
+import {SwaggerConsumes} from 'src/common/enums';
+import {AuthDecorator} from 'src/common/decorators/auth.decorator';
+import {ROLES} from 'src/common/enums/role.enum';
 
 @Controller('room-type')
-@AuthDecorator(ROLES.HOTELADMIN)
+@AuthDecorator(ROLES.HOTELADMIN,ROLES.CHECKER,ROLES.HOTELRECEPTION)
 @ApiTags("AdminRoomType")
 export class RoomTypeController {
   constructor(private readonly roomTypeService: RoomTypeService) {}
