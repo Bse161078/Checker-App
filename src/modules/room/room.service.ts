@@ -49,15 +49,6 @@ export class AdminRoomService {
             {
 
                 $lookup: {
-                    from: "roomtypes",
-                    foreignField: "_id",
-                    localField: "roomType",
-                    as: "roomType"
-                },
-            },
-            {
-
-                $lookup: {
                     from: "levels",
                     foreignField: "_id",
                     localField: "level",
@@ -145,10 +136,6 @@ export class AdminRoomService {
             },
             {
                 $project: {
-                    "level.__v": 0,
-                    "level.hotel": 0,
-                    "roomType.hotel": 0,
-                    "roomType.__v": 0,
                     __v: 0
                 }
             }

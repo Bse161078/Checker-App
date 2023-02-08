@@ -7,6 +7,7 @@ import {RoomOccupationStatus, RoomType} from "../enum/room-type.enum";
 export class CreateRoomDto {
 
     @ApiProperty({type: "string"})
+    @IsOptional()
     @IsString()
     roomType: string;
 
