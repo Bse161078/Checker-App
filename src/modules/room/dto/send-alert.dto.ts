@@ -5,8 +5,11 @@ import {ArrayMinSize, IsArray, isEnum, IsEnum, isNotEmpty, IsNotEmpty, IsOptiona
 export class SendAlertDto{
     @ApiProperty()
     roomID: string
-    @ApiProperty({type: "string", enum: RoomStatus})
-    status: RoomStatus
+
+    @ApiProperty()
+    @IsArray()
+    @IsEnum(RoomStatus,{each:true})
+    status;
 }
 export class SetRoomStatus{
 
