@@ -3,6 +3,10 @@ export enum RoomStatus {
     ExtraBedNormal="ExtraBedNormal",
     ExtraBedChild="ExtraBedChild",
     RedCard="RedCard",
+    CleanQuickGuestWaiting="Clean Quick Guest Waiting",
+    CleanStay ="CleanStay",
+    CleanCheckout = "CleanCheckout",
+    CleanAgain = "Clean Again"
 }
 export enum CheckerRoomStatus {
     Cleaned="Cleaned",
