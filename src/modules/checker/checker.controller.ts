@@ -1,23 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UseFilters, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
-import { ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { AuthDecorator } from 'src/common/decorators/auth.decorator';
-import { UploadedFileDecorator } from 'src/common/decorators/upload.decorators';
-import { SwaggerConsumes } from 'src/common/enums';
-import { ROLES } from 'src/common/enums/role.enum';
-import AllExceptionFilter from 'src/common/filters/all-exception.filter';
-import { UploadImageInterceptor } from 'src/common/interceptors/file-upload.interceptor';
-import { MulterFile } from 'src/common/types/public';
-import { CheckerService } from './checker.service';
-import { CreateCheckerDto } from './dto/create-checker.dto';
-import { UpdateCheckerDto } from './dto/update-checker.dto';
-import { Roles } from 'src/common/decorators/role.decorator';
-import { CompanyIdDto, HotelIdDto } from '../cleaner/dto/cleaner.dto';
-import { CheckerIdDto } from './dto/checker.dto';
-import { GetUser } from 'src/common/decorators/user.decorator';
+import {Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {ApiConsumes, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
+import {AuthDecorator} from 'src/common/decorators/auth.decorator';
+import {SwaggerConsumes} from 'src/common/enums';
+import {ROLES} from 'src/common/enums/role.enum';
+import {UploadImageInterceptor} from 'src/common/interceptors/file-upload.interceptor';
+import {MulterFile} from 'src/common/types/public';
+import {CheckerService} from './checker.service';
+import {CreateCheckerDto} from './dto/create-checker.dto';
+import {UpdateCheckerDto} from './dto/update-checker.dto';
+import {Roles} from 'src/common/decorators/role.decorator';
+import {CompanyIdDto, HotelIdDto} from '../cleaner/dto/cleaner.dto';
+import {CheckerIdDto} from './dto/checker.dto';
+import {GetUser} from 'src/common/decorators/user.decorator';
 
 @Controller('checker')
 @ApiTags("checker")
-@AuthDecorator(ROLES.HOTELADMIN, ROLES.COMPANYADMIN)
+@AuthDecorator(ROLES.HOTELADMIN, ROLES.COMPANYADMIN,ROLES.CHECKER)
 export class CheckerController {
   constructor(private readonly checkerService: CheckerService) { }
   @Post()
@@ -84,8 +82,8 @@ export class CheckerController {
   @Get(':checkerID')
   @ApiParam({name: "checkerID"})
   @ApiOperation({summary: "hotel and company role access"})
-  findOne(@Param() checkerIdDto: CheckerIdDto) {
-    const checker = this.checkerService.findOne(checkerIdDto.checkerID);
+  async findOne(@Param() checkerIdDto: CheckerIdDto) {
+    const checker = await this.checkerService.findOne(checkerIdDto.checkerID);
     return { checker }
   }
 

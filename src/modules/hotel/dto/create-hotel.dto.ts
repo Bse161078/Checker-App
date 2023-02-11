@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
 import { Types } from "mongoose";
 import { ROLES } from "src/common/enums/role.enum";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class CreateHotelDto {
     @ApiProperty()
@@ -13,7 +13,10 @@ export class CreateHotelDto {
     password: string;
     @ApiProperty()
     email: string;
-    role: ROLES
+    role: ROLES;
+    @ApiPropertyOptional({type: "string", format: "binary", })
+    avatar: string;
+
 }
 export class AddCompanyToHotel {
     @ApiProperty({type: 'string'})

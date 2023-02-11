@@ -17,6 +17,7 @@ import {Roles} from 'src/common/decorators/role.decorator';
 import {HotelLogoUpload} from "./interceptors/upload-file-bathroom.interceptor";
 import {LogoFileUploadDto} from "./interface/files.interface";
 import {getObjectFiles} from "../../common/utils/functions";
+import {UploadImageInterceptor} from "../../common/interceptors/file-upload.interceptor";
 
 @Controller('hotel')
 @ApiTags("hotel-supperAdmin")
@@ -27,8 +28,11 @@ export class HotelController {
 
     @Post()
     @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
+    @UseInterceptors(UploadImageInterceptor('avatar'))
     @ApiOperation({summary: "supper-admin role access"})
-    async create(@Body() createHotelDto: CreateHotelDto) {
+    async create(@UploadedFile() avatar: MulterFile,@Body() createHotelDto: CreateHotelDto) {
+        if(avatar) createHotelDto.avatar = avatar.path.slice(7);
+
         const hotel = await this.hotelService.create(createHotelDto);
         return {
             message: "created hotel account successfully"
@@ -146,6 +150,18 @@ export class HotelController {
         const hotel = await this.hotelService.findHotelLogo(hotelDto.hotelId);
         return {
             hotel
+        }
+    }
+
+
+    @Get('/report')
+    @ApiOperation({summary: "supper-admin role access"})
+    @ApiParam({name: "hotelID", type: "string"})
+    @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN)
+    async getHotelReport(@Param() hotelDto: HotelDto) {
+        const cleaners = await this.hotelService.generateReport(hotelDto.hotelId);
+        return {
+            cleaners
         }
     }
 }

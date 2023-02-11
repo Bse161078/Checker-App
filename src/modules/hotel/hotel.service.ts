@@ -86,7 +86,7 @@ export class HotelService {
     }
 
     async receptions(hotel: string) {
-        const receptions = await this.userRepository.find({hotel});
+        const receptions = await this.userRepository.find({hotel}).populate('hotel');
         return receptions
     }
 
@@ -104,5 +104,11 @@ export class HotelService {
         const hotel = await this.hotelLogoModel.findOne({hotel: new Types.ObjectId(id)});
         if (!hotel) throw new NotFoundException("not found any hotel logo")
         return hotel;
+    }
+
+
+    async generateReport(id:string){
+        const cleaners = await this.hotelLogoModel.findOne({role: ROLES.CLEANER,hotel: new Types.ObjectId(id)});
+        return cleaners;
     }
 }

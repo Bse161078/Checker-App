@@ -53,7 +53,7 @@ export class CleanerService {
       return []
     }
     if ((user.role != ROLES.SUPERADMIN ) && Object.values(filter).length == 0) return []
-    const cleaners = await this.userRepository.find(filter);
+    const cleaners = await this.userRepository.find(filter).populate('hotel');
     return cleaners
   }
 
@@ -105,7 +105,7 @@ export class CleanerService {
     const date = new Date();
     const room = new Types.ObjectId(roomID);
     const cleaner = this.request.user._id;
-    const cleaningStartAt: string = parseTime(date.getHours(), date.getMinutes());
+    const cleaningStartAt: string = new Date().toUTCString();
     const roomData = await this.cleaningHistoryRepository.findOne({ room, status: ROOM_STATUS.START });
     if (roomData) throw new BadRequestException("Room cleaning not finished. Please finish cleaning first.")
     const createResult = await this.cleaningHistoryRepository.create({
@@ -125,7 +125,7 @@ export class CleanerService {
     const date = new Date();
     const room = new Types.ObjectId(roomID);
     const cleaner = this.request.user._id;
-    const cleaningEndAt: string = parseTime(date.getHours(), date.getMinutes());
+    const cleaningEndAt: string = new Date().toUTCString();
     const roomData = await this.cleaningHistoryRepository.findOne({ room, status: ROOM_STATUS.START, cleaner });
     if (!roomData) throw new BadRequestException("not found any room being cleaned")
     const updatedResult = await this.cleaningHistoryRepository.updateOne({ _id: roomData._id }, {
@@ -139,6 +139,9 @@ export class CleanerService {
     })
     return { updatedResult, cleaningEndAt };
   }
+
+
+
   async getCompanyCleaners(companyID: string) {
     const cleaners = await this.userRepository.find({ company: companyID, role: ROLES.CLEANER });
     return cleaners
