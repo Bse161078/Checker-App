@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
     async validate(payload: ITokenPayload): Promise<User| null > {
         const { sub } = payload; 
-        const user = await this.userRepository.findOne({ _id: new Types.ObjectId(sub) });
+        const user = await this.userRepository.findOne({ _id: new Types.ObjectId(sub) }).populate('hotel');
         if (!user || !user.accessToken) throw new UnauthorizedException()
         return user;
     }
