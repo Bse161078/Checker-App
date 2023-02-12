@@ -87,7 +87,7 @@ export class HotelService {
     }
 
     async receptions(hotel: string) {
-        const receptions = await this.userRepository.find({hotel}).populate('hotel');
+        const receptions = await this.userRepository.find({hotel:new Types.ObjectId(hotel),role:ROLES.HOTELRECEPTION}).populate('hotel');
         return receptions
     }
 
