@@ -8,7 +8,7 @@ import {AuthDecorator} from 'src/common/decorators/auth.decorator';
 import {ROLES} from 'src/common/enums/role.enum';
 
 @Controller('room-type')
-@AuthDecorator(ROLES.HOTELADMIN,ROLES.CHECKER,ROLES.HOTELRECEPTION)
+@AuthDecorator(ROLES.SUPERADMIN,ROLES.HOTELADMIN,ROLES.CHECKER,ROLES.HOTELRECEPTION)
 @ApiTags("AdminRoomType")
 export class RoomTypeController {
   constructor(private readonly roomTypeService: RoomTypeService) {}
