@@ -96,9 +96,9 @@ export class HotelController {
         }
     }
 
-    @Get("/receptions/:hotelID")
+    @Get("/receptions/:hotelId")
     @ApiOperation({summary: "supper-admin admin hotel-admin role access"})
-    @ApiParam({name: "hotelID", type: "string"})
+    @ApiParam({name: "hotelId", type: "string"})
     async receptions(@Param() hotelDto: HotelDto) {
         const receptions = await this.hotelService.receptions(hotelDto.hotelId);
         return {
