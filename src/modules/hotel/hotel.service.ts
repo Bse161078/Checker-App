@@ -58,12 +58,12 @@ export class HotelService {
         return checker;
     }
 
-    async createReception(logo: string,createReceptionDto: CreateHotelReceptionDto) {
+    async createReception(createReceptionDto: CreateHotelReceptionDto) {
         const user = this.request.user;
         createReceptionDto.hotel = new Types.ObjectId(user._id)
         createReceptionDto.password = this.authService.hashPassword(createReceptionDto.password);
         createReceptionDto.role = ROLES.HOTELRECEPTION;
-        const reception = await this.userRepository.create({logo,...createReceptionDto});
+        const reception = await this.userRepository.create(createReceptionDto);
         return reception;
     }
 

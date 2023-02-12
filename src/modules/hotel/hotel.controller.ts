@@ -67,9 +67,8 @@ export class HotelController {
     @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
     @ApiOperation({summary: "supper-admin and hotel-admin role access"})
     @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN)
-    async createHotelReception(@UploadedFiles() logo: LogoFileUploadDto,@Body() createReceptionDto: CreateHotelReceptionDto) {
-        const newFile: any = getObjectFiles(logo);
-        const reception = await this.hotelService.createReception((newFile?.logo[0]) || "",createReceptionDto);
+    async createHotelReception(@Body() createReceptionDto: CreateHotelReceptionDto) {
+        const reception = await this.hotelService.createReception(createReceptionDto);
         return {
             message: "created hotel reception account successfully"
         }
