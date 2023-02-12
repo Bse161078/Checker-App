@@ -11,7 +11,7 @@ import {SearchRoom, SendAlertDto, SetRoomStatus} from './dto/send-alert.dto';
 
 @Controller('room')
 @ApiTags("Admin-room")
-@AuthDecorator(ROLES.HOTELADMIN, ROLES.HOTELRECEPTION)
+@AuthDecorator(ROLES.SUPERADMIN,ROLES.HOTELADMIN, ROLES.HOTELRECEPTION)
 export class AdminRoomController {
   constructor(private readonly roomService: AdminRoomService) { }
 

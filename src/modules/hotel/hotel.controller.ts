@@ -54,6 +54,7 @@ export class HotelController {
     @Post("/create-hotel-cleaner")
     @ApiConsumes(SwaggerConsumes.MULTIPART)
     @ApiOperation({summary: "supper-admin role access"})
+    @UseInterceptors(UploadImageInterceptor('avatar'))
     async createHotelCleaner(@UploadedFile()avatar: MulterFile, @Body() createCleanerDto: CreateHotelCleanerDto) {
         if (avatar) createCleanerDto.avatar = avatar.path.slice(7);
         const cleaner = await this.hotelService.createCleaner(createCleanerDto);
@@ -63,7 +64,7 @@ export class HotelController {
     }
 
     @Post("/create-hotel-reception")
-    @UseInterceptors(HotelLogoUpload)
+    @UseInterceptors(UploadImageInterceptor('avatar'))
     @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
     @ApiOperation({summary: "supper-admin and hotel-admin role access"})
     @Roles(ROLES.SUPERADMIN, ROLES.HOTELADMIN)
@@ -77,6 +78,7 @@ export class HotelController {
     @Post("/create-hotel-checker")
     @ApiConsumes(SwaggerConsumes.MULTIPART)
     @ApiOperation({summary: "supper-admin role access"})
+    @UseInterceptors(UploadImageInterceptor('avatar'))
     async createHotelChecker(@UploadedFile()avatar: MulterFile, @Body() createCheckerDto: CreateHotelCheckerDto) {
         if (avatar) createCheckerDto.avatar = avatar.path.slice(7);
         const cleaner = await this.hotelService.createChecker(createCheckerDto);
@@ -114,8 +116,8 @@ export class HotelController {
         }
     }
 
-    @Delete(':hotelID')
-    @ApiParam({name: "hotelID", type: "string"})
+    @Delete(':hotelId')
+    @ApiParam({name: "hotelId", type: "string"})
     @ApiOperation({summary: "supper-admin role access"})
     async remove(@Param() hotelDto: HotelDto) {
         const deletedResult = await this.hotelService.remove(hotelDto.hotelId);

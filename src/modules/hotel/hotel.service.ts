@@ -82,6 +82,7 @@ export class HotelService {
         await this.userRepository.updateMany({hotel: id}, {
             $unset: {hotel: ""}
         });
+        await this.userRepository.findOneAndRemove({_id:new Types.ObjectId(id)})
         return true;
     }
 

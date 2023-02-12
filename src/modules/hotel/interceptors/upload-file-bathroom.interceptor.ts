@@ -14,3 +14,17 @@ export class HotelLogoUpload extends FileFieldsInterceptor(
         fileFilter: imageFileFilter
     }
 ) { }
+
+
+export class AvatarUpload extends FileFieldsInterceptor(
+    [
+        {name: "avatar", maxCount: 1},
+    ],
+    {
+        storage: diskStorage( {
+            destination: destinationImageFile,
+            filename: editFileName
+        }),
+        fileFilter: imageFileFilter
+    }
+) { }
