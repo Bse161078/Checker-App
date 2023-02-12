@@ -28,7 +28,7 @@ export class AdminRoomService {
             const user = this.request.user;
             createRoomDto.level = new Types.ObjectId(createRoomDto.level);
             createRoomDto.roomType=roomType.title;
-            if (user.role == ROLES.HOTELADMIN) createRoomDto.hotel = user._id;
+            createRoomDto.hotel = new Types.ObjectId(createRoomDto.hotel);
             const createdResult = await this.adminRoomRepository.create(createRoomDto);
             return createdResult
 

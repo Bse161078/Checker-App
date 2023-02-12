@@ -30,7 +30,6 @@ export class CreateRoomDto {
     level: Types.ObjectId;
 
     @ApiProperty({type: "string"})
-    @IsOptional()
     @IsString()
     hotel: Types.ObjectId;
 }
