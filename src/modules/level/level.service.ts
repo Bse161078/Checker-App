@@ -26,7 +26,7 @@ export class LevelService {
   }
   async findAll(filter: FilterQuery<UserDocument> = {}) {
     const user = this.request.user;
-    if(user.hotel) filter['hotel'] = user._id;
+    if(user.hotel) filter['hotel'] = user.hotel._id;
     if(user.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
     return await this.adminLevelRepository.aggregate([
       { $match: filter },
