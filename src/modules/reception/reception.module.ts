@@ -12,7 +12,6 @@ import {Cleaner} from "../cleaner/entities/cleaner.entity";
     imports: [
         MongooseModule.forFeature([
             {name: Room.name, schema: RoomSchema},
-            { name: Cleaner.name, schema: UserSchema },
             { name: User.name, schema: UserSchema },
         ])
     ],
