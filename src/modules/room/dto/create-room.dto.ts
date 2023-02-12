@@ -13,7 +13,6 @@ export class CreateRoomDto {
 
 
     @ApiProperty()
-    @Length(3)
     @IsString()
     name: string;
 

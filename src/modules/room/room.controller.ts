@@ -27,7 +27,7 @@ export class AdminRoomController {
     }
 
     @Get()
-    @Roles()
+    @Roles(ROLES.CLEANER,ROLES.CHECKER,ROLES.HOTELADMIN)
     @ApiOperation({summary: "hotel and hotelReception role access"})
     async findAll() {
         const rooms = await this.roomService.findAll();

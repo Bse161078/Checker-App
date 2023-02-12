@@ -41,7 +41,7 @@ export class AdminRoomService {
     async findAll(filter: FilterQuery<RoomDocument> = {}) {
         const user = this.request.user;
         if (user.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
-        else if (user.hotel) filter['hotel'] = user.hotel;
+        else if (user.hotel) filter['hotel'] = user.hotel._id;
         else return []
         const rooms = await this.adminRoomRepository.aggregate([
             {
