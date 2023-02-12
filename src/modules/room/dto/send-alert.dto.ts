@@ -1,6 +1,17 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {CheckerRoomStatus, RoomOccupationStatus, RoomStatus} from "../enum/room-type.enum";
-import {ArrayMinSize, IsArray, isEnum, IsEnum, isNotEmpty, IsNotEmpty, IsOptional, IsString} from "class-validator";
+import {
+    ArrayMinSize,
+    IsArray,
+    IsBoolean,
+    isEnum,
+    IsEnum,
+    isNotEmpty,
+    IsNotEmpty,
+    IsOptional,
+    IsString
+} from "class-validator";
+import {ROOM_STATUS} from "../../../common/enums/room-status.enum";
 
 export class SendAlertDto{
     @ApiProperty()
@@ -11,7 +22,12 @@ export class SendAlertDto{
     @IsEnum(RoomStatus,{each:true})
     status;
 }
-export class SetRoomStatus{
+
+
+
+
+
+export class StartCleaningDto {
 
 
     @ApiProperty()
@@ -19,11 +35,32 @@ export class SetRoomStatus{
     @IsNotEmpty()
     roomId: string
 
+}
+
+
+export class UpdateCleaningStatus {
+
 
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    cleanerId: string
+    cleaningHistoryId: string
+
+
+    @ApiProperty()
+    @IsEnum(ROOM_STATUS)
+    @IsNotEmpty()
+    status;
+
+
+}
+
+export class SetRoomStatus{
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    roomId: string
+
 
     @ApiProperty({type: "string", enum: CheckerRoomStatus})
     @IsNotEmpty()
@@ -34,7 +71,6 @@ export class SetRoomStatus{
     @IsNotEmpty()
     @IsEnum(RoomOccupationStatus)
     occupation_status: RoomOccupationStatus
-
 }
 
 

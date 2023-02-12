@@ -12,7 +12,7 @@ import {RoomType, RoomTypeSchema} from "../room-type/entities/room-type.entity";
     imports: [
         MongooseModule.forFeature([
             {name: Room.name, schema: RoomSchema},
-            {name: CleaningHistory.name, schema: CleaningHistorySchema},
+            {name: "cleaninghistories", schema: CleaningHistorySchema},
             {name: User.name, schema: UserSchema},
             {name: RoomType.name, schema: RoomTypeSchema},
         ])

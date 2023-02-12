@@ -7,16 +7,17 @@ import {Room, RoomDocument} from './entities/room.entity';
 import {REQUEST} from '@nestjs/core';
 import {Request} from 'express';
 import {ROLES} from 'src/common/enums/role.enum';
-import {SearchRoom, SendAlertDto, SetRoomStatus} from './dto/send-alert.dto';
+import {SearchRoom, SendAlertDto, SetRoomStatus, StartCleaningDto, UpdateCleaningStatus} from './dto/send-alert.dto';
 import {CleaningHistoryDocument} from './entities/cleaning-history.entity';
 import {CheckerRoomStatus} from './enum/room-type.enum';
 import {RoomType, RoomTypeDocument} from "../room-type/entities/room-type.entity";
+import {ROOM_STATUS} from "../../common/enums/room-status.enum";
 
 @Injectable({scope: Scope.REQUEST})
 export class AdminRoomService {
     constructor(
         @InjectModel(Room.name) private readonly adminRoomRepository: Model<RoomDocument>,
-        @InjectModel(Room.name) private readonly cleaningHistoryRepository: Model<CleaningHistoryDocument>,
+        @InjectModel("cleaninghistories") private readonly cleaningHistoryRepository: Model<CleaningHistoryDocument>,
         @InjectModel(RoomType.name) private roomtypeRepository: Model<RoomTypeDocument>,
         @Inject(REQUEST) private request: any
     ) {
@@ -174,19 +175,61 @@ export class AdminRoomService {
         }
     }
 
+    async startRoomCleaning(startCleaning: StartCleaningDto) {
+        const {roomId } = startCleaning;
+        const user = this.request.user;
+        let cleaner: any;
+        if (user.role == ROLES.CHECKER) cleaner = user._id;
+
+        const room = await this.adminRoomRepository.findOne({_id: roomId});
+
+        if(room){
+            const cleaningHistory=await this.cleaningHistoryRepository.create({
+                room:new Types.ObjectId(room._id),cleaner:new Types.ObjectId(cleaner),
+                cleaningStartAt:new Date().toUTCString()
+            });
+
+            return {
+                message: "cleaning history created",
+                data:cleaningHistory
+            }
+        }else{
+            throw new NotFoundException("invalid request")
+        }
+    }
+
+
+    async updateCleaningStatus(updateCleaningStatus: UpdateCleaningStatus) {
+        const {cleaningHistoryId, status} = updateCleaningStatus;
+        const user = this.request.user;
+
+        const cleaningHistory=await this.cleaningHistoryRepository.findById(new Types.ObjectId(cleaningHistoryId));
+        if(cleaningHistory && status!==ROOM_STATUS.START){
+            cleaningHistory.set({status,cleaningEndAt:new Date().toUTCString()});
+            await cleaningHistory.save();
+            return cleaningHistory;
+        }else{
+            throw new NotFoundException("invalid request")
+        }
+        return {
+            message: "room hisstory updated"
+        }
+    }
+
     async setRoomStatus(setRoomStatusDto: SetRoomStatus) {
         const {roomId, clean_status, occupation_status} = setRoomStatusDto;
         const user = this.request.user;
         let checker: any;
         if (user.role == ROLES.CHECKER) checker = user._id;
-        const room = await this.adminRoomRepository.findOne({_id: roomId})
-        await this.adminRoomRepository.updateOne({_id: roomId}, {clean_status, occupation_status})
-        await this.cleaningHistoryRepository.updateOne({
-            cleaner: setRoomStatusDto.cleanerId,
-            room: room._id,
-        }, {
-            $set: {checkerStatus: clean_status, checker}
-        })
+        const room = await this.adminRoomRepository.findOne({_id: roomId});
+
+        if(room){
+            await this.adminRoomRepository.updateOne({_id: roomId}, {cleaning_status:clean_status, occupation_status});
+            await this.cleaningHistoryRepository.updateMany({room:room._id,checker:null},{checker:checker,checkerStatus:clean_status})
+        }else{
+            throw new NotFoundException("invalid request")
+        }
+
         return {
             message: "set room status successfully"
         }
