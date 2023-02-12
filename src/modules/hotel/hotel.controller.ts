@@ -21,7 +21,7 @@ import {UploadImageInterceptor} from "../../common/interceptors/file-upload.inte
 
 @Controller('hotel')
 @ApiTags("hotel-supperAdmin")
-@AuthDecorator(ROLES.SUPERADMIN)
+@AuthDecorator(ROLES.SUPERADMIN,ROLES.HOTELADMIN)
 export class HotelController {
     constructor(private readonly hotelService: HotelService) {
     }
