@@ -236,7 +236,15 @@ export class AdminRoomService {
     }
 
     async search(search: SearchRoom) {
+
+        const user = this.request.user;
+        let hotel;
+        if (user.role == ROLES.HOTELADMIN) hotel = new Types.ObjectId(user._id);
+        else hotel=user.hotel._id;
+
+
         const rooms = await this.adminRoomRepository.find({
+            hotel:hotel,
             $or:[
                 {roomType: {"$in": search.type}},
                 {cleaning_status: {"$in": search.cleaning_status || []}},
@@ -245,6 +253,51 @@ export class AdminRoomService {
         });
         return rooms;
     }
+
+
+    async createRoomReport(){
+        const user = this.request.user;
+
+        const rooms = await this.adminRoomRepository.find({hotel:user._id});
+        const roomIds=rooms.map((room)=>room._id);
+        const roomHistories=(await this.cleaningHistoryRepository.find({room:{ "$in": roomIds }}).populate('cleaner').populate('room').lean())
+            .filter((history)=>history.cleaner).filter((history)=>history.room);
+        const cleanersUsed=roomHistories.map(item => (item.cleaner._id).toString())
+            .filter((value, index, self) => self.indexOf(value) === index);
+        const roomsUsed=roomHistories.map(item => (item.room._id).toString())
+            .filter((value, index, self) => self.indexOf(value) === index);
+        const roomsCleaned = roomHistories.filter((room)=>room.checkerStatus===CheckerRoomStatus.Cleaned);
+        const roomsInProgress = roomHistories.filter((room)=>room.status===ROOM_STATUS.IN_PROGRESS);
+        const roomsNotCleaned = roomHistories.filter((room)=>room.checkerStatus===CheckerRoomStatus.NotCleaned);
+        const roomDamaged = roomHistories.filter((room)=>room.checkerStatus===CheckerRoomStatus.Damaged);
+
+        let cleanersReport:any=[];
+        let roomsReport:any=[];
+
+        for(let i=0;i<cleanersUsed.length;i++){
+            const cleaner:any=cleanersUsed[i];
+            const cleanerReport=roomHistories.filter((report)=>(report.cleaner._id).toString() === (cleaner).toString());
+            const rooms=cleanerReport.map((report)=>report.room);
+            let data={cleaner:cleanerReport[0].cleaner,rooms};
+            cleanersReport.push(data);
+        }
+
+        for(let i=0;i<roomsUsed.length;i++){
+            const room:any=roomsUsed[i];
+            const roomReport=roomHistories.filter((report)=>(report.room._id).toString() === (room).toString());
+            const cleaners=roomReport.map((report)=>report.cleaner);
+            let data:any={room:roomReport[0].room,cleaners};
+            roomsReport.push(data);
+        }
+
+
+        return {cleanersUsed:cleanersUsed.length,roomsCleaned:roomsCleaned.length,roomsInProgress:roomsInProgress.length,
+        roomsNotCleaned:roomsNotCleaned.length,roomsDamaged:roomDamaged.length,notDamaged:roomHistories.length-roomDamaged.length,
+            cleanersReport,roomsReport}
+    }
+
+
+
 
 
 }

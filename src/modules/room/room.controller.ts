@@ -36,15 +36,7 @@ export class AdminRoomController {
         }
     }
 
-    @Get(':id')
-    @ApiOperation({summary: "hotel and hotelReception role access"})
-    @ApiParam({name: "id", type: "string"})
-    async findOne(@Param('id') id: string) {
-        const room = await this.roomService.findOne(id);
-        return {
-            room
-        }
-    }
+
 
     @Patch(':id')
     @ApiOperation({summary: "hotel and hotelReception role access"})
@@ -112,4 +104,26 @@ export class AdminRoomController {
         const result = await this.roomService.search(search);
         return result
     }
+
+
+    @ApiOperation({summary: "generate report"})
+    @Roles(ROLES.HOTELADMIN)
+    @ApiConsumes(SwaggerConsumes.URL_ENCODED, SwaggerConsumes.JSON)
+    @Get('report')
+    async createReport() {
+        const result = await this.roomService.createRoomReport();
+        return result
+    }
+
+
+    @Get(':id')
+    @ApiOperation({summary: "hotel and hotelReception role access"})
+    @ApiParam({name: "id", type: "string"})
+    async findOne(@Param('id') id: string) {
+        const room = await this.roomService.findOne(id);
+        return {
+            room
+        }
+    }
+
 }
