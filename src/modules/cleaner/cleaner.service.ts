@@ -43,7 +43,9 @@ export class CleanerService {
     let filter: FilterQuery<UserDocument> = { role: ROLES.CLEANER };
     if (user.role == ROLES.COMPANYADMIN) {
       filter['company'] = user._id;
-    } else if (user.role == ROLES.HOTELADMIN || user.role === ROLES.CHECKER) {
+    }else if(user.role == ROLES.HOTELADMIN){
+        filter = {hotel: user._id,role:ROLES.CLEANER};
+    } else if ( user.role === ROLES.CHECKER) {
       filter = {hotel: user.hotel._id,role:ROLES.CLEANER};
     } else if (user.role == ROLES.SUPERADMIN || user.role === ROLES.CHECKER) {
       filter = { role: ROLES.CLEANER }
