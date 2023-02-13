@@ -179,7 +179,7 @@ export class AdminRoomService {
         const {roomId } = startCleaning;
         const user = this.request.user;
         let cleaner: any;
-        if (user.role == ROLES.CHECKER) cleaner = user._id;
+        if (user.role == ROLES.CLEANER) cleaner = user._id;
 
         const room = await this.adminRoomRepository.findOne({_id: roomId});
 
