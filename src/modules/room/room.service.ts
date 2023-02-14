@@ -228,7 +228,7 @@ export class AdminRoomService {
     }
 
     async setRoomStatus(setRoomStatusDto: SetRoomStatus) {
-        const {roomId, clean_status, occupation_status, mistakes} = setRoomStatusDto;
+        const {roomId, clean_status, occupation_status} = setRoomStatusDto;
         const user = this.request.user;
         let checker: any;
         if (user.role == ROLES.CHECKER) checker = user._id;
@@ -239,7 +239,6 @@ export class AdminRoomService {
             await this.cleaningHistoryRepository.updateMany({room: room._id, checker: null}, {
                 checker: checker,
                 checkerStatus: clean_status,
-                mistakes
             })
         } else {
             throw new NotFoundException("invalid request")
