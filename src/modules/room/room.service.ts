@@ -371,8 +371,33 @@ export class AdminRoomService {
         for (let i = 0; i < roomsUsed.length; i++) {
             const room: any = roomsUsed[i];
             const roomReport = roomHistories.filter((report) => (report.room._id).toString() === (room).toString());
-            const cleaners = roomReport.map((report) => report.cleaner);
-            let data: any = {...roomReport[0].room, cleaners};
+            const cleaners = roomReport.map((report) => ({...report.cleaner,mistakes:report.mistakes}));
+
+            const mistakesCount = cleaners.reduce((partialSum:any, room:any) => {
+                if(room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status){
+                    partialSum+=1;
+                }
+
+                if(room.mistakes &&  room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status){
+                    partialSum+=1;
+                }
+
+                if(room.mistakes && room.mistakes.report && room.mistakes.report.status){
+                    partialSum+=1;
+                }
+
+                if(room.mistakes && room.mistakes.roomHasStrongStainsThatCanNotBeCleanedByUs && room.mistakes.roomHasStrongStainsThatCanNotBeCleanedByUs.status){
+                    partialSum+=1;
+                }
+
+
+                if( room.mistakes && room.mistakes.damageCausedByGuests && room.mistakes.damageCausedByGuests.status){
+                    partialSum+=1;
+                }
+                return partialSum
+            },0);
+
+            let data: any = {...roomReport[0].room,mistakesCount, cleaners};
             roomsReport.push(data);
         }
 
