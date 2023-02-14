@@ -10,7 +10,7 @@ export class Room {
     name_de: string;
     @Prop({ type: [String], enum: [RoomStatus], default: [] })
     report: string
-    @Prop({ type: String, enum: CheckerRoomStatus, default: CheckerRoomStatus.Cleaned })
+    @Prop({ type: String, enum: CheckerRoomStatus, default: CheckerRoomStatus.NotCleaned })
     cleaning_status:string;
     @Prop({ type: String, enum: RoomOccupationStatus, default: RoomOccupationStatus.Free })
     occupation_status:string;
