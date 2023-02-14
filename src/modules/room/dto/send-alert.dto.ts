@@ -71,6 +71,14 @@ export class SetRoomStatus{
     @IsNotEmpty()
     @IsEnum(RoomOccupationStatus)
     occupation_status: RoomOccupationStatus
+
+
+    @ApiProperty()
+    @IsArray()
+    @IsNotEmpty()
+    @IsEnum(RoomStatus,{each:true})
+    mistakes: RoomStatus
+
 }
 
 
