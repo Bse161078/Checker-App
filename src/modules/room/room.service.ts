@@ -278,7 +278,7 @@ export class AdminRoomService {
             const cleaner:any=cleanersUsed[i];
             const cleanerReport=roomHistories.filter((report)=>(report.cleaner._id).toString() === (cleaner).toString());
             const rooms=cleanerReport.map((report)=>report.room);
-            let data={cleaner:cleanerReport[0].cleaner,rooms};
+            let data={...cleanerReport[0].cleaner,rooms};
             cleanersReport.push(data);
         }
 
@@ -286,7 +286,7 @@ export class AdminRoomService {
             const room:any=roomsUsed[i];
             const roomReport=roomHistories.filter((report)=>(report.room._id).toString() === (room).toString());
             const cleaners=roomReport.map((report)=>report.cleaner);
-            let data:any={room:roomReport[0].room,cleaners};
+            let data:any={...roomReport[0].room,cleaners};
             roomsReport.push(data);
         }
 
