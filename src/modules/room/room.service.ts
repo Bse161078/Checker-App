@@ -184,6 +184,10 @@ export class AdminRoomService {
         const room = await this.adminRoomRepository.findOne({_id: roomId});
 
         if(room){
+
+            await this.adminRoomRepository.updateOne({_id: roomId}, {cleaning_status:CheckerRoomStatus.IN_PROGRESS});
+
+
             const cleaningHistory=await this.cleaningHistoryRepository.create({
                 room:new Types.ObjectId(room._id),cleaner:new Types.ObjectId(cleaner),
                 cleaningStartAt:new Date().toUTCString()

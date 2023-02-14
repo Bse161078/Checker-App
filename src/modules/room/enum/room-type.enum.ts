@@ -11,7 +11,8 @@ export enum RoomStatus {
 export enum CheckerRoomStatus {
     Cleaned="Cleaned",
     NotCleaned="NotCleaned",
-    Damaged="Damaged"
+    Damaged="Damaged",
+    IN_PROGRESS='IN_PROGRESS'
 }
 
 
