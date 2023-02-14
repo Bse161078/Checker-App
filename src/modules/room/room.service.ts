@@ -190,7 +190,8 @@ export class AdminRoomService {
 
             const cleaningHistory=await this.cleaningHistoryRepository.create({
                 room:new Types.ObjectId(room._id),cleaner:new Types.ObjectId(cleaner),
-                cleaningStartAt:new Date().toUTCString()
+                cleaningStartAt:new Date().toUTCString(),
+                status:ROOM_STATUS.IN_PROGRESS
             });
 
             return {
