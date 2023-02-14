@@ -24,8 +24,30 @@ export class CleaningHistory {
     checkoutStatus: boolean;
 
     @Prop({
-        type: [{type:String,enum:RoomStatus,default:RoomStatus.CleanAgain}],
-        default: [],
+        type: {
+            roomIsNotVacuumed:{
+                status:{type:Boolean,default:false},
+                photos:{type:[String],default:""},
+                text:{type:String,default:""}
+
+            },
+            report:{
+                status:{type:Boolean,default:false},
+                photos:{type:[String],default:""},
+                text:{type:String,default:""}
+            },
+            roomHasStrongStainsThatCanNotBeCleanedByUs:{
+                status:{type:Boolean,default:false},
+                photos:{type:[String],default:""},
+                text:{type:String,default:""}
+            },
+            damageCausedByGuests:{
+                status:{type:Boolean,default:false},
+                photos:{type:[String],default:""},
+                text:{type:String,default:""}
+            }
+        },
+        default: {},
     })
     mistakes;
 

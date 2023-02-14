@@ -12,6 +12,12 @@ import {CleaningHistoryDocument} from './entities/cleaning-history.entity';
 import {CheckerRoomStatus} from './enum/room-type.enum';
 import {RoomType, RoomTypeDocument} from "../room-type/entities/room-type.entity";
 import {ROOM_STATUS} from "../../common/enums/room-status.enum";
+import {CreateFloorDto} from "../floor/dto/create-floor.dto";
+import {IFloorFilesUpload} from "../floor/interfaces/files.interface";
+import {getObjectFiles, parseValue} from "../../common/utils/functions";
+import {FloorDto} from "../floor/dto/floor.dto";
+import {MistakesFileUpload} from "./interfaces/files.interface";
+import {PostMistakesDto} from "./dto/room.dto";
 
 @Injectable({scope: Scope.REQUEST})
 export class AdminRoomService {
@@ -24,16 +30,16 @@ export class AdminRoomService {
     }
 
     async create(createRoomDto: CreateRoomDto) {
-        const roomType=await this.roomtypeRepository.findById(new Types.ObjectId(createRoomDto.roomType));
-        if(roomType){
+        const roomType = await this.roomtypeRepository.findById(new Types.ObjectId(createRoomDto.roomType));
+        if (roomType) {
             const user = this.request.user;
             createRoomDto.level = new Types.ObjectId(createRoomDto.level);
-            createRoomDto.roomType=roomType.title;
+            createRoomDto.roomType = roomType.title;
             createRoomDto.hotel = new Types.ObjectId(createRoomDto.hotel);
             const createdResult = await this.adminRoomRepository.create(createRoomDto);
             return createdResult
 
-        }else{
+        } else {
             throw new NotFoundException("room type not found")
         }
     }
@@ -176,29 +182,29 @@ export class AdminRoomService {
     }
 
     async startRoomCleaning(startCleaning: StartCleaningDto) {
-        const {roomId } = startCleaning;
+        const {roomId} = startCleaning;
         const user = this.request.user;
         let cleaner: any;
         if (user.role == ROLES.CLEANER) cleaner = user._id;
 
         const room = await this.adminRoomRepository.findOne({_id: roomId});
 
-        if(room){
+        if (room) {
 
-            await this.adminRoomRepository.updateOne({_id: roomId}, {cleaning_status:CheckerRoomStatus.IN_PROGRESS});
+            await this.adminRoomRepository.updateOne({_id: roomId}, {cleaning_status: CheckerRoomStatus.IN_PROGRESS});
 
 
-            const cleaningHistory=await this.cleaningHistoryRepository.create({
-                room:new Types.ObjectId(room._id),cleaner:new Types.ObjectId(cleaner),
-                cleaningStartAt:new Date().toUTCString(),
-                status:ROOM_STATUS.IN_PROGRESS
+            const cleaningHistory = await this.cleaningHistoryRepository.create({
+                room: new Types.ObjectId(room._id), cleaner: new Types.ObjectId(cleaner),
+                cleaningStartAt: new Date().toUTCString(),
+                status: ROOM_STATUS.IN_PROGRESS
             });
 
             return {
                 message: "cleaning history created",
-                data:cleaningHistory
+                data: cleaningHistory
             }
-        }else{
+        } else {
             throw new NotFoundException("invalid request")
         }
     }
@@ -208,12 +214,12 @@ export class AdminRoomService {
         const {cleaningHistoryId, status} = updateCleaningStatus;
         const user = this.request.user;
 
-        const cleaningHistory=await this.cleaningHistoryRepository.findById(new Types.ObjectId(cleaningHistoryId));
-        if(cleaningHistory && status!==ROOM_STATUS.START){
-            cleaningHistory.set({status,cleaningEndAt:new Date().toUTCString()});
+        const cleaningHistory = await this.cleaningHistoryRepository.findById(new Types.ObjectId(cleaningHistoryId));
+        if (cleaningHistory && status !== ROOM_STATUS.START) {
+            cleaningHistory.set({status, cleaningEndAt: new Date().toUTCString()});
             await cleaningHistory.save();
             return cleaningHistory;
-        }else{
+        } else {
             throw new NotFoundException("invalid request")
         }
         return {
@@ -222,16 +228,20 @@ export class AdminRoomService {
     }
 
     async setRoomStatus(setRoomStatusDto: SetRoomStatus) {
-        const {roomId, clean_status, occupation_status,mistakes} = setRoomStatusDto;
+        const {roomId, clean_status, occupation_status, mistakes} = setRoomStatusDto;
         const user = this.request.user;
         let checker: any;
         if (user.role == ROLES.CHECKER) checker = user._id;
         const room = await this.adminRoomRepository.findOne({_id: roomId});
 
-        if(room){
-            await this.adminRoomRepository.updateOne({_id: roomId}, {cleaning_status:clean_status, occupation_status});
-            await this.cleaningHistoryRepository.updateMany({room:room._id,checker:null},{checker:checker,checkerStatus:clean_status,mistakes})
-        }else{
+        if (room) {
+            await this.adminRoomRepository.updateOne({_id: roomId}, {cleaning_status: clean_status, occupation_status});
+            await this.cleaningHistoryRepository.updateMany({room: room._id, checker: null}, {
+                checker: checker,
+                checkerStatus: clean_status,
+                mistakes
+            })
+        } else {
             throw new NotFoundException("invalid request")
         }
 
@@ -245,12 +255,12 @@ export class AdminRoomService {
         const user = this.request.user;
         let hotel;
         if (user.role == ROLES.HOTELADMIN) hotel = new Types.ObjectId(user._id);
-        else hotel=user.hotel._id;
+        else hotel = user.hotel._id;
 
 
         const rooms = await this.adminRoomRepository.find({
-            hotel:hotel,
-            $or:[
+            hotel: hotel,
+            $or: [
                 {roomType: {"$in": search.type}},
                 {cleaning_status: {"$in": search.cleaning_status || []}},
                 {occupation_status: {"$in": search.occupation_status || []}}
@@ -260,49 +270,125 @@ export class AdminRoomService {
     }
 
 
-    async createRoomReport(){
+    async setMistakes(mistakeDto: PostMistakesDto & any, files: MistakesFileUpload) {
+
+        const user = this.request.user;
+        let checker: any;
+        if (user.role == ROLES.CHECKER) checker = user._id;
+        else throw new NotFoundException("invalid request")
+
+        const room = await this.adminRoomRepository.findOne({_id: mistakeDto.roomId});
+
+
+        const newFile: any = getObjectFiles(files);
+        const newMistakes: any = {
+            roomIsNotVacuumed: {
+                status: mistakeDto.roomIsNotVacuumedStatus && (mistakeDto.roomIsNotVacuumedStatus).toLowerCase()==="true" ,
+                text: "",
+                photos: newFile.roomIsNotVacuumedPhotos
+            },
+            roomHasStrongStainsThatCanNotBeCleanedByUs: {
+                status: mistakeDto.roomHasStrongStainsThatCanNotBeCleanedByUsStatus && (mistakeDto.roomHasStrongStainsThatCanNotBeCleanedByUsStatus).toLowerCase()==="true",
+                text: "",
+                photos: newFile.roomHasStrongStainsThatCanNotBeCleanedByUsPhotos
+            },
+            damageCausedByGuests: {
+                status: mistakeDto.damageCausedByGuestsStatus && (mistakeDto.damageCausedByGuestsStatus).toLowerCase()==="true",
+                text: "",
+                photos: newFile.damageCausedByGuestsPhotos
+            },
+            report: {
+                status: mistakeDto.reportStatus && (mistakeDto.reportStatus).toLowerCase()==="true",
+                text: "",
+                photos: newFile.reportPhotos
+            }
+        }
+
+
+        if (room) {
+            const cleaningStatus=await this.cleaningHistoryRepository.updateMany({room: mistakeDto.roomId, checker: null}, {
+                mistakes:newMistakes,
+            });
+            return cleaningStatus;
+
+        } else {
+            throw new NotFoundException("invalid request")
+        }
+    }
+
+
+    async createRoomReport() {
         const user = this.request.user;
 
-        const rooms = await this.adminRoomRepository.find({hotel:user._id});
-        const roomIds=rooms.map((room)=>room._id);
-        const roomHistories=(await this.cleaningHistoryRepository.find({room:{ "$in": roomIds }}).populate('cleaner').populate('room').lean())
-            .filter((history)=>history.cleaner).filter((history)=>history.room);
-        const cleanersUsed=roomHistories.map(item => (item.cleaner._id).toString())
+        const rooms = await this.adminRoomRepository.find({hotel: user._id});
+        const roomIds = rooms.map((room) => room._id);
+        const roomHistories = (await this.cleaningHistoryRepository.find({room: {"$in": roomIds}}).populate('cleaner').populate('room').lean())
+            .filter((history) => history.cleaner).filter((history) => history.room);
+        const cleanersUsed = roomHistories.map(item => (item.cleaner._id).toString())
             .filter((value, index, self) => self.indexOf(value) === index);
-        const roomsUsed=roomHistories.map(item => (item.room._id).toString())
+        const roomsUsed = roomHistories.map(item => (item.room._id).toString())
             .filter((value, index, self) => self.indexOf(value) === index);
-        const roomsCleaned = roomHistories.filter((room)=>room.checkerStatus===CheckerRoomStatus.Cleaned);
-        const roomsInProgress = roomHistories.filter((room)=>room.status===ROOM_STATUS.IN_PROGRESS);
-        const roomsNotCleaned = roomHistories.filter((room)=>room.checkerStatus===CheckerRoomStatus.NotCleaned);
-        const roomDamaged = roomHistories.filter((room)=>room.checkerStatus===CheckerRoomStatus.Damaged);
+        const roomsCleaned = roomHistories.filter((room) => room.checkerStatus === CheckerRoomStatus.Cleaned);
+        const roomsInProgress = roomHistories.filter((room) => room.status === ROOM_STATUS.IN_PROGRESS);
+        const roomsNotCleaned = roomHistories.filter((room) => room.checkerStatus === CheckerRoomStatus.NotCleaned);
+        const roomDamaged = roomHistories.filter((room) => room.checkerStatus === CheckerRoomStatus.Damaged);
 
-        let cleanersReport:any=[];
-        let roomsReport:any=[];
+        let cleanersReport: any = [];
+        let roomsReport: any = [];
 
-        for(let i=0;i<cleanersUsed.length;i++){
-            const cleaner:any=cleanersUsed[i];
-            const cleanerReport=roomHistories.filter((report)=>(report.cleaner._id).toString() === (cleaner).toString());
-            const rooms=cleanerReport.map((report)=>report.room);
-            let data={...cleanerReport[0].cleaner,rooms};
+        for (let i = 0; i < cleanersUsed.length; i++) {
+            const cleaner: any = cleanersUsed[i];
+            const cleanerReport = roomHistories.filter((report) => (report.cleaner._id).toString() === (cleaner).toString());
+            const rooms = cleanerReport.map((report) => ({...report.room,mistakes:report.mistakes}));
+            const extra = rooms.filter((room: any) => room.roomType === "Double");
+            const mistakesCount = rooms.reduce((partialSum:any, room:any) => {
+                if(room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status){
+                    partialSum+=1;
+                }
+
+                if(room.mistakes &&  room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status){
+                    partialSum+=1;
+                }
+
+                if(room.mistakes && room.mistakes.report && room.mistakes.report.status){
+                    partialSum+=1;
+                }
+
+                if(room.mistakes && room.mistakes.roomHasStrongStainsThatCanNotBeCleanedByUs && room.mistakes.roomHasStrongStainsThatCanNotBeCleanedByUs.status){
+                    partialSum+=1;
+                }
+
+
+                if( room.mistakes && room.mistakes.damageCausedByGuests && room.mistakes.damageCausedByGuests.status){
+                    partialSum+=1;
+                }
+                return partialSum
+            },0);
+
+            let data = {...cleanerReport[0].cleaner, extra: extra.length,mistakesCount, rooms,};
             cleanersReport.push(data);
         }
 
-        for(let i=0;i<roomsUsed.length;i++){
-            const room:any=roomsUsed[i];
-            const roomReport=roomHistories.filter((report)=>(report.room._id).toString() === (room).toString());
-            const cleaners=roomReport.map((report)=>report.cleaner);
-            let data:any={...roomReport[0].room,cleaners};
+        for (let i = 0; i < roomsUsed.length; i++) {
+            const room: any = roomsUsed[i];
+            const roomReport = roomHistories.filter((report) => (report.room._id).toString() === (room).toString());
+            const cleaners = roomReport.map((report) => report.cleaner);
+            let data: any = {...roomReport[0].room, cleaners};
             roomsReport.push(data);
         }
 
 
-        return {cleanersUsed:cleanersUsed.length,roomsCleaned:roomsCleaned.length,roomsInProgress:roomsInProgress.length,
-        roomsNotCleaned:roomsNotCleaned.length,roomsDamaged:roomDamaged.length,notDamaged:roomHistories.length-roomDamaged.length,
-            cleanersReport,roomsReport}
+        return {
+            cleanersUsed: cleanersUsed.length,
+            roomsCleaned: roomsCleaned.length,
+            roomsInProgress: roomsInProgress.length,
+            roomsNotCleaned: roomsNotCleaned.length,
+            roomsDamaged: roomDamaged.length,
+            notDamaged: roomHistories.length - roomDamaged.length,
+            cleanersReport,
+            roomsReport
+        }
     }
-
-
-
 
 
 }

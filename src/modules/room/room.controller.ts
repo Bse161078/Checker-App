@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, UploadedFiles, UseInterceptors} from '@nestjs/common';
 import {AdminRoomService} from './room.service';
 import {CreateRoomDto} from './dto/create-room.dto';
 import {UpdateRoomDto} from './dto/update-room.dto';
@@ -8,6 +8,13 @@ import {ROLES} from 'src/common/enums/role.enum';
 import {SwaggerConsumes} from 'src/common/enums';
 import {Roles} from 'src/common/decorators/role.decorator';
 import {SearchRoom, SendAlertDto, SetRoomStatus, StartCleaningDto, UpdateCleaningStatus} from './dto/send-alert.dto';
+import {FloorFileUpload} from "../floor/interceptors/upload-image.interceptor";
+import {IFloorFilesUpload} from "../floor/interfaces/files.interface";
+import {CreateFloorDto} from "../floor/dto/create-floor.dto";
+import {PostMistakesDto, RoomIdDto} from "./dto/room.dto";
+import {Types} from "mongoose";
+import {MistakesFileUpload} from "./interfaces/files.interface";
+import {MistakeFileInterceptor} from "./interceptors/upload-file-mistake.interceptor";
 
 @Controller('room')
 @ApiTags("Admin-room")
@@ -125,5 +132,23 @@ export class AdminRoomController {
             room
         }
     }
+
+
+    @Post("/:roomID/mistakes")
+    @Roles(ROLES.CHECKER)
+    @ApiParam({ name: "roomID", type: "string", required: true })
+    @ApiConsumes(SwaggerConsumes.MULTIPART)
+    @UseInterceptors(MistakeFileInterceptor)
+    @ApiOperation({summary: "checker role access"})
+    async saveMistakes(
+        @Param('roomID') id: string,
+        @UploadedFiles() files: MistakesFileUpload,
+        @Body() createRoomMistake: PostMistakesDto
+    ) {
+        createRoomMistake.roomId = new Types.ObjectId(id)
+        await this.roomService.setMistakes(createRoomMistake, files);
+        return { message: "save floor data successfully" }
+    }
+
 
 }

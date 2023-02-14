@@ -38,6 +38,14 @@ export function getObjectFiles(files: any) {
   }
   return fileObject;
 }
+
+export const createMistakeObject=(mistakes:any,files:any)=>{
+    for (const property in mistakes) {
+
+    }
+}
+
+
 export function parseValue(objectDto: object) {
   for (const key in objectDto) {
     if(!isNaN(Number(objectDto[key]))) objectDto[key] = +objectDto[key];
