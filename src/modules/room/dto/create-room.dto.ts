@@ -1,6 +1,6 @@
 import {Optional} from "@nestjs/common";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {IsEnum, IsNotEmpty, IsOptional, IsString, Length} from "class-validator";
+import {IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Length} from "class-validator";
 import {Types} from "mongoose";
 import {RoomOccupationStatus, RoomType} from "../enum/room-type.enum";
 
@@ -21,6 +21,12 @@ export class CreateRoomDto {
     @IsOptional()
     @IsString()
     name_de: string;
+
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsNumber()
+    price: Number;
 
 
     @ApiProperty({type: "string"})

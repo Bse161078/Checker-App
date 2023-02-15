@@ -30,12 +30,13 @@ export class AdminRoomService {
     }
 
     async create(createRoomDto: CreateRoomDto) {
-        const roomType = await this.roomtypeRepository.findById(new Types.ObjectId(createRoomDto.roomType));
+        const roomType:any = await this.roomtypeRepository.findById(new Types.ObjectId(createRoomDto.roomType));
         if (roomType) {
             const user = this.request.user;
             createRoomDto.level = new Types.ObjectId(createRoomDto.level);
             createRoomDto.roomType = roomType.title;
             createRoomDto.hotel = new Types.ObjectId(createRoomDto.hotel);
+            createRoomDto.price = createRoomDto.price || roomType.price || 0 ;
             const createdResult = await this.adminRoomRepository.create(createRoomDto);
             return createdResult
 

@@ -15,7 +15,11 @@ export class Room {
     @Prop({ type: String, enum: RoomOccupationStatus, default: RoomOccupationStatus.Free })
     occupation_status:string;
     @Prop({ type: String, default:"" })
-    roomType: string
+    roomType: string;
+
+    @Prop({ type: Number, default:0 })
+    price: Number
+
     @Prop({ref: 'Level'})
     level: Types.ObjectId
     @Prop({ref: 'User'})
