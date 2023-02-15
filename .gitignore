@@ -36,3 +36,4 @@ lerna-debug.log*
 
 *.jpg\n*.jpeg\n*.png\n*.gif\n
 public/upload/images/*.*
+keys/
