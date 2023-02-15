@@ -18,7 +18,7 @@ export class CheckListService {
   ) { }
   async create(createCheckListDto: CreateCheckListDto) {
     const user = this.request.user;
-    const hotel = user.hotel;
+    const hotel = user.hotel._id;
     const hotelObject = await this.userRepository.findOne({_id: hotel})
     createCheckListDto.checker = user._id;
     createCheckListDto.materials = createCheckListDto.materials.map(item => {
@@ -45,10 +45,10 @@ export class CheckListService {
   async findAll() {
     const user = this.request.user;
     const filter: FilterQuery<CheckListDocument> = {}
-    if(user.role = ROLES.CHECKER) filter['hotel'] = user.hotel
+    if(user.role = ROLES.CHECKER) filter['hotel'] = user.hotel._id
     else if(user.role = ROLES.HOTELADMIN) filter['hotel'] = user._id
     else if(user.role = ROLES.COMPANYADMIN) filter['company'] = user._id
-    const checkList = await this.checkListRepository.find(filter);
+    const checkList = await this.checkListRepository.find(filter).populate('materials.material');
     return checkList
   }
 

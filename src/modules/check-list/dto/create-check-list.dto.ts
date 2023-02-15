@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Length } from "class-validator";
-import { IMaterialList } from "../entities/check-list.entity";
 import { Types } from "mongoose";
 import { CheckListSupplier } from "../enum/check-list-supplier.enum";
 
@@ -15,7 +14,7 @@ export class CreateCheckListDto {
         quantity: 2
     },
  ]})
- materials : IMaterialList[];
+ materials ;
  @ApiProperty({type: "string", enum: CheckListSupplier})
  supplier: CheckListSupplier
  hotel: Types.ObjectId;

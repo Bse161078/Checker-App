@@ -3,21 +3,17 @@ import { Document, Types } from "mongoose";
 import { IComments, IDamageReport, ITopQuestion } from "../interface/check-list.interface";
 import { ApiProperty } from "@nestjs/swagger";
 import { CheckListSupplier } from "../enum/check-list-supplier.enum";
+import {Material} from "../../material-list/entities/material-list.entity";
+
 @Schema()
-export class MaterialList extends Document {
-    @Prop()
-    material: Types.ObjectId;
-    @Prop()
-    quantity: number;
-}
-export interface IMaterialList {
-    material: Types.ObjectId;
-    quantity: number;
-}
 export class CheckList {
-    @Prop({type: [MaterialList]})
+    @Prop({type: [{
+           material:{type: Types.ObjectId, ref: "Material"},
+            quantity:{type: Number},
+
+        }]})
     @ApiProperty()
-    materials: IMaterialList[];
+    materials;
     @Prop()
     @ApiProperty({type: "string", enum: CheckListSupplier})
     supplier: CheckListSupplier
