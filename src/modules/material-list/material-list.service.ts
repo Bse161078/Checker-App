@@ -21,10 +21,10 @@ export class MaterialListService {
     const user = this.request.user;
     if (user.role == ROLES.CHECKER) {
       createMaterialListDto.checker = new Types.ObjectId(user._id);
-      createMaterialListDto.hotel = new Types.ObjectId(user.hotel);
+      createMaterialListDto.hotel = new Types.ObjectId(user.hotel._id);
     }
     if (user.role == ROLES.HOTELADMIN) {
-      createMaterialListDto.hotel = new Types.ObjectId(user.hotel);
+      createMaterialListDto.hotel = new Types.ObjectId(user._id);
     }
     const createdResult = await this.materialRepository.create(createMaterialListDto);
     return createdResult
@@ -34,7 +34,7 @@ export class MaterialListService {
     const user = this.request.user;
     const filter: FilterQuery<MaterialDocument> = {}
     if (user.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
-    else if (user.hotel) filter['hotel'] = user.hotel;
+    else if (user.hotel) filter['hotel'] = user.hotel._id;
     else return []
     const materials = await this.materialRepository.find(filter)
       .populate(
