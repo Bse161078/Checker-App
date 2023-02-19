@@ -1,6 +1,25 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Types } from "mongoose";
 import { ADMIN_ROLES, ROLES } from "src/common/enums/role.enum";
+import {IsNotEmpty, IsNumber, IsObject, IsOptional, ValidateNested} from "class-validator";
+import {Type} from "class-transformer";
+
+class PriceDto {
+    @IsNotEmpty()
+    @IsNumber()
+    normal;
+
+    @IsNotEmpty()
+    @IsNumber()
+    extraChild;
+
+
+    @IsNotEmpty()
+    @IsNumber()
+    extraAdult;
+
+}
+
 
 export class CreateUserDto {
     @ApiPropertyOptional()
@@ -15,5 +34,12 @@ export class CreateUserDto {
     role: ADMIN_ROLES;
     @ApiPropertyOptional()
     mobile: string;
-    hotel: Types.ObjectId
+    hotel: Types.ObjectId;
+
+    @IsOptional()
+    @IsObject()
+    @ValidateNested({each: true})
+    @Type(() => PriceDto)
+    price;
+
 }

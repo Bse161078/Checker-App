@@ -40,6 +40,20 @@ export class User {
     salaryPerRoom: string;
     @Prop()
     roomCountForCleanEachDay: string;
+    @Prop({
+        type: {
+            normal:{type:Number,default:0},
+            extraAdult:{type:Number,default:0},
+            extraChild:{type:Number,default:0}
+        }, default: {
+            normal: 0,
+            extraAdult: 0,
+            extraChild: 0
+        }
+    })
+    price;
+
+
 }
 export type UserDocument = User & Document;
 export const UserSchema = SchemaFactory.createForClass(User)

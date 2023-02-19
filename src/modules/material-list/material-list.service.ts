@@ -11,6 +11,7 @@ import {ROLES} from 'src/common/enums/role.enum';
 import {removeEmptyFieldsObject} from 'src/common/utils/functions';
 import {OrderMaterialDto} from "./dto/materila.dto";
 import {MaterialOrderDocument} from "./entities/order-material-list-entity";
+import {sendEmail} from "../utils/email";
 
 @Injectable({scope: Scope.REQUEST})
 export class MaterialListService {
@@ -82,12 +83,14 @@ export class MaterialListService {
     async orderMaterial(materialId: string,createMaterialOrder: OrderMaterialDto) {
         const user = this.request.user;
         if(user.role===ROLES.CHECKER){
+            const hotel=await this.userRepository.findById(new Types.ObjectId(user.hotel._id));
             const material:any=await this.materialRepository.findOne({_id:new Types.ObjectId(materialId),
                 hotel:new Types.ObjectId(user.hotel._id)});
             if(material){
                 const materialOrder=await this.materialOrdersRepository.create({
                     ...createMaterialOrder,checker:user._id,hotel:user.hotel._id,material:material._id
-                })
+                });
+                await sendEmail(hotel.email,user.username,material.name,createMaterialOrder.quantity);
                 return materialOrder;
             }else{
                 throw new NotFoundException("material not found")

@@ -9,7 +9,7 @@ import {Request} from 'express';
 import {ROLES} from 'src/common/enums/role.enum';
 import {SearchRoom, SendAlertDto, SetRoomStatus, StartCleaningDto, UpdateCleaningStatus} from './dto/send-alert.dto';
 import {CleaningHistoryDocument} from './entities/cleaning-history.entity';
-import {CheckerRoomStatus} from './enum/room-type.enum';
+import {CheckerRoomStatus, RoomStatus} from './enum/room-type.enum';
 import {RoomType, RoomTypeDocument} from "../room-type/entities/room-type.entity";
 import {ROOM_STATUS} from "../../common/enums/room-status.enum";
 import {CreateFloorDto} from "../floor/dto/create-floor.dto";
@@ -36,7 +36,6 @@ export class AdminRoomService {
             createRoomDto.level = new Types.ObjectId(createRoomDto.level);
             createRoomDto.roomType = roomType.title;
             createRoomDto.hotel = new Types.ObjectId(createRoomDto.hotel);
-            createRoomDto.price = createRoomDto.price || roomType.price || 0 ;
             const createdResult = await this.adminRoomRepository.create(createRoomDto);
             return createdResult
 
@@ -322,10 +321,15 @@ export class AdminRoomService {
     async createRoomReport() {
         const user = this.request.user;
 
-        const rooms = await this.adminRoomRepository.find({hotel: user._id});
+        const rooms = await this.adminRoomRepository.find({hotel: user._id})
         const roomIds = rooms.map((room) => room._id);
-        const roomHistories = (await this.cleaningHistoryRepository.find({room: {"$in": roomIds}}).populate('cleaner').populate('room').lean())
-            .filter((history) => history.cleaner).filter((history) => history.room);
+        const roomHistories = (await this.cleaningHistoryRepository.find({room: {"$in": roomIds}}).populate('cleaner')
+            .populate({
+                path:"room",
+                populate:{
+                    path:"hotel"
+                }
+            }).lean()).filter((history) => history.cleaner).filter((history) => history.room);
         const cleanersUsed = roomHistories.map(item => (item.cleaner._id).toString())
             .filter((value, index, self) => self.indexOf(value) === index);
         const roomsUsed = roomHistories.map(item => (item.room._id).toString())
@@ -341,8 +345,25 @@ export class AdminRoomService {
         for (let i = 0; i < cleanersUsed.length; i++) {
             const cleaner: any = cleanersUsed[i];
             const cleanerReport = roomHistories.filter((report) => (report.cleaner._id).toString() === (cleaner).toString());
-            const rooms = cleanerReport.map((report) => ({...report.room,mistakes:report.mistakes,price:report.price}));
-            const extra = rooms.filter((room: any) => room.roomType === "Double");
+            const rooms = cleanerReport.map((report:any) => {
+                const room=report.room;
+                const {extraAdult,extraChild}=room.hotel.price || {};
+                const roomReport=room.report;
+                let extra=false;
+                let roomPrice=room.price;
+                if(room.report.indexOf(RoomStatus.ExtraBedNormal)){
+                    roomPrice+=extraAdult;
+                    extra=true;
+                }
+                if(room.report.indexOf(RoomStatus.ExtraBedChild)){
+                    roomPrice+=extraChild;
+                    extra=true;
+                }
+
+                return {...report.room,mistakes:report.mistakes,price:roomPrice,extra}
+            });
+
+            const extra = rooms.filter((room: any) => room.extra);
             const mistakesCount = rooms.reduce((partialSum:any, room:any) => {
                 if(room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status){
                     partialSum+=1;

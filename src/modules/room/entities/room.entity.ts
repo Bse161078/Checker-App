@@ -17,18 +17,8 @@ export class Room {
     @Prop({type: String, default: ""})
     roomType: string;
 
-    @Prop({
-        type: {
-            normal:{type:Number,default:0},
-            extraAdult:{type:Number,default:0},
-            extraChild:{type:Number,default:0}
-        }, default: {
-            normal: 0,
-            extraAdult: 0,
-            extraChild: 0
-        }
-    })
-    price;
+    @Prop({ type: Number, default:0 })
+    price: Number
 
     @Prop({ref: 'Level'})
     level: Types.ObjectId

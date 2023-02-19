@@ -5,21 +5,6 @@ import {Types} from "mongoose";
 import {RoomOccupationStatus, RoomType} from "../enum/room-type.enum";
 import {Type} from "class-transformer";
 
-class PriceDto {
-    @IsNotEmpty()
-    @IsNumber()
-    normal;
-
-    @IsNotEmpty()
-    @IsNumber()
-    extraChild;
-
-
-    @IsNotEmpty()
-    @IsNumber()
-    extraAdult;
-
-}
 
 
 export class CreateRoomDto {
@@ -41,12 +26,10 @@ export class CreateRoomDto {
     name_de: string;
 
 
-
-    @IsNotEmpty()
-    @IsObject()
-    @ValidateNested({each: true})
-    @Type(() => PriceDto)
-    price;
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsNumber()
+    price: Number;
 
 
     @ApiProperty({type: "string"})
