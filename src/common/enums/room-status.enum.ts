@@ -7,3 +7,10 @@ export enum ROOM_STATUS {
     DAMAGED="DAMAGED",
     
 }
+
+
+export enum PRICE_STATUS {
+    NORMAL="normal",
+    EXTRA_CHILD="extra_child",
+    EXTRA_ADULT="extra_adult"
+}

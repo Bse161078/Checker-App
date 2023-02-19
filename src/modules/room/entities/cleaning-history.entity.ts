@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
 import { ROLES } from "src/common/enums/role.enum";
-import { ROOM_STATUS } from "src/common/enums/room-status.enum";
+import {PRICE_STATUS, ROOM_STATUS} from "src/common/enums/room-status.enum";
 import {CheckerRoomStatus, RoomStatus} from "../enum/room-type.enum";
 
 @Schema({timestamps: true})
@@ -50,6 +50,11 @@ export class CleaningHistory {
         default: {},
     })
     mistakes;
+
+
+    @Prop({default: PRICE_STATUS.NORMAL})
+    price: PRICE_STATUS;
+
 
     @Prop({type:Date,default: Date.now})
     date;

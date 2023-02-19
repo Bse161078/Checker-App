@@ -10,7 +10,6 @@ import { GetUser } from 'src/common/decorators/user.decorator';
 
 @Controller('user')
 @ApiTags("User")
-@AuthDecorator(ROLES.SUPERADMIN)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

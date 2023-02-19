@@ -1,8 +1,26 @@
 import {Optional} from "@nestjs/common";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Length} from "class-validator";
+import {IsEnum, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, Length, ValidateNested} from "class-validator";
 import {Types} from "mongoose";
 import {RoomOccupationStatus, RoomType} from "../enum/room-type.enum";
+import {Type} from "class-transformer";
+
+class PriceDto {
+    @IsNotEmpty()
+    @IsNumber()
+    normal;
+
+    @IsNotEmpty()
+    @IsNumber()
+    extraChild;
+
+
+    @IsNotEmpty()
+    @IsNumber()
+    extraAdult;
+
+}
+
 
 export class CreateRoomDto {
 
@@ -23,10 +41,12 @@ export class CreateRoomDto {
     name_de: string;
 
 
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsNumber()
-    price: Number;
+
+    @IsNotEmpty()
+    @IsObject()
+    @ValidateNested({each: true})
+    @Type(() => PriceDto)
+    price;
 
 
     @ApiProperty({type: "string"})

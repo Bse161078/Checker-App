@@ -198,7 +198,8 @@ export class AdminRoomService {
             const cleaningHistory = await this.cleaningHistoryRepository.create({
                 room: new Types.ObjectId(room._id), cleaner: new Types.ObjectId(cleaner),
                 cleaningStartAt: new Date().toUTCString(),
-                status: ROOM_STATUS.IN_PROGRESS
+                status: ROOM_STATUS.IN_PROGRESS,
+                checkerStatus:CheckerRoomStatus.IN_PROGRESS
             });
 
             return {
@@ -217,7 +218,7 @@ export class AdminRoomService {
 
         const cleaningHistory = await this.cleaningHistoryRepository.findById(new Types.ObjectId(cleaningHistoryId));
         if (cleaningHistory && status !== ROOM_STATUS.START) {
-            cleaningHistory.set({status, cleaningEndAt: new Date().toUTCString()});
+            cleaningHistory.set({status, cleaningEndAt: new Date().toUTCString(),checkerStatus:CheckerRoomStatus.IN_PROGRESS});
             await cleaningHistory.save();
             return cleaningHistory;
         } else {
@@ -229,7 +230,7 @@ export class AdminRoomService {
     }
 
     async setRoomStatus(setRoomStatusDto: SetRoomStatus) {
-        const {roomId, clean_status, occupation_status} = setRoomStatusDto;
+        const {roomId, clean_status, occupation_status,price} = setRoomStatusDto;
         const user = this.request.user;
         let checker: any;
         if (user.role == ROLES.CHECKER) checker = user._id;
@@ -240,6 +241,7 @@ export class AdminRoomService {
             await this.cleaningHistoryRepository.updateMany({room: room._id, checker: null}, {
                 checker: checker,
                 checkerStatus: clean_status,
+                price
             })
         } else {
             throw new NotFoundException("invalid request")
@@ -329,7 +331,7 @@ export class AdminRoomService {
         const roomsUsed = roomHistories.map(item => (item.room._id).toString())
             .filter((value, index, self) => self.indexOf(value) === index);
         const roomsCleaned = roomHistories.filter((room) => room.checkerStatus === CheckerRoomStatus.Cleaned);
-        const roomsInProgress = roomHistories.filter((room) => room.status === ROOM_STATUS.IN_PROGRESS);
+        const roomsInProgress = roomHistories.filter((room) => room.checkerStatus === CheckerRoomStatus.IN_PROGRESS);
         const roomsNotCleaned = roomHistories.filter((room) => room.checkerStatus === CheckerRoomStatus.NotCleaned);
         const roomDamaged = roomHistories.filter((room) => room.checkerStatus === CheckerRoomStatus.Damaged);
 
@@ -339,7 +341,7 @@ export class AdminRoomService {
         for (let i = 0; i < cleanersUsed.length; i++) {
             const cleaner: any = cleanersUsed[i];
             const cleanerReport = roomHistories.filter((report) => (report.cleaner._id).toString() === (cleaner).toString());
-            const rooms = cleanerReport.map((report) => ({...report.room,mistakes:report.mistakes}));
+            const rooms = cleanerReport.map((report) => ({...report.room,mistakes:report.mistakes,price:report.price}));
             const extra = rooms.filter((room: any) => room.roomType === "Double");
             const mistakesCount = rooms.reduce((partialSum:any, room:any) => {
                 if(room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status){
@@ -372,7 +374,7 @@ export class AdminRoomService {
         for (let i = 0; i < roomsUsed.length; i++) {
             const room: any = roomsUsed[i];
             const roomReport = roomHistories.filter((report) => (report.room._id).toString() === (room).toString());
-            const cleaners = roomReport.map((report) => ({...report.cleaner,mistakes:report.mistakes}));
+            const cleaners = roomReport.map((report) => ({...report.cleaner,mistakes:report.mistakes,price:report.price}));
 
             const mistakesCount = cleaners.reduce((partialSum:any, room:any) => {
                 if(room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status){

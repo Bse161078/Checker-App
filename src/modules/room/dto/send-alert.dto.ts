@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {ApiProperty} from "@nestjs/swagger";
 import {CheckerRoomStatus, RoomOccupationStatus, RoomStatus} from "../enum/room-type.enum";
 import {
     ArrayMinSize,
@@ -11,20 +11,17 @@ import {
     IsOptional,
     IsString
 } from "class-validator";
-import {ROOM_STATUS} from "../../../common/enums/room-status.enum";
+import {PRICE_STATUS, ROOM_STATUS} from "../../../common/enums/room-status.enum";
 
-export class SendAlertDto{
+export class SendAlertDto {
     @ApiProperty()
     roomID: string
 
     @ApiProperty()
     @IsArray()
-    @IsEnum(RoomStatus,{each:true})
+    @IsEnum(RoomStatus, {each: true})
     status;
 }
-
-
-
 
 
 export class StartCleaningDto {
@@ -55,7 +52,7 @@ export class UpdateCleaningStatus {
 
 }
 
-export class SetRoomStatus{
+export class SetRoomStatus {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
@@ -73,6 +70,11 @@ export class SetRoomStatus{
     occupation_status: RoomOccupationStatus
 
 
+    @ApiProperty({type: "string", enum: PRICE_STATUS})
+    @IsNotEmpty()
+    @IsEnum(PRICE_STATUS)
+    price: PRICE_STATUS
+
 }
 
 
@@ -80,19 +82,19 @@ export class SearchRoom {
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
+    @IsString({each: true})
     type;
 
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
+    @IsString({each: true})
     cleaning_status;
 
 
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
+    @IsString({each: true})
     occupation_status;
 
 }
