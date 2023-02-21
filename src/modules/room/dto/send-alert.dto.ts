@@ -70,11 +70,6 @@ export class SetRoomStatus {
     occupation_status: RoomOccupationStatus
 
 
-    @ApiProperty({type: "string", enum: PRICE_STATUS})
-    @IsNotEmpty()
-    @IsEnum(PRICE_STATUS)
-    price: PRICE_STATUS
-
 }
 
 

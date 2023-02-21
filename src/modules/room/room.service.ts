@@ -231,7 +231,7 @@ export class AdminRoomService {
     }
 
     async setRoomStatus(setRoomStatusDto: SetRoomStatus) {
-        const {roomId, clean_status, occupation_status,price} = setRoomStatusDto;
+        const {roomId, clean_status, occupation_status} = setRoomStatusDto;
         const user = this.request.user;
         let checker: any;
         if (user.role == ROLES.CHECKER) checker = user._id;
@@ -241,8 +241,7 @@ export class AdminRoomService {
             await this.adminRoomRepository.updateOne({_id: roomId}, {cleaning_status: clean_status, occupation_status});
             await this.cleaningHistoryRepository.updateMany({room: room._id, checker: null}, {
                 checker: checker,
-                checkerStatus: clean_status,
-                price
+                checkerStatus: clean_status
             })
         } else {
             throw new NotFoundException("invalid request")
