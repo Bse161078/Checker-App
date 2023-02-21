@@ -26,6 +26,7 @@ export class HotelService {
     async create(createHotelDto: CreateHotelDto) {
         createHotelDto.password = this.authService.hashPassword(createHotelDto.password);
         createHotelDto.role = ROLES.HOTELADMIN;
+        createHotelDto.price=JSON.parse(createHotelDto.price || "{}");
         let hotel = null;
         if (createHotelDto.username) hotel = await this.userRepository.findOne({username: createHotelDto.username})
         if (hotel) throw new BadRequestException("username already exists");

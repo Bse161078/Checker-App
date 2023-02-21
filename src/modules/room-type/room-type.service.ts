@@ -32,7 +32,7 @@ export class RoomTypeService {
     const user = this.request.user;
     const filter: FilterQuery<RoomTypeDocument> = {}
     if (user.role == ROLES.HOTELADMIN) filter['hotel'] = user._id;
-    else filter['hotel'] = user.hotel;
+    else filter['hotel'] = user.hotel._id;
     if(!filter.hotel) return []
     const roomTypes = await this.roomtypeRepository.find(filter).populate(
       { path: "hotel", select: { username: 1 } }

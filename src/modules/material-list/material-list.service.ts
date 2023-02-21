@@ -84,14 +84,17 @@ export class MaterialListService {
         const user = this.request.user;
         if(user.role===ROLES.CHECKER){
             const hotel=await this.userRepository.findById(new Types.ObjectId(user.hotel._id));
-            const material:any=await this.materialRepository.findOne({_id:new Types.ObjectId(materialId),
-                hotel:new Types.ObjectId(user.hotel._id)});
+            const material:any=await this.materialRepository.findOneAndUpdate({_id:new Types.ObjectId(materialId),
+                hotel:new Types.ObjectId(user.hotel._id)},{quantity:(createMaterialOrder.quantity).toString()});
             if(material){
                 const materialOrder=await this.materialOrdersRepository.create({
                     ...createMaterialOrder,checker:user._id,hotel:user.hotel._id,material:material._id
                 });
+
+
+
                 await sendEmail(hotel.email,user.username,material.name,createMaterialOrder.quantity);
-                return materialOrder;
+                return material;
             }else{
                 throw new NotFoundException("material not found")
             }

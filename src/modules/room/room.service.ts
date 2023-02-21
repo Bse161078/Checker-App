@@ -175,7 +175,9 @@ export class AdminRoomService {
         const {roomID, status} = sendAlertDto;
         await this.adminRoomRepository.updateOne({_id: roomID}, {
             $set: {report: status}
-        })
+        });
+
+
         return {
             message: "set room report successfully"
         }
@@ -351,11 +353,11 @@ export class AdminRoomService {
                 const roomReport=room.report;
                 let extra=false;
                 let roomPrice=room.price;
-                if(room.report.indexOf(RoomStatus.ExtraBedNormal)){
+                if(room.report.indexOf(RoomStatus.ExtraBedNormal)!==-1){
                     roomPrice+=extraAdult;
                     extra=true;
                 }
-                if(room.report.indexOf(RoomStatus.ExtraBedChild)){
+                if(room.report.indexOf(RoomStatus.ExtraBedChild)!==-1){
                     roomPrice+=extraChild;
                     extra=true;
                 }
