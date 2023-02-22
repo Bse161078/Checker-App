@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoomSchema = exports.Room = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
+const room_type_enum_1 = require("../enum/room-type.enum");
 let Room = class Room {
 };
 __decorate([
@@ -23,17 +24,25 @@ __decorate([
     __metadata("design:type", String)
 ], Room.prototype, "name_de", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ type: [String], enum: [room_type_enum_1.RoomStatus], default: [] }),
     __metadata("design:type", String)
 ], Room.prototype, "report", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
+    (0, mongoose_1.Prop)({ type: String, enum: room_type_enum_1.CheckerRoomStatus, default: room_type_enum_1.CheckerRoomStatus.NotCleaned }),
     __metadata("design:type", String)
-], Room.prototype, "status", void 0);
+], Room.prototype, "cleaning_status", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ ref: 'RoomType' }),
-    __metadata("design:type", mongoose_2.Types.ObjectId)
+    (0, mongoose_1.Prop)({ type: String, enum: room_type_enum_1.RoomOccupationStatus, default: room_type_enum_1.RoomOccupationStatus.Free }),
+    __metadata("design:type", String)
+], Room.prototype, "occupation_status", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, default: "" }),
+    __metadata("design:type", String)
 ], Room.prototype, "roomType", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Number, default: 0 }),
+    __metadata("design:type", Number)
+], Room.prototype, "price", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ ref: 'Level' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)

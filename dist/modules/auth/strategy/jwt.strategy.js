@@ -30,7 +30,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
     }
     async validate(payload) {
         const { sub } = payload;
-        const user = await this.userRepository.findOne({ _id: new mongoose_2.Types.ObjectId(sub) });
+        const user = await this.userRepository.findOne({ _id: new mongoose_2.Types.ObjectId(sub) }).populate('hotel');
         if (!user || !user.accessToken)
             throw new common_1.UnauthorizedException();
         return user;

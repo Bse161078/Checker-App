@@ -6,6 +6,7 @@ const multer_1 = require("multer");
 const multer_2 = require("../../../common/utils/multer");
 class BathRoomFileUpload extends (0, platform_express_1.FileFieldsInterceptor)([
     { name: "samplePhotoTopQuestion", maxCount: 1 },
+    { name: "isCleanedPhotos", maxCount: 5 },
     { name: "tilesAreNotMoppedPhotos", maxCount: 5 },
     { name: "toiletIsNotWipedPhotos", maxCount: 5 },
     { name: "thereIsDirtInTheShowePhotos", maxCount: 5 },

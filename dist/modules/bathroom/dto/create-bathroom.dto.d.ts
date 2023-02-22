@@ -4,6 +4,8 @@ export declare class CreateBathroomDto {
     samplePhotoTopQuestion: string[];
     tilesAreNotMoppedStatus: boolean;
     tilesAreNotMoppedPhotos: string[];
+    isCleanedStatus: boolean;
+    isCleanedPhotos: string[];
     toiletIsNotWipedStatus: boolean;
     toiletIsNotWipedPhotos: string[];
     thereIsDirtInTheShoweStatus: boolean;

@@ -22,7 +22,6 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Request } from 'express';
 import { Model, Types } from 'mongoose';
 import { AuthService } from '../auth/services/auth.service';
 import { User, UserDocument } from '../user/entities/user.entity';
@@ -32,16 +31,16 @@ export declare class CheckerService {
     private userRepository;
     private request;
     private authService;
-    constructor(userRepository: Model<UserDocument>, request: Request, authService: AuthService);
+    constructor(userRepository: Model<UserDocument>, request: any, authService: AuthService);
     create(createCheckerDto: CreateCheckerDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
     }>>;
-    findAll(): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+    findAll(): Promise<Omit<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
-    }>)[]>;
-    findOne(id: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+    }>, never>[]>;
+    findOne(id: string): Promise<import("mongoose").LeanDocument<User & Document & Required<{
         _id: Types.ObjectId;
-    }>>;
+    }>>>;
     update(id: string, updateCheckerDto: UpdateCheckerDto): Promise<boolean>;
     remove(id: string): Promise<boolean>;
     getCompanyCheckers(companyID: string): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{

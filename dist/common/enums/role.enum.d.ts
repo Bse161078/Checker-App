@@ -9,7 +9,8 @@ export declare enum ROLES {
 }
 export declare enum ADMIN_ROLES {
     HOTELADMIN = "HotelAdmin",
-    COMPANYADMIN = "CompanyAdmin"
+    COMPANYADMIN = "CompanyAdmin",
+    SUPERADMIN = "SuperAdmin"
 }
 export declare enum HOTEL_ROLES {
     HOTELRECEPTION = "HotelReception",

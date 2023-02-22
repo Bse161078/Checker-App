@@ -103,7 +103,7 @@ __decorate([
 ], RoomTypeController.prototype, "remove", null);
 RoomTypeController = __decorate([
     (0, common_1.Controller)('room-type'),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.HOTELADMIN),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.HOTELRECEPTION),
     (0, swagger_1.ApiTags)("AdminRoomType"),
     __metadata("design:paramtypes", [room_type_service_1.RoomTypeService])
 ], RoomTypeController);

@@ -32,6 +32,14 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
     __metadata("design:type", Boolean)
+], CreateBedDto.prototype, "isMadeUpStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),
+    __metadata("design:type", Array)
+], CreateBedDto.prototype, "isMadeUpPhotos", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
+    __metadata("design:type", Boolean)
 ], CreateBedDto.prototype, "bedSheetInNotProperlyTightenedStatus", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),

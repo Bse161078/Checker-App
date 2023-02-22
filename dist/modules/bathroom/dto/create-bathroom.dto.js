@@ -32,6 +32,14 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
     __metadata("design:type", Boolean)
+], CreateBathroomDto.prototype, "isCleanedStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),
+    __metadata("design:type", Array)
+], CreateBathroomDto.prototype, "isCleanedPhotos", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
+    __metadata("design:type", Boolean)
 ], CreateBathroomDto.prototype, "toiletIsNotWipedStatus", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),

@@ -15,6 +15,7 @@ var ADMIN_ROLES;
 (function (ADMIN_ROLES) {
     ADMIN_ROLES["HOTELADMIN"] = "HotelAdmin";
     ADMIN_ROLES["COMPANYADMIN"] = "CompanyAdmin";
+    ADMIN_ROLES["SUPERADMIN"] = "SuperAdmin";
 })(ADMIN_ROLES = exports.ADMIN_ROLES || (exports.ADMIN_ROLES = {}));
 var HOTEL_ROLES;
 (function (HOTEL_ROLES) {

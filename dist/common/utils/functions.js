@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseTime = exports.parseValue = exports.getObjectFiles = exports.removeEmptyFieldsObject = exports.filterObject = exports.createEnumWithObject = exports.randomNumber = void 0;
+exports.parseTime = exports.parseValue = exports.createMistakeObject = exports.getObjectFiles = exports.removeEmptyFieldsObject = exports.filterObject = exports.createEnumWithObject = exports.randomNumber = void 0;
 function randomNumber(length) {
     let max = '9';
     let min = '1';
@@ -38,6 +38,11 @@ function getObjectFiles(files) {
     return fileObject;
 }
 exports.getObjectFiles = getObjectFiles;
+const createMistakeObject = (mistakes, files) => {
+    for (const property in mistakes) {
+    }
+};
+exports.createMistakeObject = createMistakeObject;
 function parseValue(objectDto) {
     for (const key in objectDto) {
         if (!isNaN(Number(objectDto[key])))

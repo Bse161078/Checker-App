@@ -59,14 +59,15 @@ let CheckerService = class CheckerService {
         }
         if (user.role != role_enum_1.ROLES.SUPERADMIN && Object.values(filter).length == 0)
             return [];
-        const checkers = await this.userRepository.find(filter);
+        const checkers = await this.userRepository.find(filter).populate('hotel');
         return checkers;
     }
     async findOne(id) {
         const checkerID = new mongoose_2.Types.ObjectId(id);
-        const checker = await this.userRepository.findOne({ _id: checkerID, role: role_enum_1.ROLES.CHECKER });
-        if (checker)
+        const checker = await this.userRepository.findOne({ _id: checkerID }).populate('hotel').lean();
+        if (checker) {
             return checker;
+        }
         throw new common_1.NotFoundException("checker not found");
     }
     async update(id, updateCheckerDto) {

@@ -22,11 +22,16 @@ const auth_decorator_1 = require("../../common/decorators/auth.decorator");
 const role_enum_1 = require("../../common/enums/role.enum");
 const hotel_dto_1 = require("./dto/hotel.dto");
 const role_decorator_1 = require("../../common/decorators/role.decorator");
+const upload_file_bathroom_interceptor_1 = require("./interceptors/upload-file-bathroom.interceptor");
+const functions_1 = require("../../common/utils/functions");
+const file_upload_interceptor_1 = require("../../common/interceptors/file-upload.interceptor");
 let HotelController = class HotelController {
     constructor(hotelService) {
         this.hotelService = hotelService;
     }
-    async create(createHotelDto) {
+    async create(avatar, createHotelDto) {
+        if (avatar)
+            createHotelDto.avatar = avatar.path.slice(7);
         const hotel = await this.hotelService.create(createHotelDto);
         return {
             message: "created hotel account successfully"
@@ -67,31 +72,53 @@ let HotelController = class HotelController {
         };
     }
     async receptions(hotelDto) {
-        const receptions = await this.hotelService.receptions(hotelDto.hotelID);
+        const receptions = await this.hotelService.receptions(hotelDto.hotelId);
         return {
             receptions
         };
     }
     async findOne(hotelDto) {
-        const hotel = await this.hotelService.findOne(hotelDto.hotelID);
+        const hotel = await this.hotelService.findOne(hotelDto.hotelId);
         return {
             hotel
         };
     }
     async remove(hotelDto) {
-        const deletedResult = await this.hotelService.remove(hotelDto.hotelID);
+        const deletedResult = await this.hotelService.remove(hotelDto.hotelId);
         return {
             message: "deleted hotel successfully"
+        };
+    }
+    async updateHotelLogo(logo, updateHotelLogoDto) {
+        let hotelLogo = "";
+        const newFile = (0, functions_1.getObjectFiles)(logo);
+        const cleaner = await this.hotelService.updateHotelLogo(newFile.logo[0]);
+        return {
+            message: "logo updated"
+        };
+    }
+    async findHotelLogo(hotelDto) {
+        const hotel = await this.hotelService.findHotelLogo(hotelDto.hotelId);
+        return {
+            hotel
+        };
+    }
+    async getHotelReport(hotelDto) {
+        const cleaners = await this.hotelService.generateReport(hotelDto.hotelId);
+        return {
+            cleaners
         };
     }
 };
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, common_1.UseInterceptors)((0, file_upload_interceptor_1.UploadImageInterceptor)('avatar')),
     (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_hotel_dto_1.CreateHotelDto]),
+    __metadata("design:paramtypes", [Object, create_hotel_dto_1.CreateHotelDto]),
     __metadata("design:returntype", Promise)
 ], HotelController.prototype, "create", null);
 __decorate([
@@ -110,6 +137,7 @@ __decorate([
     (0, common_1.Post)("/create-hotel-cleaner"),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
     (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    (0, common_1.UseInterceptors)((0, file_upload_interceptor_1.UploadImageInterceptor)('avatar')),
     __param(0, (0, common_1.UploadedFile)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -118,6 +146,7 @@ __decorate([
 ], HotelController.prototype, "createHotelCleaner", null);
 __decorate([
     (0, common_1.Post)("/create-hotel-reception"),
+    (0, common_1.UseInterceptors)((0, file_upload_interceptor_1.UploadImageInterceptor)('avatar')),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
     (0, swagger_1.ApiOperation)({ summary: "supper-admin and hotel-admin role access" }),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN),
@@ -130,6 +159,7 @@ __decorate([
     (0, common_1.Post)("/create-hotel-checker"),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
     (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    (0, common_1.UseInterceptors)((0, file_upload_interceptor_1.UploadImageInterceptor)('avatar')),
     __param(0, (0, common_1.UploadedFile)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -144,9 +174,9 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], HotelController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)("/receptions/:hotelID"),
+    (0, common_1.Get)("/receptions/:hotelId"),
     (0, swagger_1.ApiOperation)({ summary: "supper-admin admin hotel-admin role access" }),
-    (0, swagger_1.ApiParam)({ name: "hotelID", type: "string" }),
+    (0, swagger_1.ApiParam)({ name: "hotelId", type: "string" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [hotel_dto_1.HotelDto]),
@@ -162,18 +192,50 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], HotelController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Delete)(':hotelID'),
-    (0, swagger_1.ApiParam)({ name: "hotelID", type: "string" }),
+    (0, common_1.Delete)(':hotelId'),
+    (0, swagger_1.ApiParam)({ name: "hotelId", type: "string" }),
     (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [hotel_dto_1.HotelDto]),
     __metadata("design:returntype", Promise)
 ], HotelController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)("/logo"),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    (0, common_1.UseInterceptors)(upload_file_bathroom_interceptor_1.HotelLogoUpload),
+    (0, swagger_1.ApiOperation)({ summary: "update hotel logo" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.HOTELRECEPTION),
+    __param(0, (0, common_1.UploadedFiles)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, hotel_dto_1.UpdateHotelLogoDto]),
+    __metadata("design:returntype", Promise)
+], HotelController.prototype, "updateHotelLogo", null);
+__decorate([
+    (0, common_1.Get)(':hotelId/logo'),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    (0, swagger_1.ApiParam)({ name: "hotelID", type: "string" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.HOTELRECEPTION),
+    __param(0, (0, common_1.Param)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [hotel_dto_1.HotelDto]),
+    __metadata("design:returntype", Promise)
+], HotelController.prototype, "findHotelLogo", null);
+__decorate([
+    (0, common_1.Get)('/report'),
+    (0, swagger_1.ApiOperation)({ summary: "supper-admin role access" }),
+    (0, swagger_1.ApiParam)({ name: "hotelID", type: "string" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN),
+    __param(0, (0, common_1.Param)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [hotel_dto_1.HotelDto]),
+    __metadata("design:returntype", Promise)
+], HotelController.prototype, "getHotelReport", null);
 HotelController = __decorate([
     (0, common_1.Controller)('hotel'),
     (0, swagger_1.ApiTags)("hotel-supperAdmin"),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.SUPERADMIN),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN),
     __metadata("design:paramtypes", [hotel_service_1.HotelService])
 ], HotelController);
 exports.HotelController = HotelController;

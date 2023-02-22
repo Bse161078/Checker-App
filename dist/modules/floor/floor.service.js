@@ -35,6 +35,10 @@ let FloorService = class FloorService {
                 samplePhoto: newFile.samplePhotoTopQuestion,
             },
             comments: {
+                roomIsVacuumed: {
+                    status: createFloorDto.roomIsVacuumedStatus,
+                    photos: newFile.roomIsVacuumedPhotos
+                },
                 roomIsNotVacuumed: {
                     status: createFloorDto.roomIsNotVacuumedStatus,
                     photos: newFile.roomIsNotVacuumedPhotos

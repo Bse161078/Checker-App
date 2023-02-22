@@ -64,7 +64,7 @@ __decorate([
 ShelvesController = __decorate([
     (0, common_1.Controller)('shelves'),
     (0, swagger_1.ApiTags)("Shelves"),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.SUPERADMIN),
     __metadata("design:paramtypes", [shelves_service_1.ShelvesService])
 ], ShelvesController);
 exports.ShelvesController = ShelvesController;

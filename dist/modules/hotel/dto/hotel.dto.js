@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateHotelReceptionDto = exports.CreateHotelCheckerDto = exports.CreateHotelCleanerDto = exports.HotelDto = void 0;
+exports.UpdateHotelLogoDto = exports.CreateHotelReceptionDto = exports.CreateHotelCheckerDto = exports.CreateHotelCleanerDto = exports.HotelDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const mongoose_1 = require("mongoose");
@@ -19,7 +19,7 @@ class HotelDto {
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
-], HotelDto.prototype, "hotelID", void 0);
+], HotelDto.prototype, "hotelId", void 0);
 exports.HotelDto = HotelDto;
 class CreateHotelCleanerDto {
     constructor() {
@@ -112,4 +112,11 @@ __decorate([
     __metadata("design:type", mongoose_1.Types.ObjectId)
 ], CreateHotelReceptionDto.prototype, "hotel", void 0);
 exports.CreateHotelReceptionDto = CreateHotelReceptionDto;
+class UpdateHotelLogoDto {
+}
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "string", format: "binary", }),
+    __metadata("design:type", String)
+], UpdateHotelLogoDto.prototype, "logo", void 0);
+exports.UpdateHotelLogoDto = UpdateHotelLogoDto;
 //# sourceMappingURL=hotel.dto.js.map

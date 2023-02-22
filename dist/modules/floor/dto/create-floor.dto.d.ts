@@ -1,5 +1,7 @@
 import { Types } from "mongoose";
 export declare class CreateFloorDto {
+    roomIsVacuumedStatus: boolean;
+    roomIsVacuumedPhotos: string[];
     topQuestionStatus: boolean;
     samplePhotoTopQuestion: string[];
     roomIsNotVacuumedStatus: boolean;

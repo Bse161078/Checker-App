@@ -24,16 +24,8 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { Document, Types } from "mongoose";
 import { CheckListSupplier } from "../enum/check-list-supplier.enum";
-export declare class MaterialList extends Document {
-    material: Types.ObjectId;
-    quantity: number;
-}
-export interface IMaterialList {
-    material: Types.ObjectId;
-    quantity: number;
-}
 export declare class CheckList {
-    materials: IMaterialList[];
+    materials: any;
     supplier: CheckListSupplier;
     company: Types.ObjectId;
     hotel: Types.ObjectId;

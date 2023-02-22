@@ -25,8 +25,11 @@
 import { Document, Types } from "mongoose";
 import { ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
 export interface IShelvesComments {
+    wiped: ICommentValue;
     tableNotClean: ICommentValue;
     sideTableNotClean: ICommentValue;
+    tv: ICommentValue;
+    window: ICommentValue;
     tvStandNotClean: ICommentValue;
     cabinetTopAndInsideSurfacesNotClean: ICommentValue;
     windowSillNotClean: ICommentValue;

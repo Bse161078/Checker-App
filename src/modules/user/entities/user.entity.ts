@@ -40,6 +40,10 @@ export class User {
     salaryPerRoom: string;
     @Prop()
     roomCountForCleanEachDay: string;
+
+    @Prop()
+    company_email: string;
+
     @Prop({
         type: {
             normal:{type:Number,default:0},

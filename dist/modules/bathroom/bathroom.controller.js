@@ -39,7 +39,7 @@ let BathroomController = class BathroomController {
     }
 };
 __decorate([
-    (0, common_1.Post)(":/roomID"),
+    (0, common_1.Post)("/:roomID"),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
     (0, common_1.UseInterceptors)(upload_file_bathroom_interceptor_1.BathRoomFileUpload),
     (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
@@ -64,7 +64,7 @@ __decorate([
 BathroomController = __decorate([
     (0, common_1.Controller)('bathroom'),
     (0, swagger_1.ApiTags)("BathRoom"),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.SUPERADMIN),
     __metadata("design:paramtypes", [bathroom_service_1.BathroomService])
 ], BathroomController);
 exports.BathroomController = BathroomController;

@@ -14,6 +14,14 @@ const swagger_1 = require("@nestjs/swagger");
 class CreateFloorDto {
 }
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: Boolean, default: false }),
+    __metadata("design:type", Boolean)
+], CreateFloorDto.prototype, "roomIsVacuumedStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),
+    __metadata("design:type", Array)
+], CreateFloorDto.prototype, "roomIsVacuumedPhotos", void 0);
+__decorate([
     (0, swagger_1.ApiPropertyOptional)({ default: false, type: "bool", }),
     __metadata("design:type", Boolean)
 ], CreateFloorDto.prototype, "topQuestionStatus", void 0);

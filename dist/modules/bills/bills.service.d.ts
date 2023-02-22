@@ -23,7 +23,6 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { CreateBillDto } from './dto/create-bill.dto';
-import { Request } from 'express';
 import { Bill, BillDocument } from './entities/bill.entity';
 import { Model } from 'mongoose';
 import { CleaningHistoryDocument } from '../room/entities/cleaning-history.entity';
@@ -33,7 +32,7 @@ export declare class BillsService {
     private billRepository;
     private cleaningHistoryRepository;
     private userRepository;
-    constructor(request: Request, billRepository: Model<BillDocument>, cleaningHistoryRepository: Model<CleaningHistoryDocument>, userRepository: Model<UserDocument>);
+    constructor(request: any, billRepository: Model<BillDocument>, cleaningHistoryRepository: Model<CleaningHistoryDocument>, userRepository: Model<UserDocument>);
     create(createBillDto: CreateBillDto): Promise<boolean>;
     findAll(): Promise<(import("mongoose").Document<unknown, any, BillDocument> & Bill & Document & {
         _id: import("mongoose").Types.ObjectId;

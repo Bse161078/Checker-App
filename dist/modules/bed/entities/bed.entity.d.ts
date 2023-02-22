@@ -25,6 +25,7 @@
 import { Document, Types } from "mongoose";
 import { ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
 interface IBedComments {
+    isMadeUp: ICommentValue;
     bedDoesNotLookFresh: ICommentValue;
     bedSheetInNotProperlyTightened: ICommentValue;
     extraBed: ICommentValue;

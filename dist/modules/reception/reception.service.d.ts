@@ -24,17 +24,19 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { CreateReceptionDto } from './dto/create-reception.dto';
 import { Room, RoomDocument } from '../room/entities/room.entity';
-import { Model } from 'mongoose';
-import { Request } from 'express';
-import { UserDocument } from '../user/entities/user.entity';
+import { Model, Types } from 'mongoose';
+import { User, UserDocument } from '../user/entities/user.entity';
 export declare class ReceptionService {
     private roomRepository;
     private cleanerRepository;
     private request;
-    constructor(roomRepository: Model<RoomDocument>, cleanerRepository: Model<UserDocument>, request: Request);
+    constructor(roomRepository: Model<RoomDocument>, cleanerRepository: Model<UserDocument>, request: any);
     create(createReceptionDto: CreateReceptionDto): string;
     getRooms(): Promise<(import("mongoose").Document<unknown, any, RoomDocument> & Room & Document & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     })[]>;
     getCleaners(id: number): Promise<void>;
+    deleteReception(receptionId: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
 }

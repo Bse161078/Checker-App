@@ -12,6 +12,7 @@ import {removeEmptyFieldsObject} from 'src/common/utils/functions';
 import {OrderMaterialDto} from "./dto/materila.dto";
 import {MaterialOrderDocument} from "./entities/order-material-list-entity";
 import {sendEmail} from "../utils/email";
+import {OrderEmailDto} from "./enum/material.enum";
 
 @Injectable({scope: Scope.REQUEST})
 export class MaterialListService {
@@ -83,7 +84,7 @@ export class MaterialListService {
     async orderMaterial(materialId: string,createMaterialOrder: OrderMaterialDto) {
         const user = this.request.user;
         if(user.role===ROLES.CHECKER){
-            const hotel=await this.userRepository.findById(new Types.ObjectId(user.hotel._id));
+            const hotel:any=await this.userRepository.findById(new Types.ObjectId(user.hotel._id));
             const material:any=await this.materialRepository.findOneAndUpdate({_id:new Types.ObjectId(materialId),
                 hotel:new Types.ObjectId(user.hotel._id)},{quantity:(createMaterialOrder.quantity).toString()});
             if(material){
@@ -91,10 +92,21 @@ export class MaterialListService {
                     ...createMaterialOrder,checker:user._id,hotel:user.hotel._id,material:material._id
                 });
 
+                let email;
+                if((createMaterialOrder.emailTo===OrderEmailDto.HOTEL && hotel.email && (hotel.email).length>0)){
+                    email=hotel.email;
+                }
 
+                if((createMaterialOrder.emailTo===OrderEmailDto.COMPANY && hotel.company_email && (hotel.company_email).length>0)){
+                    email=hotel.company_email;
 
-                await sendEmail(hotel.email,user.username,material.name,createMaterialOrder.quantity);
-                return material;
+                }
+                if(email && email.length>0){
+                    await sendEmail(email,user.username,material.name,createMaterialOrder.quantity);
+                    return material;
+                }else{
+                    throw new NotFoundException("email not found")
+                }
             }else{
                 throw new NotFoundException("material not found")
             }

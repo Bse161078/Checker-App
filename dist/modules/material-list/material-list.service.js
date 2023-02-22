@@ -21,20 +21,23 @@ const user_entity_1 = require("../user/entities/user.entity");
 const core_1 = require("@nestjs/core");
 const role_enum_1 = require("../../common/enums/role.enum");
 const functions_1 = require("../../common/utils/functions");
+const email_1 = require("../utils/email");
+const material_enum_1 = require("./enum/material.enum");
 let MaterialListService = class MaterialListService {
-    constructor(materialRepository, userRepository, request) {
+    constructor(materialRepository, userRepository, materialOrdersRepository, request) {
         this.materialRepository = materialRepository;
         this.userRepository = userRepository;
+        this.materialOrdersRepository = materialOrdersRepository;
         this.request = request;
     }
     async create(createMaterialListDto) {
         const user = this.request.user;
         if (user.role == role_enum_1.ROLES.CHECKER) {
             createMaterialListDto.checker = new mongoose_2.Types.ObjectId(user._id);
-            createMaterialListDto.hotel = new mongoose_2.Types.ObjectId(user.hotel);
+            createMaterialListDto.hotel = new mongoose_2.Types.ObjectId(user.hotel._id);
         }
         if (user.role == role_enum_1.ROLES.HOTELADMIN) {
-            createMaterialListDto.hotel = new mongoose_2.Types.ObjectId(user.hotel);
+            createMaterialListDto.hotel = new mongoose_2.Types.ObjectId(user._id);
         }
         const createdResult = await this.materialRepository.create(createMaterialListDto);
         return createdResult;
@@ -45,7 +48,7 @@ let MaterialListService = class MaterialListService {
         if (user.role == role_enum_1.ROLES.HOTELADMIN)
             filter['hotel'] = user._id;
         else if (user.hotel)
-            filter['hotel'] = user.hotel;
+            filter['hotel'] = user.hotel._id;
         else
             return [];
         const materials = await this.materialRepository.find(filter)
@@ -75,13 +78,42 @@ let MaterialListService = class MaterialListService {
         const deletedResult = await this.materialRepository.deleteOne({ _id: id });
         return deletedResult;
     }
+    async orderMaterial(materialId, createMaterialOrder) {
+        const user = this.request.user;
+        if (user.role === role_enum_1.ROLES.CHECKER) {
+            const hotel = await this.userRepository.findById(new mongoose_2.Types.ObjectId(user.hotel._id));
+            const material = await this.materialRepository.findOneAndUpdate({ _id: new mongoose_2.Types.ObjectId(materialId),
+                hotel: new mongoose_2.Types.ObjectId(user.hotel._id) }, { quantity: (createMaterialOrder.quantity).toString() });
+            if (material) {
+                const materialOrder = await this.materialOrdersRepository.create(Object.assign(Object.assign({}, createMaterialOrder), { checker: user._id, hotel: user.hotel._id, material: material._id }));
+                let email;
+                if ((createMaterialOrder.emailTo === material_enum_1.OrderEmailDto.HOTEL && hotel.email && (hotel.email).length > 0)) {
+                    email = hotel.email;
+                }
+                if ((createMaterialOrder.emailTo === material_enum_1.OrderEmailDto.HOTEL && hotel.company && (hotel.company).length > 0)) {
+                    email = hotel.company;
+                }
+                if (email && email.length > 0)
+                    await (0, email_1.sendEmail)(email, user.username, material.name, createMaterialOrder.quantity);
+                return material;
+            }
+            else {
+                throw new common_1.NotFoundException("material not found");
+            }
+        }
+        else {
+            throw new common_1.BadRequestException("bad request");
+        }
+    }
 };
 MaterialListService = __decorate([
     (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),
     __param(0, (0, mongoose_1.InjectModel)(material_list_entity_1.Material.name)),
     __param(1, (0, mongoose_1.InjectModel)(user_entity_1.User.name)),
-    __param(2, (0, common_1.Inject)(core_1.REQUEST)),
+    __param(2, (0, mongoose_1.InjectModel)("material-orders")),
+    __param(3, (0, common_1.Inject)(core_1.REQUEST)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         mongoose_2.Model, Object])
 ], MaterialListService);
 exports.MaterialListService = MaterialListService;

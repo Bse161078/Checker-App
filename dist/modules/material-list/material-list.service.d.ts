@@ -27,12 +27,14 @@ import { UpdateMaterialListDto } from './dto/update-material-list.dto';
 import { Material, MaterialDocument } from './entities/material-list.entity';
 import { Model, Types } from 'mongoose';
 import { UserDocument } from '../user/entities/user.entity';
-import { Request } from 'express';
+import { OrderMaterialDto } from "./dto/materila.dto";
+import { MaterialOrderDocument } from "./entities/order-material-list-entity";
 export declare class MaterialListService {
     private materialRepository;
     private userRepository;
+    private materialOrdersRepository;
     private request;
-    constructor(materialRepository: Model<MaterialDocument>, userRepository: Model<UserDocument>, request: Request);
+    constructor(materialRepository: Model<MaterialDocument>, userRepository: Model<UserDocument>, materialOrdersRepository: Model<MaterialOrderDocument>, request: any);
     create(createMaterialListDto: CreateMaterialListDto): Promise<import("mongoose").Document<unknown, any, MaterialDocument> & Material & Document & {
         _id: Types.ObjectId;
     }>;
@@ -44,4 +46,5 @@ export declare class MaterialListService {
     }>;
     update(id: string, updateMaterialListDto: UpdateMaterialListDto): Promise<import("mongodb").UpdateResult>;
     remove(id: string): Promise<import("mongodb").DeleteResult>;
+    orderMaterial(materialId: string, createMaterialOrder: OrderMaterialDto): Promise<any>;
 }

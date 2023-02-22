@@ -13,6 +13,7 @@ exports.CleaningHistorySchema = exports.CleaningHistory = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const room_status_enum_1 = require("../../../common/enums/room-status.enum");
+const room_type_enum_1 = require("../enum/room-type.enum");
 let CleaningHistory = class CleaningHistory {
 };
 __decorate([
@@ -44,9 +45,45 @@ __decorate([
     __metadata("design:type", String)
 ], CleaningHistory.prototype, "checkerStatus", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: false }),
+    (0, mongoose_1.Prop)({ type: Boolean, default: false }),
     __metadata("design:type", Boolean)
 ], CleaningHistory.prototype, "checkoutStatus", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: {
+            roomIsNotVacuumed: {
+                status: { type: Boolean, default: false },
+                photos: { type: [String], default: "" },
+                text: { type: String, default: "" }
+            },
+            report: {
+                status: { type: Boolean, default: false },
+                photos: { type: [String], default: "" },
+                text: { type: String, default: "" }
+            },
+            roomHasStrongStainsThatCanNotBeCleanedByUs: {
+                status: { type: Boolean, default: false },
+                photos: { type: [String], default: "" },
+                text: { type: String, default: "" }
+            },
+            damageCausedByGuests: {
+                status: { type: Boolean, default: false },
+                photos: { type: [String], default: "" },
+                text: { type: String, default: "" }
+            }
+        },
+        default: {},
+    }),
+    __metadata("design:type", Object)
+], CleaningHistory.prototype, "mistakes", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: room_status_enum_1.PRICE_STATUS.NORMAL }),
+    __metadata("design:type", String)
+], CleaningHistory.prototype, "price", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Date, default: Date.now }),
+    __metadata("design:type", Object)
+], CleaningHistory.prototype, "date", void 0);
 CleaningHistory = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], CleaningHistory);

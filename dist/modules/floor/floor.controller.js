@@ -64,7 +64,7 @@ __decorate([
 FloorController = __decorate([
     (0, common_1.Controller)('floor'),
     (0, swagger_1.ApiTags)("Floor"),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.SUPERADMIN),
     __metadata("design:paramtypes", [floor_service_1.FloorService])
 ], FloorController);
 exports.FloorController = FloorController;

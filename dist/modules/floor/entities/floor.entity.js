@@ -22,6 +22,10 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ type: index_schema_1.CommentsValueSchema }),
     __metadata("design:type", Object)
+], CommentsClass.prototype, "roomIsVacuumed", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: index_schema_1.CommentsValueSchema }),
+    __metadata("design:type", Object)
 ], CommentsClass.prototype, "roomHasStrongStainsThatCanNotBeCleanedByUs", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: index_schema_1.CommentsValueSchema }),

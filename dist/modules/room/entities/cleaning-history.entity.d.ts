@@ -23,7 +23,8 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Types } from "mongoose";
-import { ROOM_STATUS } from "src/common/enums/room-status.enum";
+import { PRICE_STATUS, ROOM_STATUS } from "src/common/enums/room-status.enum";
+import { CheckerRoomStatus } from "../enum/room-type.enum";
 export declare class CleaningHistory {
     cleaner: Types.ObjectId;
     cleaningStartAt: string;
@@ -31,8 +32,11 @@ export declare class CleaningHistory {
     room: Types.ObjectId;
     checker: Types.ObjectId;
     status: ROOM_STATUS;
-    checkerStatus: ROOM_STATUS;
+    checkerStatus: CheckerRoomStatus;
     checkoutStatus: boolean;
+    mistakes: any;
+    price: PRICE_STATUS;
+    date: any;
 }
 export type CleaningHistoryDocument = CleaningHistory & Document;
 export declare const CleaningHistorySchema: import("mongoose").Schema<CleaningHistory, import("mongoose").Model<CleaningHistory, any, any, any, any>, {}, {}, {}, {}, "type", CleaningHistory>;

@@ -13,6 +13,7 @@ const material_list_controller_1 = require("./material-list.controller");
 const mongoose_1 = require("@nestjs/mongoose");
 const material_list_entity_1 = require("./entities/material-list.entity");
 const user_entity_1 = require("../user/entities/user.entity");
+const order_material_list_entity_1 = require("./entities/order-material-list-entity");
 let MaterialListModule = class MaterialListModule {
 };
 MaterialListModule = __decorate([
@@ -21,6 +22,7 @@ MaterialListModule = __decorate([
             mongoose_1.MongooseModule.forFeature([
                 { name: material_list_entity_1.Material.name, schema: material_list_entity_1.MaterialSchema },
                 { name: user_entity_1.User.name, schema: user_entity_1.UserSchema },
+                { name: "material-orders", schema: order_material_list_entity_1.MaterialOrderSchema },
             ])
         ],
         controllers: [material_list_controller_1.MaterialListController],

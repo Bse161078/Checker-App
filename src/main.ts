@@ -32,7 +32,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalInterceptors(new ResponseInterceptor());
     SwaggerInit(app);
-    await app.listen(3000);
+    await app.listen(3002);
 }
 
 bootstrap();

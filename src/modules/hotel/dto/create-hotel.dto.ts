@@ -18,6 +18,10 @@ export class CreateHotelDto {
     price: string;
 
 
+    @IsNotEmpty()
+    @IsString()
+    company_email: string;
+
     @ApiProperty()
     email: string;
     role: ROLES;

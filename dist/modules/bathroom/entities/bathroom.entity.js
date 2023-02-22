@@ -18,6 +18,10 @@ let CommentsClass = class CommentsClass extends mongoose_2.Document {
 __decorate([
     (0, mongoose_1.Prop)({ type: index_schema_1.CommentsValueSchema }),
     __metadata("design:type", Object)
+], CommentsClass.prototype, "isCleaned", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: index_schema_1.CommentsValueSchema }),
+    __metadata("design:type", Object)
 ], CommentsClass.prototype, "tilesAreNotMopped", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: index_schema_1.CommentsValueSchema }),

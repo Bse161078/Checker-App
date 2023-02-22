@@ -23,6 +23,9 @@ const role_enum_1 = require("../../common/enums/role.enum");
 const enums_1 = require("../../common/enums");
 const role_decorator_1 = require("../../common/decorators/role.decorator");
 const send_alert_dto_1 = require("./dto/send-alert.dto");
+const room_dto_1 = require("./dto/room.dto");
+const mongoose_1 = require("mongoose");
+const upload_file_mistake_interceptor_1 = require("./interceptors/upload-file-mistake.interceptor");
 let AdminRoomController = class AdminRoomController {
     constructor(roomService) {
         this.roomService = roomService;
@@ -37,12 +40,6 @@ let AdminRoomController = class AdminRoomController {
         const rooms = await this.roomService.findAll();
         return {
             rooms
-        };
-    }
-    async findOne(id) {
-        const room = await this.roomService.findOne(id);
-        return {
-            room
         };
     }
     async update(id, updateRoomDto) {
@@ -60,8 +57,35 @@ let AdminRoomController = class AdminRoomController {
     async sendAlert(sendAlertDto) {
         const result = await this.roomService.sendAlert(sendAlertDto);
     }
+    async startCleaning(startCleaning) {
+        const result = await this.roomService.startRoomCleaning(startCleaning);
+        return result;
+    }
+    async updateCleaningStatus(updateCleaningStatus) {
+        const result = await this.roomService.updateCleaningStatus(updateCleaningStatus);
+        return result;
+    }
     async setRoomStatus(setRoomStatusDto) {
         const result = await this.roomService.setRoomStatus(setRoomStatusDto);
+    }
+    async searchRooms(search) {
+        const result = await this.roomService.search(search);
+        return result;
+    }
+    async createReport() {
+        const result = await this.roomService.createRoomReport();
+        return result;
+    }
+    async findOne(id) {
+        const room = await this.roomService.findOne(id);
+        return {
+            room
+        };
+    }
+    async saveMistakes(id, files, createRoomMistake) {
+        createRoomMistake.roomId = new mongoose_1.Types.ObjectId(id);
+        await this.roomService.setMistakes(createRoomMistake, files);
+        return { message: "save floor data successfully" };
     }
 };
 __decorate([
@@ -75,21 +99,12 @@ __decorate([
 ], AdminRoomController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, role_decorator_1.Roles)(),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CLEANER, role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.HOTELRECEPTION),
     (0, swagger_1.ApiOperation)({ summary: "hotel and hotelReception role access" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AdminRoomController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: "hotel and hotelReception role access" }),
-    (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], AdminRoomController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiOperation)({ summary: "hotel and hotelReception role access" }),
@@ -120,19 +135,81 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminRoomController.prototype, "sendAlert", null);
 __decorate([
-    (0, common_1.Post)('set-room-status'),
+    (0, swagger_1.ApiOperation)({ summary: "start cleaning" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CLEANER),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, common_1.Post)('start-cleaning'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [send_alert_dto_1.StartCleaningDto]),
+    __metadata("design:returntype", Promise)
+], AdminRoomController.prototype, "startCleaning", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "update cleaning status" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CLEANER),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, common_1.Post)('update-cleaning'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [send_alert_dto_1.UpdateCleaningStatus]),
+    __metadata("design:returntype", Promise)
+], AdminRoomController.prototype, "updateCleaningStatus", null);
+__decorate([
     (0, swagger_1.ApiOperation)({ summary: "checker role access for send alert" }),
     (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER),
     (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, common_1.Post)('set-room-status'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [send_alert_dto_1.SetRoomStatus]),
     __metadata("design:returntype", Promise)
 ], AdminRoomController.prototype, "setRoomStatus", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "search rooms" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.CLEANER),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [send_alert_dto_1.SearchRoom]),
+    __metadata("design:returntype", Promise)
+], AdminRoomController.prototype, "searchRooms", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "generate report" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.HOTELADMIN),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, common_1.Get)('report'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminRoomController.prototype, "createReport", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: "hotel and hotelReception role access" }),
+    (0, swagger_1.ApiParam)({ name: "id", type: "string" }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AdminRoomController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Post)("/:roomID/mistakes"),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER),
+    (0, swagger_1.ApiParam)({ name: "roomID", type: "string", required: true }),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.MULTIPART),
+    (0, common_1.UseInterceptors)(upload_file_mistake_interceptor_1.MistakeFileInterceptor),
+    (0, swagger_1.ApiOperation)({ summary: "checker role access" }),
+    __param(0, (0, common_1.Param)('roomID')),
+    __param(1, (0, common_1.UploadedFiles)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, room_dto_1.PostMistakesDto]),
+    __metadata("design:returntype", Promise)
+], AdminRoomController.prototype, "saveMistakes", null);
 AdminRoomController = __decorate([
     (0, common_1.Controller)('room'),
     (0, swagger_1.ApiTags)("Admin-room"),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.HOTELRECEPTION),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.HOTELRECEPTION),
     __metadata("design:paramtypes", [room_service_1.AdminRoomService])
 ], AdminRoomController);
 exports.AdminRoomController = AdminRoomController;

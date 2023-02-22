@@ -68,8 +68,8 @@ let CheckerController = class CheckerController {
             checker
         };
     }
-    findOne(checkerIdDto) {
-        const checker = this.checkerService.findOne(checkerIdDto.checkerID);
+    async findOne(checkerIdDto) {
+        const checker = await this.checkerService.findOne(checkerIdDto.checkerID);
         return { checker };
     }
     async update(checkerIdDto, updateCheckerDto) {
@@ -149,7 +149,7 @@ __decorate([
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [checker_dto_1.CheckerIdDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], CheckerController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':checkerID'),
@@ -173,7 +173,7 @@ __decorate([
 CheckerController = __decorate([
     (0, common_1.Controller)('checker'),
     (0, swagger_1.ApiTags)("checker"),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.COMPANYADMIN),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.HOTELADMIN, role_enum_1.ROLES.COMPANYADMIN, role_enum_1.ROLES.CHECKER),
     __metadata("design:paramtypes", [checker_service_1.CheckerService])
 ], CheckerController);
 exports.CheckerController = CheckerController;

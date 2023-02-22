@@ -12,6 +12,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const role_enum_1 = require("../../../common/enums/role.enum");
+const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
+class PriceDto {
+}
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Object)
+], PriceDto.prototype, "normal", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Object)
+], PriceDto.prototype, "extraChild", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Object)
+], PriceDto.prototype, "extraAdult", void 0);
 class CreateUserDto {
 }
 __decorate([
@@ -38,5 +57,12 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "mobile", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsObject)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => PriceDto),
+    __metadata("design:type", Object)
+], CreateUserDto.prototype, "price", void 0);
 exports.CreateUserDto = CreateUserDto;
 //# sourceMappingURL=create-user.dto.js.map

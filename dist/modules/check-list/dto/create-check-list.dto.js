@@ -25,7 +25,7 @@ __decorate([
                 quantity: 2
             },
         ] }),
-    __metadata("design:type", Array)
+    __metadata("design:type", Object)
 ], CreateCheckListDto.prototype, "materials", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: "string", enum: check_list_supplier_enum_1.CheckListSupplier }),

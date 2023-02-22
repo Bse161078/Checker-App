@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { ROLES } from "src/common/enums/role.enum";
 export declare class HotelDto {
-    hotelID: string;
+    hotelId: string;
 }
 export declare class CreateHotelCleanerDto {
     fullname: string;
@@ -27,4 +27,7 @@ export declare class CreateHotelReceptionDto {
     password: string;
     hotel: Types.ObjectId;
     role: ROLES;
+}
+export declare class UpdateHotelLogoDto {
+    logo: string;
 }

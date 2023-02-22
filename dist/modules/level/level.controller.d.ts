@@ -31,7 +31,7 @@ import { LevelIdDto } from './dto/level.dto';
 export declare class LevelController {
     private readonly levelService;
     constructor(levelService: LevelService);
-    create(createLevelDto: CreateLevelDto, user: Express.User): Promise<import("mongoose").Document<unknown, any, import("./entities/level.entity").LevelDocument> & import("./entities/level.entity").Level & Document & {
+    create(createLevelDto: CreateLevelDto, user: any): Promise<import("mongoose").Document<unknown, any, import("./entities/level.entity").LevelDocument> & import("./entities/level.entity").Level & Document & {
         _id: import("mongoose").Types.ObjectId;
     }>;
     findAll(): Promise<{

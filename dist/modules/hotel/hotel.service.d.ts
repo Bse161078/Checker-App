@@ -29,8 +29,10 @@ import { AuthService } from '../auth/services/auth.service';
 import { CreateHotelCheckerDto, CreateHotelCleanerDto, CreateHotelReceptionDto } from './dto/hotel.dto';
 export declare class HotelService {
     private userRepository;
+    private hotelLogoModel;
+    private request;
     private authService;
-    constructor(userRepository: Model<UserDocument>, authService: AuthService);
+    constructor(userRepository: Model<UserDocument>, hotelLogoModel: Model<UserDocument>, request: any, authService: AuthService);
     create(createHotelDto: CreateHotelDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
     }>>;
@@ -51,7 +53,16 @@ export declare class HotelService {
         _id: Types.ObjectId;
     }>>;
     remove(id: string): Promise<boolean>;
-    receptions(hotel: string): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+    receptions(hotel: string): Promise<Omit<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
-    }>)[]>;
+    }>, never>[]>;
+    updateHotelLogo(logo: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
+    findHotelLogo(id: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
+    generateReport(id: string): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+        _id: Types.ObjectId;
+    }>>;
 }

@@ -15,7 +15,7 @@ const class_validator_1 = require("class-validator");
 class LoginDto {
 }
 __decorate([
-    (0, class_validator_1.Length)(4, 20),
+    (0, class_validator_1.Length)(4),
     (0, swagger_1.ApiProperty)({ default: "admin" }),
     __metadata("design:type", String)
 ], LoginDto.prototype, "username", void 0);

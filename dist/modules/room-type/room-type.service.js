@@ -43,7 +43,7 @@ let RoomTypeService = class RoomTypeService {
         if (user.role == role_enum_1.ROLES.HOTELADMIN)
             filter['hotel'] = user._id;
         else
-            filter['hotel'] = user.hotel;
+            filter['hotel'] = user.hotel._id;
         if (!filter.hotel)
             return [];
         const roomTypes = await this.roomtypeRepository.find(filter).populate({ path: "hotel", select: { username: 1 } });

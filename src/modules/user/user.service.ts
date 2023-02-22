@@ -19,10 +19,11 @@ export class UserService {
     const newObjectDto: CreateUserDto = removeEmptyFieldsObject(createUserDto)
     await this.checkExistUser(newObjectDto);
     createUserDto.password = this.authService.hashPassword(createUserDto.password)
+      createUserDto.hotel=createUserDto.hotel && new Types.ObjectId(createUserDto.hotel)
     const user = await this.userRepository.create(createUserDto);
-    if (createUserDto.role == ADMIN_ROLES.HOTELADMIN) {
-      await this.update(user._id.toString(), { hotel: user._id })
-    }
+    // if (createUserDto.role == ADMIN_ROLES.HOTELADMIN) {
+    //   await this.update(user._id.toString(), { hotel: user._id })
+    // }
     return user
   }
 

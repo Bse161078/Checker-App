@@ -36,6 +36,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "avatar", void 0);
 __decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], User.prototype, "logo", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ unique: true, index: true, type: String }),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
@@ -83,6 +87,24 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], User.prototype, "roomCountForCleanEachDay", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], User.prototype, "company_email", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({
+        type: {
+            normal: { type: Number, default: 0 },
+            extraAdult: { type: Number, default: 0 },
+            extraChild: { type: Number, default: 0 }
+        }, default: {
+            normal: 0,
+            extraAdult: 0,
+            extraChild: 0
+        }
+    }),
+    __metadata("design:type", Object)
+], User.prototype, "price", void 0);
 User = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], User);

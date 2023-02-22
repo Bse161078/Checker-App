@@ -19,14 +19,18 @@ const user_entity_1 = require("../user/entities/user.entity");
 const mongoose_2 = require("mongoose");
 const role_enum_1 = require("../../common/enums/role.enum");
 const auth_service_1 = require("../auth/services/auth.service");
+const core_1 = require("@nestjs/core");
 let HotelService = class HotelService {
-    constructor(userRepository, authService) {
+    constructor(userRepository, hotelLogoModel, request, authService) {
         this.userRepository = userRepository;
+        this.hotelLogoModel = hotelLogoModel;
+        this.request = request;
         this.authService = authService;
     }
     async create(createHotelDto) {
         createHotelDto.password = this.authService.hashPassword(createHotelDto.password);
         createHotelDto.role = role_enum_1.ROLES.HOTELADMIN;
+        createHotelDto.price = JSON.parse(createHotelDto.price || "{}");
         let hotel = null;
         if (createHotelDto.username)
             hotel = await this.userRepository.findOne({ username: createHotelDto.username });
@@ -60,7 +64,8 @@ let HotelService = class HotelService {
         return checker;
     }
     async createReception(createReceptionDto) {
-        createReceptionDto.hotel = new mongoose_2.Types.ObjectId(createReceptionDto.hotel);
+        const user = this.request.user;
+        createReceptionDto.hotel = new mongoose_2.Types.ObjectId(user._id);
         createReceptionDto.password = this.authService.hashPassword(createReceptionDto.password);
         createReceptionDto.role = role_enum_1.ROLES.HOTELRECEPTION;
         const reception = await this.userRepository.create(createReceptionDto);
@@ -80,18 +85,36 @@ let HotelService = class HotelService {
         await this.userRepository.updateMany({ hotel: id }, {
             $unset: { hotel: "" }
         });
+        await this.userRepository.findOneAndRemove({ _id: new mongoose_2.Types.ObjectId(id) });
         return true;
     }
     async receptions(hotel) {
-        const receptions = await this.userRepository.find({ hotel });
+        const receptions = await this.userRepository.find({ hotel: new mongoose_2.Types.ObjectId(hotel), role: role_enum_1.ROLES.HOTELRECEPTION }).populate('hotel');
         return receptions;
+    }
+    async updateHotelLogo(logo) {
+        const user = this.request.user;
+        const hotelLogo = await this.hotelLogoModel.findOneAndUpdate({ hotel: user._id }, { logo }, { upsert: true });
+        return hotelLogo;
+    }
+    async findHotelLogo(id) {
+        const hotel = await this.hotelLogoModel.findOne({ hotel: new mongoose_2.Types.ObjectId(id) });
+        if (!hotel)
+            throw new common_1.NotFoundException("not found any hotel logo");
+        return hotel;
+    }
+    async generateReport(id) {
+        const cleaners = await this.hotelLogoModel.findOne({ role: role_enum_1.ROLES.CLEANER, hotel: new mongoose_2.Types.ObjectId(id) });
+        return cleaners;
     }
 };
 HotelService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_entity_1.User.name)),
+    __param(1, (0, mongoose_1.InjectModel)("hotel-logos")),
+    __param(2, (0, common_1.Inject)(core_1.REQUEST)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        auth_service_1.AuthService])
+        mongoose_2.Model, Object, auth_service_1.AuthService])
 ], HotelService);
 exports.HotelService = HotelService;
 //# sourceMappingURL=hotel.service.js.map

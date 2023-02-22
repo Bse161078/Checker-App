@@ -36,6 +36,10 @@ let BathroomService = class BathroomService {
                 samplePhoto: newFile.samplePhotoTopQuestion,
             },
             comments: {
+                isCleaned: {
+                    status: createBathroomDto.isCleanedStatus,
+                    photos: newFile.isCleanedPhotos
+                },
                 tilesAreNotMopped: {
                     status: createBathroomDto.tilesAreNotMoppedStatus,
                     photos: newFile.tilesAreNotMoppedPhotos

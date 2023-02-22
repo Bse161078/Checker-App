@@ -10,10 +10,19 @@ exports.ReceptionModule = void 0;
 const common_1 = require("@nestjs/common");
 const reception_service_1 = require("./reception.service");
 const reception_controller_1 = require("./reception.controller");
+const room_entity_1 = require("../room/entities/room.entity");
+const user_entity_1 = require("../user/entities/user.entity");
+const mongoose_1 = require("@nestjs/mongoose");
 let ReceptionModule = class ReceptionModule {
 };
 ReceptionModule = __decorate([
     (0, common_1.Module)({
+        imports: [
+            mongoose_1.MongooseModule.forFeature([
+                { name: room_entity_1.Room.name, schema: room_entity_1.RoomSchema },
+                { name: user_entity_1.User.name, schema: user_entity_1.UserSchema },
+            ])
+        ],
         controllers: [reception_controller_1.ReceptionController],
         providers: [reception_service_1.ReceptionService]
     })

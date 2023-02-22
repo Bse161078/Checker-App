@@ -66,7 +66,7 @@ __decorate([
 BedController = __decorate([
     (0, common_1.Controller)('bed'),
     (0, swagger_1.ApiTags)("Bed"),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.CHECKER, role_enum_1.ROLES.SUPERADMIN),
     __metadata("design:paramtypes", [bed_service_1.BedService])
 ], BedController);
 exports.BedController = BedController;

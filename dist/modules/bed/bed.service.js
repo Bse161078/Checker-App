@@ -36,6 +36,10 @@ let BedService = class BedService {
                 samplePhoto: newFile.samplePhotoTopQuestion,
             },
             comments: {
+                isMadeUp: {
+                    status: createBedDto.isMadeUpStatus,
+                    photos: newFile.isMadeUpPhotos
+                },
                 bedDoesNotLookFresh: {
                     status: createBedDto.bedDoesNotLookFreshStatus,
                     photos: newFile.bedDoesNotLookFreshPhotos

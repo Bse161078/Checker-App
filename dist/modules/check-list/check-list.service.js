@@ -29,7 +29,7 @@ let CheckListService = class CheckListService {
     }
     async create(createCheckListDto) {
         const user = this.request.user;
-        const hotel = user.hotel;
+        const hotel = user.hotel._id;
         const hotelObject = await this.userRepository.findOne({ _id: hotel });
         createCheckListDto.checker = user._id;
         createCheckListDto.materials = createCheckListDto.materials.map(item => {
@@ -55,12 +55,12 @@ let CheckListService = class CheckListService {
         const user = this.request.user;
         const filter = {};
         if (user.role = role_enum_1.ROLES.CHECKER)
-            filter['hotel'] = user.hotel;
+            filter['hotel'] = user.hotel._id;
         else if (user.role = role_enum_1.ROLES.HOTELADMIN)
             filter['hotel'] = user._id;
         else if (user.role = role_enum_1.ROLES.COMPANYADMIN)
             filter['company'] = user._id;
-        const checkList = await this.checkListRepository.find(filter);
+        const checkList = await this.checkListRepository.find(filter).populate('materials.material');
         return checkList;
     }
     async findOne(id) {

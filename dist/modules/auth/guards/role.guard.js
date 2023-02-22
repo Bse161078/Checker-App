@@ -31,7 +31,7 @@ let RoleGuard = class RoleGuard {
             context.getClass()
         ]);
         const req = context.switchToHttp().getRequest();
-        const user = await this.userRepository.findOne({ _id: (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a._id });
+        const user = await this.userRepository.findOne({ _id: (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a._id }).populate('hotel');
         const userRole = user.role;
         if (!requiredRoles || requiredRoles.length == 0)
             return true;

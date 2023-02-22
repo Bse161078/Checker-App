@@ -18,8 +18,6 @@ const user_service_1 = require("./user.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const swagger_1 = require("@nestjs/swagger");
-const auth_decorator_1 = require("../../common/decorators/auth.decorator");
-const role_enum_1 = require("../../common/enums/role.enum");
 const enums_1 = require("../../common/enums");
 let UserController = class UserController {
     constructor(userService) {
@@ -84,7 +82,6 @@ __decorate([
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     (0, swagger_1.ApiTags)("User"),
-    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.SUPERADMIN),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
 exports.UserController = UserController;

@@ -18,7 +18,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const room_entity_1 = require("../room/entities/room.entity");
 const mongoose_2 = require("mongoose");
 const core_1 = require("@nestjs/core");
-const cleaner_entity_1 = require("../cleaner/entities/cleaner.entity");
+const user_entity_1 = require("../user/entities/user.entity");
 let ReceptionService = class ReceptionService {
     constructor(roomRepository, cleanerRepository, request) {
         this.roomRepository = roomRepository;
@@ -38,11 +38,17 @@ let ReceptionService = class ReceptionService {
         const user = this.request.user;
         const hotel = user.hotel;
     }
+    async deleteReception(receptionId) {
+        const user = this.request.user;
+        const hotel = user.hotel;
+        const reception = await this.cleanerRepository.findOneAndRemove({ _id: new mongoose_2.Types.ObjectId(receptionId) });
+        return reception;
+    }
 };
 ReceptionService = __decorate([
     (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),
     __param(0, (0, mongoose_1.InjectModel)(room_entity_1.Room.name)),
-    __param(1, (0, mongoose_1.InjectModel)(cleaner_entity_1.Cleaner.name)),
+    __param(1, (0, mongoose_1.InjectModel)(user_entity_1.User.name)),
     __param(2, (0, common_1.Inject)(core_1.REQUEST)),
     __metadata("design:paramtypes", [mongoose_2.Model,
         mongoose_2.Model, Object])

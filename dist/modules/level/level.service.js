@@ -36,7 +36,7 @@ let LevelService = class LevelService {
     async findAll(filter = {}) {
         const user = this.request.user;
         if (user.hotel)
-            filter['hotel'] = user._id;
+            filter['hotel'] = user.hotel._id;
         if (user.role == role_enum_1.ROLES.HOTELADMIN)
             filter['hotel'] = user._id;
         return await this.adminLevelRepository.aggregate([
@@ -47,6 +47,14 @@ let LevelService = class LevelService {
                     foreignField: "_id",
                     localField: "hotel",
                     as: "hotel"
+                }
+            },
+            {
+                $lookup: {
+                    from: "rooms",
+                    foreignField: "level",
+                    localField: "_id",
+                    as: "rooms"
                 }
             },
             { $unwind: "$hotel" },

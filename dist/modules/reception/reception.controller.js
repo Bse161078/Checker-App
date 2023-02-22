@@ -16,6 +16,11 @@ exports.ReceptionController = void 0;
 const common_1 = require("@nestjs/common");
 const reception_service_1 = require("./reception.service");
 const create_reception_dto_1 = require("./dto/create-reception.dto");
+const enums_1 = require("../../common/enums");
+const role_decorator_1 = require("../../common/decorators/role.decorator");
+const role_enum_1 = require("../../common/enums/role.enum");
+const swagger_1 = require("@nestjs/swagger");
+const auth_decorator_1 = require("../../common/decorators/auth.decorator");
 let ReceptionController = class ReceptionController {
     constructor(receptionService) {
         this.receptionService = receptionService;
@@ -25,6 +30,9 @@ let ReceptionController = class ReceptionController {
     }
     findAll() {
         return this.receptionService.getRooms();
+    }
+    deleteReception(receptionId) {
+        return this.receptionService.deleteReception(receptionId);
     }
 };
 __decorate([
@@ -40,8 +48,20 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ReceptionController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Delete)("/:receptionId"),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, swagger_1.ApiOperation)({ summary: "super admin and hotel admin can delete reception" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN),
+    (0, swagger_1.ApiParam)({ name: "receptionId" }),
+    __param(0, (0, common_1.Param)('receptionId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ReceptionController.prototype, "deleteReception", null);
 ReceptionController = __decorate([
     (0, common_1.Controller)('reception'),
+    (0, auth_decorator_1.AuthDecorator)(role_enum_1.ROLES.SUPERADMIN, role_enum_1.ROLES.HOTELADMIN),
     __metadata("design:paramtypes", [reception_service_1.ReceptionService])
 ], ReceptionController);
 exports.ReceptionController = ReceptionController;

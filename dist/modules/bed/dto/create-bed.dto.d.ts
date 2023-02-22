@@ -4,6 +4,8 @@ export declare class CreateBedDto {
     samplePhotoTopQuestion: string[];
     bedDoesNotLookFreshStatus: boolean;
     bedDoesNotLookFreshPhotos: string[];
+    isMadeUpStatus: boolean;
+    isMadeUpPhotos: string[];
     bedSheetInNotProperlyTightenedStatus: boolean;
     bedSheetInNotProperlyTightenedPhotos: string[];
     extraBedStatus: boolean;

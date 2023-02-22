@@ -8,4 +8,5 @@ export declare class CreateUserDto {
     role: ADMIN_ROLES;
     mobile: string;
     hotel: Types.ObjectId;
+    price: any;
 }

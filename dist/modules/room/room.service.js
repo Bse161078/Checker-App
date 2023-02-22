@@ -19,42 +19,42 @@ const mongoose_2 = require("mongoose");
 const room_entity_1 = require("./entities/room.entity");
 const core_1 = require("@nestjs/core");
 const role_enum_1 = require("../../common/enums/role.enum");
+const room_type_enum_1 = require("./enum/room-type.enum");
+const room_type_entity_1 = require("../room-type/entities/room-type.entity");
+const room_status_enum_1 = require("../../common/enums/room-status.enum");
+const functions_1 = require("../../common/utils/functions");
 let AdminRoomService = class AdminRoomService {
-    constructor(adminRoomRepository, cleaningHistoryRepository, request) {
+    constructor(adminRoomRepository, cleaningHistoryRepository, roomtypeRepository, request) {
         this.adminRoomRepository = adminRoomRepository;
         this.cleaningHistoryRepository = cleaningHistoryRepository;
+        this.roomtypeRepository = roomtypeRepository;
         this.request = request;
     }
     async create(createRoomDto) {
-        const user = this.request.user;
-        createRoomDto.level = new mongoose_2.Types.ObjectId(createRoomDto.level);
-        if (user.hotel)
-            createRoomDto.hotel = user.hotel;
-        if (user.role == role_enum_1.ROLES.HOTELADMIN)
-            createRoomDto.hotel = user._id;
-        createRoomDto.roomType = new mongoose_2.Types.ObjectId(createRoomDto.roomType);
-        const createdResult = await this.adminRoomRepository.create(createRoomDto);
-        return createdResult;
+        const roomType = await this.roomtypeRepository.findById(new mongoose_2.Types.ObjectId(createRoomDto.roomType));
+        if (roomType) {
+            const user = this.request.user;
+            createRoomDto.level = new mongoose_2.Types.ObjectId(createRoomDto.level);
+            createRoomDto.roomType = roomType.title;
+            createRoomDto.hotel = new mongoose_2.Types.ObjectId(createRoomDto.hotel);
+            const createdResult = await this.adminRoomRepository.create(createRoomDto);
+            return createdResult;
+        }
+        else {
+            throw new common_1.NotFoundException("room type not found");
+        }
     }
     async findAll(filter = {}) {
         const user = this.request.user;
         if (user.role == role_enum_1.ROLES.HOTELADMIN)
             filter['hotel'] = user._id;
         else if (user.hotel)
-            filter['hotel'] = user.hotel;
+            filter['hotel'] = user.hotel._id;
         else
             return [];
         const rooms = await this.adminRoomRepository.aggregate([
             {
                 $match: filter
-            },
-            {
-                $lookup: {
-                    from: "roomtypes",
-                    foreignField: "_id",
-                    localField: "roomType",
-                    as: "roomType"
-                },
             },
             {
                 $lookup: {
@@ -145,10 +145,6 @@ let AdminRoomService = class AdminRoomService {
             },
             {
                 $project: {
-                    "level.__v": 0,
-                    "level.hotel": 0,
-                    "roomType.hotel": 0,
-                    "roomType.__v": 0,
                     __v: 0
                 }
             }
@@ -186,34 +182,232 @@ let AdminRoomService = class AdminRoomService {
             message: "set room report successfully"
         };
     }
+    async startRoomCleaning(startCleaning) {
+        const { roomId } = startCleaning;
+        const user = this.request.user;
+        let cleaner;
+        if (user.role == role_enum_1.ROLES.CLEANER)
+            cleaner = user._id;
+        const room = await this.adminRoomRepository.findOne({ _id: roomId });
+        if (room) {
+            await this.adminRoomRepository.updateOne({ _id: roomId }, { cleaning_status: room_type_enum_1.CheckerRoomStatus.IN_PROGRESS });
+            const cleaningHistory = await this.cleaningHistoryRepository.create({
+                room: new mongoose_2.Types.ObjectId(room._id), cleaner: new mongoose_2.Types.ObjectId(cleaner),
+                cleaningStartAt: new Date().toUTCString(),
+                status: room_status_enum_1.ROOM_STATUS.IN_PROGRESS,
+                checkerStatus: room_type_enum_1.CheckerRoomStatus.IN_PROGRESS
+            });
+            return {
+                message: "cleaning history created",
+                data: cleaningHistory
+            };
+        }
+        else {
+            throw new common_1.NotFoundException("invalid request");
+        }
+    }
+    async updateCleaningStatus(updateCleaningStatus) {
+        const { cleaningHistoryId, status } = updateCleaningStatus;
+        const user = this.request.user;
+        const cleaningHistory = await this.cleaningHistoryRepository.findById(new mongoose_2.Types.ObjectId(cleaningHistoryId));
+        if (cleaningHistory && status !== room_status_enum_1.ROOM_STATUS.START) {
+            cleaningHistory.set({ status, cleaningEndAt: new Date().toUTCString(), checkerStatus: room_type_enum_1.CheckerRoomStatus.IN_PROGRESS });
+            await cleaningHistory.save();
+            return cleaningHistory;
+        }
+        else {
+            throw new common_1.NotFoundException("invalid request");
+        }
+        return {
+            message: "room hisstory updated"
+        };
+    }
     async setRoomStatus(setRoomStatusDto) {
-        const { roomID, status } = setRoomStatusDto;
+        const { roomId, clean_status, occupation_status } = setRoomStatusDto;
         const user = this.request.user;
         let checker;
         if (user.role == role_enum_1.ROLES.CHECKER)
             checker = user._id;
-        const room = await this.adminRoomRepository.findOne({ _id: roomID });
-        await this.adminRoomRepository.updateOne({ _id: roomID }, {
-            $set: { status }
-        });
-        await this.cleaningHistoryRepository.updateOne({
-            cleaner: room.cleaner,
-            room: room._id,
-            checkerStatus: "no-status"
-        }, {
-            $set: { checkerStatus: status, checker }
-        });
+        const room = await this.adminRoomRepository.findOne({ _id: roomId });
+        if (room) {
+            await this.adminRoomRepository.updateOne({ _id: roomId }, { cleaning_status: clean_status, occupation_status });
+            await this.cleaningHistoryRepository.updateMany({ room: room._id, checker: null }, {
+                checker: checker,
+                checkerStatus: clean_status
+            });
+        }
+        else {
+            throw new common_1.NotFoundException("invalid request");
+        }
         return {
             message: "set room status successfully"
+        };
+    }
+    async search(search) {
+        const user = this.request.user;
+        let hotel;
+        if (user.role == role_enum_1.ROLES.HOTELADMIN)
+            hotel = new mongoose_2.Types.ObjectId(user._id);
+        else
+            hotel = user.hotel._id;
+        const rooms = await this.adminRoomRepository.find({
+            hotel: hotel,
+            $or: [
+                { roomType: { "$in": search.type } },
+                { cleaning_status: { "$in": search.cleaning_status || [] } },
+                { occupation_status: { "$in": search.occupation_status || [] } }
+            ]
+        });
+        return rooms;
+    }
+    async setMistakes(mistakeDto, files) {
+        const user = this.request.user;
+        let checker;
+        if (user.role == role_enum_1.ROLES.CHECKER)
+            checker = user._id;
+        else
+            throw new common_1.NotFoundException("invalid request");
+        const room = await this.adminRoomRepository.findOne({ _id: mistakeDto.roomId });
+        const newFile = (0, functions_1.getObjectFiles)(files);
+        const newMistakes = {
+            roomIsNotVacuumed: {
+                status: mistakeDto.roomIsNotVacuumedStatus && (mistakeDto.roomIsNotVacuumedStatus).toLowerCase() === "true",
+                text: "",
+                photos: newFile.roomIsNotVacuumedPhotos
+            },
+            roomHasStrongStainsThatCanNotBeCleanedByUs: {
+                status: mistakeDto.roomHasStrongStainsThatCanNotBeCleanedByUsStatus && (mistakeDto.roomHasStrongStainsThatCanNotBeCleanedByUsStatus).toLowerCase() === "true",
+                text: "",
+                photos: newFile.roomHasStrongStainsThatCanNotBeCleanedByUsPhotos
+            },
+            damageCausedByGuests: {
+                status: mistakeDto.damageCausedByGuestsStatus && (mistakeDto.damageCausedByGuestsStatus).toLowerCase() === "true",
+                text: "",
+                photos: newFile.damageCausedByGuestsPhotos
+            },
+            report: {
+                status: mistakeDto.reportStatus && (mistakeDto.reportStatus).toLowerCase() === "true",
+                text: "",
+                photos: newFile.reportPhotos
+            }
+        };
+        if (room) {
+            const cleaningStatus = await this.cleaningHistoryRepository.updateMany({ room: mistakeDto.roomId, checker: null }, {
+                mistakes: newMistakes,
+            });
+            return cleaningStatus;
+        }
+        else {
+            throw new common_1.NotFoundException("invalid request");
+        }
+    }
+    async createRoomReport() {
+        const user = this.request.user;
+        const rooms = await this.adminRoomRepository.find({ hotel: user._id });
+        const roomIds = rooms.map((room) => room._id);
+        const roomHistories = (await this.cleaningHistoryRepository.find({ room: { "$in": roomIds } }).populate('cleaner')
+            .populate({
+            path: "room",
+            populate: {
+                path: "hotel"
+            }
+        }).lean()).filter((history) => history.cleaner).filter((history) => history.room);
+        const cleanersUsed = roomHistories.map(item => (item.cleaner._id).toString())
+            .filter((value, index, self) => self.indexOf(value) === index);
+        const roomsUsed = roomHistories.map(item => (item.room._id).toString())
+            .filter((value, index, self) => self.indexOf(value) === index);
+        const roomsCleaned = roomHistories.filter((room) => room.checkerStatus === room_type_enum_1.CheckerRoomStatus.Cleaned);
+        const roomsInProgress = roomHistories.filter((room) => room.checkerStatus === room_type_enum_1.CheckerRoomStatus.IN_PROGRESS);
+        const roomsNotCleaned = roomHistories.filter((room) => room.checkerStatus === room_type_enum_1.CheckerRoomStatus.NotCleaned);
+        const roomDamaged = roomHistories.filter((room) => room.checkerStatus === room_type_enum_1.CheckerRoomStatus.Damaged);
+        let cleanersReport = [];
+        let roomsReport = [];
+        for (let i = 0; i < cleanersUsed.length; i++) {
+            const cleaner = cleanersUsed[i];
+            const cleanerReport = roomHistories.filter((report) => (report.cleaner._id).toString() === (cleaner).toString());
+            const rooms = cleanerReport.map((report) => {
+                const room = report.room;
+                const { extraAdult, extraChild } = room.hotel.price || {};
+                const roomReport = room.report;
+                let extra = false;
+                let roomPrice = room.price;
+                if (room.report.indexOf(room_type_enum_1.RoomStatus.ExtraBedNormal) !== -1) {
+                    roomPrice += extraAdult;
+                    extra = true;
+                }
+                if (room.report.indexOf(room_type_enum_1.RoomStatus.ExtraBedChild) !== -1) {
+                    roomPrice += extraChild;
+                    extra = true;
+                }
+                return Object.assign(Object.assign({}, report.room), { mistakes: report.mistakes, price: roomPrice, extra });
+            });
+            const extra = rooms.filter((room) => room.extra);
+            const mistakesCount = rooms.reduce((partialSum, room) => {
+                if (room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status) {
+                    partialSum += 1;
+                }
+                if (room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status) {
+                    partialSum += 1;
+                }
+                if (room.mistakes && room.mistakes.report && room.mistakes.report.status) {
+                    partialSum += 1;
+                }
+                if (room.mistakes && room.mistakes.roomHasStrongStainsThatCanNotBeCleanedByUs && room.mistakes.roomHasStrongStainsThatCanNotBeCleanedByUs.status) {
+                    partialSum += 1;
+                }
+                if (room.mistakes && room.mistakes.damageCausedByGuests && room.mistakes.damageCausedByGuests.status) {
+                    partialSum += 1;
+                }
+                return partialSum;
+            }, 0);
+            let data = Object.assign(Object.assign({}, cleanerReport[0].cleaner), { extra: extra.length, mistakesCount, rooms });
+            cleanersReport.push(data);
+        }
+        for (let i = 0; i < roomsUsed.length; i++) {
+            const room = roomsUsed[i];
+            const roomReport = roomHistories.filter((report) => (report.room._id).toString() === (room).toString());
+            const cleaners = roomReport.map((report) => (Object.assign(Object.assign({}, report.cleaner), { mistakes: report.mistakes, price: report.price })));
+            const mistakesCount = cleaners.reduce((partialSum, room) => {
+                if (room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status) {
+                    partialSum += 1;
+                }
+                if (room.mistakes && room.mistakes.roomIsNotVacuumed && room.mistakes.roomIsNotVacuumed.status) {
+                    partialSum += 1;
+                }
+                if (room.mistakes && room.mistakes.report && room.mistakes.report.status) {
+                    partialSum += 1;
+                }
+                if (room.mistakes && room.mistakes.roomHasStrongStainsThatCanNotBeCleanedByUs && room.mistakes.roomHasStrongStainsThatCanNotBeCleanedByUs.status) {
+                    partialSum += 1;
+                }
+                if (room.mistakes && room.mistakes.damageCausedByGuests && room.mistakes.damageCausedByGuests.status) {
+                    partialSum += 1;
+                }
+                return partialSum;
+            }, 0);
+            let data = Object.assign(Object.assign({}, roomReport[0].room), { mistakesCount, cleaners });
+            roomsReport.push(data);
+        }
+        return {
+            cleanersUsed: cleanersUsed.length,
+            roomsCleaned: roomsCleaned.length,
+            roomsInProgress: roomsInProgress.length,
+            roomsNotCleaned: roomsNotCleaned.length,
+            roomsDamaged: roomDamaged.length,
+            notDamaged: roomHistories.length - roomDamaged.length,
+            cleanersReport,
+            roomsReport
         };
     }
 };
 AdminRoomService = __decorate([
     (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),
     __param(0, (0, mongoose_1.InjectModel)(room_entity_1.Room.name)),
-    __param(1, (0, mongoose_1.InjectModel)(room_entity_1.Room.name)),
-    __param(2, (0, common_1.Inject)(core_1.REQUEST)),
+    __param(1, (0, mongoose_1.InjectModel)("cleaninghistories")),
+    __param(2, (0, mongoose_1.InjectModel)(room_type_entity_1.RoomType.name)),
+    __param(3, (0, common_1.Inject)(core_1.REQUEST)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         mongoose_2.Model, Object])
 ], AdminRoomService);
 exports.AdminRoomService = AdminRoomService;

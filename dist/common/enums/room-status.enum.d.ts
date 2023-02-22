@@ -6,3 +6,8 @@ export declare enum ROOM_STATUS {
     IN_PROGRESS = "IN_PROGRESS",
     DAMAGED = "DAMAGED"
 }
+export declare enum PRICE_STATUS {
+    NORMAL = "normal",
+    EXTRA_CHILD = "extra_child",
+    EXTRA_ADULT = "extra_adult"
+}

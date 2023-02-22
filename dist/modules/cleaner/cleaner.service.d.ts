@@ -22,7 +22,6 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Request } from 'express';
 import { Model, Types } from 'mongoose';
 import { AuthService } from '../auth/services/auth.service';
 import { CleaningHistory, CleaningHistoryDocument } from '../room/entities/cleaning-history.entity';
@@ -38,13 +37,13 @@ export declare class CleanerService {
     private roomRepository;
     private request;
     private authService;
-    constructor(userRepository: Model<UserDocument>, cleaningHistoryRepository: Model<CleaningHistoryDocument>, billRepository: Model<BillDocument>, roomRepository: Model<RoomDocument>, request: Request, authService: AuthService);
+    constructor(userRepository: Model<UserDocument>, cleaningHistoryRepository: Model<CleaningHistoryDocument>, billRepository: Model<BillDocument>, roomRepository: Model<RoomDocument>, request: any, authService: AuthService);
     create(createCleanerDto: CreateCleanerDto): Promise<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
     }>>;
-    findAll(): Promise<(import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
+    findAll(): Promise<Omit<import("mongoose").Document<unknown, any, UserDocument> & User & Document & Required<{
         _id: Types.ObjectId;
-    }>)[]>;
+    }>, never>[]>;
     findOne(id: string): Promise<any>;
     update(id: string, updateCleanerDto: UpdateCleanerDto): Promise<boolean>;
     remove(id: string): Promise<boolean>;

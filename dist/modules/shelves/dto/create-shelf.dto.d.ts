@@ -2,8 +2,14 @@ import { Types } from "mongoose";
 export declare class CreateShelvesDto {
     topQuestionStatus: boolean;
     samplePhotoTopQuestion: string;
+    wipedStatus: boolean;
+    wipedPhotos: string[];
     tableNotCleanStatus: boolean;
     tableNotCleanPhotos: string[];
+    tvStatus: boolean;
+    tvPhotos: string[];
+    windowStatus: boolean;
+    windowPhotos: string[];
     sideTableNotCleanStatus: boolean;
     sideTableNotCleanPhotos: string[];
     tvStandNotCleanStatus: boolean;

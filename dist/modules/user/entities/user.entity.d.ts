@@ -30,6 +30,7 @@ export declare class User {
     hotel_name: string;
     company_name: string;
     avatar: string;
+    logo: string;
     username: string;
     password: string;
     email: string;
@@ -42,6 +43,8 @@ export declare class User {
     accessToken: string;
     salaryPerRoom: string;
     roomCountForCleanEachDay: string;
+    company_email: string;
+    price: any;
 }
 export type UserDocument = User & Document;
 export declare const UserSchema: import("mongoose").Schema<User, import("mongoose").Model<User, any, any, any, any>, {}, {}, {}, {}, "type", User>;

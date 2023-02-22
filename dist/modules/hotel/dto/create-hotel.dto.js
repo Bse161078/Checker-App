@@ -10,8 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddCompanyToHotel = exports.CreateHotelDto = void 0;
-const swagger_1 = require("@nestjs/swagger");
 const mongoose_1 = require("mongoose");
+const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
 class CreateHotelDto {
 }
 __decorate([
@@ -31,9 +32,23 @@ __decorate([
     __metadata("design:type", String)
 ], CreateHotelDto.prototype, "password", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateHotelDto.prototype, "price", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateHotelDto.prototype, "company_email", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], CreateHotelDto.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "string", format: "binary", }),
+    __metadata("design:type", String)
+], CreateHotelDto.prototype, "avatar", void 0);
 exports.CreateHotelDto = CreateHotelDto;
 class AddCompanyToHotel {
 }

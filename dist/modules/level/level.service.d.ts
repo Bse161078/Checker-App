@@ -22,7 +22,6 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Request } from 'express';
 import { FilterQuery, Model, Types } from 'mongoose';
 import { RoomDocument } from '../room/entities/room.entity';
 import { UserDocument } from '../user/entities/user.entity';
@@ -34,7 +33,7 @@ export declare class LevelService {
     private readonly adminRoomRepository;
     private readonly userRepository;
     private request;
-    constructor(adminLevelRepository: Model<LevelDocument>, adminRoomRepository: Model<RoomDocument>, userRepository: Model<UserDocument>, request: Request);
+    constructor(adminLevelRepository: Model<LevelDocument>, adminRoomRepository: Model<RoomDocument>, userRepository: Model<UserDocument>, request: any);
     create(createLevelDto: CreateLevelDto, userID: Types.ObjectId): Promise<import("mongoose").Document<unknown, any, LevelDocument> & Level & Document & {
         _id: Types.ObjectId;
     }>;

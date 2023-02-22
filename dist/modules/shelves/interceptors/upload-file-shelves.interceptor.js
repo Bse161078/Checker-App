@@ -6,6 +6,9 @@ const multer_1 = require("multer");
 const multer_2 = require("../../../common/utils/multer");
 class ShelvesFileUpload extends (0, platform_express_1.FileFieldsInterceptor)([
     { name: "samplePhotoTopQuestion", maxCount: 1 },
+    { name: "wipedPhotos", maxCount: 5 },
+    { name: "tvPhotos", maxCount: 5 },
+    { name: "windowPhotos", maxCount: 5 },
     { name: "tableNotCleanPhotos", maxCount: 5 },
     { name: "sideTableNotCleanPhotos", maxCount: 5 },
     { name: "tvStandNotCleanPhotos", maxCount: 5 },

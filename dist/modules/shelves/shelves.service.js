@@ -35,13 +35,25 @@ let ShelvesService = class ShelvesService {
                 samplePhoto: newFile.samplePhotoTopQuestion,
             },
             comments: {
+                wiped: {
+                    status: createShelvesDto.tableNotCleanStatus,
+                    photos: newFile.tableNotCleanPhotos
+                },
                 tableNotClean: {
                     status: createShelvesDto.tableNotCleanStatus,
                     photos: newFile.tableNotCleanPhotos
                 },
                 sideTableNotClean: {
-                    status: createShelvesDto.sideTableNotCleanStatus,
-                    photos: newFile.sideTableNotCleanPhotos,
+                    status: createShelvesDto.tableNotCleanStatus,
+                    photos: newFile.tableNotCleanPhotos
+                },
+                tv: {
+                    status: createShelvesDto.tableNotCleanStatus,
+                    photos: newFile.tableNotCleanPhotos
+                },
+                window: {
+                    status: createShelvesDto.tableNotCleanStatus,
+                    photos: newFile.tableNotCleanPhotos
                 },
                 tvStandNotClean: {
                     status: createShelvesDto.tvStandNotCleanStatus,

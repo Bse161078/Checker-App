@@ -32,4 +32,7 @@ export declare class ReceptionController {
     findAll(): Promise<(import("mongoose").Document<unknown, any, import("../room/entities/room.entity").RoomDocument> & import("../room/entities/room.entity").Room & Document & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
+    deleteReception(receptionId: string): Promise<import("mongoose").Document<unknown, any, import("../user/entities/user.entity").UserDocument> & import("../user/entities/user.entity").User & Document & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }>>;
 }

@@ -56,9 +56,12 @@ let CleanerService = class CleanerService {
             filter['company'] = user._id;
         }
         else if (user.role == role_enum_1.ROLES.HOTELADMIN) {
-            filter['hotel'] = user._id;
+            filter = { hotel: user._id, role: role_enum_1.ROLES.CLEANER };
         }
-        else if (user.role == role_enum_1.ROLES.SUPERADMIN) {
+        else if (user.role === role_enum_1.ROLES.CHECKER) {
+            filter = { hotel: user.hotel._id, role: role_enum_1.ROLES.CLEANER };
+        }
+        else if (user.role == role_enum_1.ROLES.SUPERADMIN || user.role === role_enum_1.ROLES.CHECKER) {
             filter = { role: role_enum_1.ROLES.CLEANER };
         }
         else if (user.role == role_enum_1.ROLES.HOTELRECEPTION) {
@@ -67,9 +70,9 @@ let CleanerService = class CleanerService {
         else {
             return [];
         }
-        if (user.role != role_enum_1.ROLES.SUPERADMIN && Object.values(filter).length == 0)
+        if ((user.role != role_enum_1.ROLES.SUPERADMIN) && Object.values(filter).length == 0)
             return [];
-        const cleaners = await this.userRepository.find(filter);
+        const cleaners = await this.userRepository.find(filter).populate('hotel');
         return cleaners;
     }
     async findOne(id) {
@@ -115,7 +118,7 @@ let CleanerService = class CleanerService {
         const date = new Date();
         const room = new mongoose_2.Types.ObjectId(roomID);
         const cleaner = this.request.user._id;
-        const cleaningStartAt = (0, functions_1.parseTime)(date.getHours(), date.getMinutes());
+        const cleaningStartAt = new Date().toUTCString();
         const roomData = await this.cleaningHistoryRepository.findOne({ room, status: room_status_enum_1.ROOM_STATUS.START });
         if (roomData)
             throw new common_1.BadRequestException("Room cleaning not finished. Please finish cleaning first.");
@@ -135,7 +138,7 @@ let CleanerService = class CleanerService {
         const date = new Date();
         const room = new mongoose_2.Types.ObjectId(roomID);
         const cleaner = this.request.user._id;
-        const cleaningEndAt = (0, functions_1.parseTime)(date.getHours(), date.getMinutes());
+        const cleaningEndAt = new Date().toUTCString();
         const roomData = await this.cleaningHistoryRepository.findOne({ room, status: room_status_enum_1.ROOM_STATUS.START, cleaner });
         if (!roomData)
             throw new common_1.BadRequestException("not found any room being cleaned");

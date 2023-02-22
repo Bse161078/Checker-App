@@ -26,13 +26,12 @@ import { CreateRoomTypeDto } from './dto/create-room-type.dto';
 import { UpdateRoomTypeDto } from './dto/update-room-type.dto';
 import { RoomType, RoomTypeDocument } from './entities/room-type.entity';
 import { Model, Types } from 'mongoose';
-import { Request } from 'express';
 import { RoomDocument } from '../room/entities/room.entity';
 export declare class RoomTypeService {
     private roomtypeRepository;
     private roomRepository;
     private request;
-    constructor(roomtypeRepository: Model<RoomTypeDocument>, roomRepository: Model<RoomDocument>, request: Request);
+    constructor(roomtypeRepository: Model<RoomTypeDocument>, roomRepository: Model<RoomDocument>, request: any);
     create(createRoomTypeDto: CreateRoomTypeDto): Promise<import("mongoose").Document<unknown, any, RoomTypeDocument> & RoomType & Document & {
         _id: Types.ObjectId;
     }>;

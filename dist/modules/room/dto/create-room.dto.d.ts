@@ -1,8 +1,9 @@
 import { Types } from "mongoose";
 export declare class CreateRoomDto {
-    roomType: Types.ObjectId;
+    roomType: string;
     name: string;
     name_de: string;
+    price: Number;
     level: Types.ObjectId;
     hotel: Types.ObjectId;
 }

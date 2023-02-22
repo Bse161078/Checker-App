@@ -31,6 +31,7 @@ const bills_module_1 = require("../bills/bills.module");
 const hotel_module_1 = require("../hotel/hotel.module");
 const company_module_1 = require("../company/company.module");
 const material_list_module_1 = require("../material-list/material-list.module");
+const reception_module_1 = require("../reception/reception.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -59,6 +60,7 @@ AppModule = __decorate([
             bed_module_1.BedModule,
             bathroom_module_1.BathroomModule,
             material_list_module_1.MaterialListModule,
+            reception_module_1.ReceptionModule
         ],
         controllers: [],
         providers: [],

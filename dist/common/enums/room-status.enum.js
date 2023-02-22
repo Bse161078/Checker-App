@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ROOM_STATUS = void 0;
+exports.PRICE_STATUS = exports.ROOM_STATUS = void 0;
 var ROOM_STATUS;
 (function (ROOM_STATUS) {
     ROOM_STATUS["START"] = "START";
@@ -10,4 +10,10 @@ var ROOM_STATUS;
     ROOM_STATUS["IN_PROGRESS"] = "IN_PROGRESS";
     ROOM_STATUS["DAMAGED"] = "DAMAGED";
 })(ROOM_STATUS = exports.ROOM_STATUS || (exports.ROOM_STATUS = {}));
+var PRICE_STATUS;
+(function (PRICE_STATUS) {
+    PRICE_STATUS["NORMAL"] = "normal";
+    PRICE_STATUS["EXTRA_CHILD"] = "extra_child";
+    PRICE_STATUS["EXTRA_ADULT"] = "extra_adult";
+})(PRICE_STATUS = exports.PRICE_STATUS || (exports.PRICE_STATUS = {}));
 //# sourceMappingURL=room-status.enum.js.map

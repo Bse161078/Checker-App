@@ -6,6 +6,7 @@ const multer_1 = require("multer");
 const multer_2 = require("../../../common/utils/multer");
 class FloorFileUpload extends (0, platform_express_1.FileFieldsInterceptor)([
     { name: "samplePhotoTopQuestion", maxCount: 1 },
+    { name: "roomIsVacuumedPhotos", maxCount: 5 },
     { name: "roomIsNotVacuumedPhotos", maxCount: 5 },
     { name: "roomHasStrongStainsThatCanNotBeCleanedByUsPhotos", maxCount: 5 },
     { name: "DamageCausedByGuestsPhotos", maxCount: 5 },

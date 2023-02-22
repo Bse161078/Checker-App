@@ -5,8 +5,11 @@ export declare class CreateHotelDto {
     hotel_name: string;
     username: string;
     password: string;
+    price: string;
+    company_email: string;
     email: string;
     role: ROLES;
+    avatar: string;
 }
 export declare class AddCompanyToHotel {
     company: Types.ObjectId;

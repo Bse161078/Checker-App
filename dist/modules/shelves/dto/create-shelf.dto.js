@@ -24,11 +24,35 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
     __metadata("design:type", Boolean)
+], CreateShelvesDto.prototype, "wipedStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),
+    __metadata("design:type", Array)
+], CreateShelvesDto.prototype, "wipedPhotos", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
+    __metadata("design:type", Boolean)
 ], CreateShelvesDto.prototype, "tableNotCleanStatus", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),
     __metadata("design:type", Array)
 ], CreateShelvesDto.prototype, "tableNotCleanPhotos", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
+    __metadata("design:type", Boolean)
+], CreateShelvesDto.prototype, "tvStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),
+    __metadata("design:type", Array)
+], CreateShelvesDto.prototype, "tvPhotos", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
+    __metadata("design:type", Boolean)
+], CreateShelvesDto.prototype, "windowStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: "array", items: { type: "string", format: "binary" } }),
+    __metadata("design:type", Array)
+], CreateShelvesDto.prototype, "windowPhotos", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: "boolean" }),
     __metadata("design:type", Boolean)

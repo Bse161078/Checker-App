@@ -27,8 +27,10 @@ export declare class Room {
     name: string;
     name_de: string;
     report: string;
-    status: string;
-    roomType: Types.ObjectId;
+    cleaning_status: string;
+    occupation_status: string;
+    roomType: string;
+    price: Number;
     level: Types.ObjectId;
     hotel: Types.ObjectId;
     cleaner: Types.ObjectId;

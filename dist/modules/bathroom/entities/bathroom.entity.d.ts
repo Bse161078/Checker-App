@@ -25,6 +25,7 @@
 import { Document, Types } from "mongoose";
 import { ICommentValue, IDamageReport, ITopQuestion } from "../../check-list/interface/check-list.interface";
 export interface IBathRoomComment {
+    isCleaned: ICommentValue;
     tilesAreNotMopped: ICommentValue;
     toiletIsNotWiped: ICommentValue;
     thereIsDirtInTheShowe: ICommentValue;

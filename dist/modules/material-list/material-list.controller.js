@@ -21,6 +21,8 @@ const swagger_1 = require("@nestjs/swagger");
 const enums_1 = require("../../common/enums");
 const auth_decorator_1 = require("../../common/decorators/auth.decorator");
 const role_enum_1 = require("../../common/enums/role.enum");
+const materila_dto_1 = require("./dto/materila.dto");
+const role_decorator_1 = require("../../common/decorators/role.decorator");
 let MaterialListController = class MaterialListController {
     constructor(materialListService) {
         this.materialListService = materialListService;
@@ -53,6 +55,12 @@ let MaterialListController = class MaterialListController {
         const deletedResult = await this.materialListService.remove(id);
         return {
             message: "deleted material item successfully"
+        };
+    }
+    async createOrder(id, creatMaterialOrder) {
+        const createOrder = await this.materialListService.orderMaterial(id, creatMaterialOrder);
+        return {
+            message: "created material item successfully", order: createOrder
         };
     }
 };
@@ -98,6 +106,17 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MaterialListController.prototype, "remove", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "checker can order material" }),
+    (0, role_decorator_1.Roles)(role_enum_1.ROLES.CHECKER),
+    (0, swagger_1.ApiConsumes)(enums_1.SwaggerConsumes.URL_ENCODED, enums_1.SwaggerConsumes.JSON),
+    (0, common_1.Post)('/:id/order'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, materila_dto_1.OrderMaterialDto]),
+    __metadata("design:returntype", Promise)
+], MaterialListController.prototype, "createOrder", null);
 MaterialListController = __decorate([
     (0, common_1.Controller)('material-list'),
     (0, swagger_1.ApiTags)('Material-List'),
