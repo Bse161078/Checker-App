@@ -18,9 +18,7 @@ async function bootstrap() {
         ca: fs.readFileSync('./keys/server.ca-bundle'),
 
     };
-    const app = await NestFactory.create<NestExpressApplication>(AppModule,{
-        httpsOptions,
-    });
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 
     //const app = await NestFactory.create<NestExpressApplication>(AppModule);
