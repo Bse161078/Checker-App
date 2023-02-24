@@ -12,16 +12,18 @@ import {ValidationPipe} from '@nestjs/common';
 const fs=require("fs");
 
 async function bootstrap() {
-    const httpsOptions = {
-        key: fs.readFileSync('./keys/server.key'),
-        cert: fs.readFileSync('./keys/server.crt'),
-        ca: fs.readFileSync('./keys/server.ca-bundle'),
+    // const httpsOptions = {
+    //     key: fs.readFileSync('./keys/server.key'),
+    //     cert: fs.readFileSync('./keys/server.crt'),
+    //     ca: fs.readFileSync('./keys/server.ca-bundle'),
+    //
+    // };
+    // const app = await NestFactory.create<NestExpressApplication>(AppModule,{
+    //     httpsOptions,
+    // });
 
-    };
+
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
-
-    //const app = await NestFactory.create<NestExpressApplication>(AppModule);
     const publicPath = join(__dirname, "../public");
     app.useGlobalFilters(new AllExceptionFilter(), new MongoExceptionFilter(), new ValidationFilter());
     app.use(json({limit: '50mb'}));
