@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
 import {MaterialListService} from './material-list.service';
 import {CreateMaterialListDto} from './dto/create-material-list.dto';
 import {UpdateMaterialListDto} from './dto/update-material-list.dto';
@@ -11,7 +11,7 @@ import {Roles} from "../../common/decorators/role.decorator";
 
 @Controller('material-list')
 @ApiTags('Material-List')
-@AuthDecorator(ROLES.HOTELADMIN, ROLES.CHECKER)
+@AuthDecorator(ROLES.SUPERADMIN,ROLES.HOTELADMIN, ROLES.CHECKER)
 export class MaterialListController {
     constructor(private readonly materialListService: MaterialListService) {
     }

@@ -16,7 +16,6 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
-const role_enum_1 = require("../../common/enums/role.enum");
 const functions_1 = require("../../common/utils/functions");
 const user_entity_1 = require("./entities/user.entity");
 const auth_service_1 = require("../auth/services/auth.service");
@@ -29,10 +28,8 @@ let UserService = class UserService {
         const newObjectDto = (0, functions_1.removeEmptyFieldsObject)(createUserDto);
         await this.checkExistUser(newObjectDto);
         createUserDto.password = this.authService.hashPassword(createUserDto.password);
+        createUserDto.hotel = createUserDto.hotel && new mongoose_2.Types.ObjectId(createUserDto.hotel);
         const user = await this.userRepository.create(createUserDto);
-        if (createUserDto.role == role_enum_1.ADMIN_ROLES.HOTELADMIN) {
-            await this.update(user._id.toString(), { hotel: user._id });
-        }
         return user;
     }
     async findAll() {

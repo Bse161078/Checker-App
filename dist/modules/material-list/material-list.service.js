@@ -90,12 +90,16 @@ let MaterialListService = class MaterialListService {
                 if ((createMaterialOrder.emailTo === material_enum_1.OrderEmailDto.HOTEL && hotel.email && (hotel.email).length > 0)) {
                     email = hotel.email;
                 }
-                if ((createMaterialOrder.emailTo === material_enum_1.OrderEmailDto.HOTEL && hotel.company && (hotel.company).length > 0)) {
-                    email = hotel.company;
+                if ((createMaterialOrder.emailTo === material_enum_1.OrderEmailDto.COMPANY && hotel.company_email && (hotel.company_email).length > 0)) {
+                    email = hotel.company_email;
                 }
-                if (email && email.length > 0)
+                if (email && email.length > 0) {
                     await (0, email_1.sendEmail)(email, user.username, material.name, createMaterialOrder.quantity);
-                return material;
+                    return material;
+                }
+                else {
+                    throw new common_1.NotFoundException("email not found");
+                }
             }
             else {
                 throw new common_1.NotFoundException("material not found");
